@@ -52,6 +52,7 @@ jobs:
           arch: clang_64
           dir: ${{ github.workspace }}/.local/Qt
           set-env: false
+          cache: true
       - name: Qt Android
         id: qt-android
         uses: jurplel/install-qt-action@v4
@@ -62,11 +63,24 @@ jobs:
           arch: android_arm64_v8a
           dir: ${{ github.workspace }}/.local/Qt
           set-env: false
+          cache: true
+      - name: Restore native engine
+        id: native-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: build-aria-android-arm64
+          key: aria-native-macos-x64-qt6111-ndk27-${{ hashFiles('sandbox/engraving/**', 'MuseReaderAndroid/engine/**', 'src/**', 'thirdparty/**') }}
       - name: Build Android APK
         env:
           QT_ANDROID: ${{ steps.qt-android.outputs.qt-root-dir }}
           QT_HOST: ${{ steps.qt-host.outputs.qt-root-dir }}
         run: bash MuseReaderAndroid/scripts/build-community-android.sh
+      - name: Save completed native engine
+        if: always() && steps.native-cache.outputs.cache-hit != 'true' && hashFiles('build-aria-android-arm64/libMuseScoreRenderCore.a', 'build-aria-android-arm64/jniLibs/arm64-v8a/libaria_engine.so') != ''
+        uses: actions/cache/save@v4
+        with:
+          path: build-aria-android-arm64
+          key: ${{ steps.native-cache.outputs.cache-primary-key }}
       - name: Android APK
         uses: actions/upload-artifact@v4
         with:
