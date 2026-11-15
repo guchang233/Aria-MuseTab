@@ -8,7 +8,7 @@
 ## 已进行的检查
 
 - 真实云端静态清单：573 个文件。分别抽取 MID、MSCZ、PDF，大小与 Git blob SHA-1 全部匹配。
-  这是网络协议检查；Swift UI 和 URLSession 调用尚未在 App 内验证。
+  Swift 云端协议和 Git blob SHA-1 检查已在 macOS runner 编译运行通过；Swift UI 和 URLSession 调用尚未在 App 内验证。
 - 离线 PDF → MusicXML：本项目内的 Python、模型与适配源码完成一页识别；与参考谱比较，
   32 个音符的音高、时值、谱表及小节位置全部一致。不能据此推断复杂乐谱的识别准确率。
 - MIDI：云端 MIDI 及用户此前提供的 Animenz MIDI 均完成 MusicXML 转换。

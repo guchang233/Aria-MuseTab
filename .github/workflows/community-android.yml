@@ -36,6 +36,9 @@ jobs:
           swiftc MuseReaderiOS/MuseReaderiOS/Services/CloudScoreLibrary.swift checks/CloudScoreChecks.swift -o .local/cloud-check
           .local/cloud-check
       - uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools
+          log-accepted-android-sdk-licenses: false
       - name: Install build tools
         run: |
           brew install cmake ninja gradle skip
@@ -76,7 +79,7 @@ jobs:
           QT_HOST: ${{ steps.qt-host.outputs.qt-root-dir }}
         run: bash MuseReaderAndroid/scripts/build-community-android.sh
       - name: Save completed native engine
-        if: always() && steps.native-cache.outputs.cache-hit != 'true' && hashFiles('build-aria-android-arm64/libMuseScoreRenderCore.a', 'build-aria-android-arm64/jniLibs/arm64-v8a/libaria_engine.so') != ''
+        if: always() && steps.native-cache.outputs.cache-hit != 'true' && hashFiles('build-aria-android-arm64/libMuseScoreRenderCore.a') != '' && hashFiles('build-aria-android-arm64/jniLibs/arm64-v8a/libaria_engine.so') != ''
         uses: actions/cache/save@v4
         with:
           path: build-aria-android-arm64
