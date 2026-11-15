@@ -60,12 +60,12 @@ struct ScoreLegacyRepairSheet: View {
                     }
                     .buttonStyle(.plain)
                     .accessibilityLabel(issue.title)
-                    .accessibilityValue(selectedIndexes.contains(issue.index) ? "Selected" : "Not selected")
+                    .accessibilityValue(selectedIndexes.contains(issue.index) ? "已选择" : "未选择")
                     .disabled(isFixing)
                 }
 
                 VStack(spacing: 12) {
-                    Text("Aria saves an untouched copy in Files → Aria Backups before changing the score.")
+                    Text("修改乐谱前，会在“文件 → Aria Backups”保存原始副本。")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -89,7 +89,7 @@ struct ScoreLegacyRepairSheet: View {
                         if isFixing {
                             ProgressView().frame(maxWidth: .infinity)
                         } else {
-                            Text(selectedIndexes.count == issues.count ? "Back Up & Fix All" : "Back Up & Fix Selected")
+                            Text(selectedIndexes.count == issues.count ? "备份并全部修复" : "备份并修复所选项")
                                 .frame(maxWidth: .infinity)
                         }
                     }
@@ -99,11 +99,11 @@ struct ScoreLegacyRepairSheet: View {
                 }
                 .padding()
             }
-            .navigationTitle("Review Score Fixes")
+            .navigationTitle("查看乐谱修复项")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Not Now") { dismiss() }.disabled(isFixing)
+                    Button("暂不") { dismiss() }.disabled(isFixing)
                 }
             }
         }

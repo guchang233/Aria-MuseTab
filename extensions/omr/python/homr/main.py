@@ -1,0 +1,383 @@
+import os
+from concurrent.futures import Future
+from dataclasses import dataclass
+from enum import Enum
+from time import perf_counter
+
+import cv2
+import numpy as np
+
+from homr import color_adjust, download_utils
+from homr.autocrop import autocrop
+from homr.bar_line_detection import (
+    detect_bar_lines,
+    prepare_bar_line_image,
+)
+from homr.bounding_boxes import (
+    BoundingEllipse,
+    RotatedBoundingBox,
+    create_bounding_ellipses,
+    create_rotated_bounding_boxes,
+)
+from homr.brace_dot_detection import (
+    find_braces_brackets_and_grand_staff_lines,
+    prepare_brace_dot_image,
+)
+from homr.debug import Debug
+from homr.model import InputPredictions, MultiStaff
+from homr.music_xml_generator import XmlGeneratorArguments, generate_xml
+from homr.noise_filtering import filter_predictions
+from homr.note_detection import add_notes_to_staffs, combine_noteheads_with_stems
+from homr.resize import resize_image
+from homr.segmentation.inference_segnet import extract
+from homr.simple_logging import eprint
+from homr.staff_detection import break_wide_fragments, detect_staff, make_lines_stronger
+from homr.staff_parsing import parse_staffs
+from homr.staff_position_save_load import load_staff_positions, save_staff_positions
+from homr.transformer.configs import Config, default_config
+from homr.segmentation.config import segnet_path_tflite
+from homr.type_definitions import NDArray
+
+from aria_omr_runtime import appdata, MODEL_STORAGE
+from aria_omr_runtime import platform
+
+
+class PredictedSymbols:
+    def __init__(
+        self,
+        noteheads: list[BoundingEllipse],
+        staff_fragments: list[RotatedBoundingBox],
+        clefs_keys: list[RotatedBoundingBox],
+        stems_rest: list[RotatedBoundingBox],
+        bar_lines: list[RotatedBoundingBox],
+    ) -> None:
+        self.noteheads = noteheads
+        self.staff_fragments = staff_fragments
+        self.clefs_keys = clefs_keys
+        self.stems_rest = stems_rest
+        self.bar_lines = bar_lines
+
+
+class InvalidProgramArgumentException(Exception):
+    """Raise this exception for issues which the user can address."""
+
+
+class GpuSupport(Enum):
+    No = "no"
+    AUTO = "auto"
+    FORCE = "force"
+
+
+def get_predictions(
+    original: NDArray,
+    preprocessed: NDArray,
+    img_path: str,
+    enable_cache: bool,
+    use_gpu_inference: bool,
+) -> InputPredictions:
+    result = extract(
+        preprocessed,
+        img_path,
+        step_size=320,
+        use_cache=enable_cache,
+        use_gpu_inference=use_gpu_inference,
+    )
+    original_image = cv2.resize(original, (result.staff.shape[1], result.staff.shape[0]))
+    preprocessed_image = cv2.resize(preprocessed, (result.staff.shape[1], result.staff.shape[0]))
+    return InputPredictions(
+        original=original_image,
+        preprocessed=preprocessed_image,
+        notehead=result.notehead.astype(np.uint8),
+        symbols=result.symbols.astype(np.uint8),
+        staff=result.staff.astype(np.uint8),
+        clefs_keys=result.clefs_keys.astype(np.uint8),
+        stems_rest=result.stems_rests.astype(np.uint8),
+    )
+
+
+def replace_extension(path: str, new_extension: str) -> str:
+    return os.path.splitext(path)[0] + new_extension
+
+
+def load_and_preprocess_predictions(
+    image_path: str, enable_debug: bool, enable_cache: bool, use_gpu_inference: bool
+) -> tuple[InputPredictions, Debug]:
+    image = cv2.imread(image_path)
+    if image is None:
+        raise InvalidProgramArgumentException(
+            "The file format is not supported, please provide a JPG or PNG image file:" + image_path
+        )
+    image = autocrop(image)
+    image = resize_image(image)
+    preprocessed = color_adjust.apply_clahe(image)
+    predictions = get_predictions(image, preprocessed, image_path, enable_cache, use_gpu_inference)
+    debug = Debug(predictions.original, image_path, enable_debug)
+    debug.write_image("color_adjust", preprocessed)
+
+    predictions = filter_predictions(predictions, debug)
+
+    predictions.staff = make_lines_stronger(predictions.staff, (1, 2))
+    debug.write_threshold_image("staff", predictions.staff)
+    debug.write_threshold_image("symbols", predictions.symbols)
+    debug.write_threshold_image("stems_rest", predictions.stems_rest)
+    debug.write_threshold_image("notehead", predictions.notehead)
+    debug.write_threshold_image("clefs_keys", predictions.clefs_keys)
+    return predictions, debug
+
+
+def predict_symbols(debug: Debug, predictions: InputPredictions) -> PredictedSymbols:
+    eprint("Creating bounds for noteheads")
+    noteheads = create_bounding_ellipses(predictions.notehead, min_size=(4, 4))
+    eprint("Creating bounds for staff_fragments")
+    staff_fragments = create_rotated_bounding_boxes(
+        predictions.staff, skip_merging=True, min_size=(5, 1), max_size=(10000, 100)
+    )
+
+    eprint("Creating bounds for clefs_keys")
+    clefs_keys = create_rotated_bounding_boxes(
+        predictions.clefs_keys, min_size=(20, 40), max_size=(1000, 1000)
+    )
+    eprint("Creating bounds for stems_rest")
+    stems_rest = create_rotated_bounding_boxes(predictions.stems_rest)
+    eprint("Creating bounds for bar_lines")
+    bar_line_img = prepare_bar_line_image(predictions.stems_rest)
+    debug.write_threshold_image("bar_line_img", bar_line_img)
+    bar_lines = create_rotated_bounding_boxes(bar_line_img, skip_merging=True, min_size=(1, 5))
+
+    return PredictedSymbols(noteheads, staff_fragments, clefs_keys, stems_rest, bar_lines)
+
+
+@dataclass
+class ProcessingConfig:
+    enable_debug: bool
+    enable_cache: bool
+    write_staff_positions: bool
+    read_staff_positions: bool
+    selected_staff: int
+    use_gpu_inference: bool
+
+
+def process_image(
+    image_path: str,
+    config: ProcessingConfig,
+    xml_generator_args: XmlGeneratorArguments,
+    output_path: str = None,
+) -> None:
+    appdata.homr_state = "Segmenting"
+    appdata.homr_progress = 1
+    eprint("Processing " + image_path)
+    xml_file = output_path
+    debug_cleanup: Debug | None = None
+    try:
+        if config.read_staff_positions:
+            image = cv2.imread(image_path)
+            if image is None:
+                raise ValueError("Failed to read " + image_path)
+            image = resize_image(image)
+            debug = Debug(image, image_path, config.enable_debug)
+            staff_position_files = replace_extension(image_path, ".txt")
+            multi_staffs = load_staff_positions(
+                debug, image, staff_position_files, config.selected_staff
+            )
+            # parse_staffs() expects a grayscale image (cv2.findContours requires it),
+            # matching what the normal detect_staffs_in_image() path hands it
+            # (predictions.preprocessed). Apply the same CLAHE preprocessing here so the
+            # two code paths feed the symbol-recognition encoder consistent input.
+            image = color_adjust.apply_clahe(image)
+        else:
+            multi_staffs, image, debug = detect_staffs_in_image(image_path, config)
+        debug_cleanup = debug
+
+        transformer_config = Config()
+        transformer_config.use_gpu_inference = config.use_gpu_inference
+
+        appdata.homr_state = "Transforming"
+        appdata.homr_progress = 1
+
+        result_staffs = parse_staffs(
+            debug,
+            multi_staffs,
+            image,
+            selected_staff=config.selected_staff,
+            config=transformer_config,
+        )
+
+        eprint("Writing XML", result_staffs)
+        xml = generate_xml(xml_generator_args, result_staffs, "")
+        xml.write(xml_file)
+
+        eprint("Finished parsing " + str(len(result_staffs)) + " staves")
+        eprint("Result was written to", xml_file)
+    except:
+        if os.path.exists(xml_file):
+            os.remove(xml_file)
+        raise
+    finally:
+        if debug_cleanup is not None:
+            debug_cleanup.clean_debug_files_from_previous_runs()
+
+    return xml_file
+
+
+def detect_staffs_in_image(
+    image_path: str, config: ProcessingConfig
+) -> tuple[list[MultiStaff], NDArray, Debug, Future[str]]:
+    predictions, debug = load_and_preprocess_predictions(
+        image_path, config.enable_debug, config.enable_cache, config.use_gpu_inference
+    )
+    appdata.homr_state = "Segmenting"
+    appdata.homr_progress = 1
+
+    symbols = predict_symbols(debug, predictions)
+
+    appdata.homr_state = "Extracting"
+    appdata.homr_progress = 1
+
+    symbols.staff_fragments = break_wide_fragments(symbols.staff_fragments)
+    debug.write_bounding_boxes("staff_fragments", symbols.staff_fragments)
+    eprint("Found " + str(len(symbols.staff_fragments)) + " staff line fragments")
+
+    noteheads_with_stems = combine_noteheads_with_stems(symbols.noteheads, symbols.stems_rest)
+    debug.write_bounding_boxes_alternating_colors("notehead_with_stems", noteheads_with_stems)
+
+    appdata.homr_progress = 10
+
+    eprint("Found " + str(len(noteheads_with_stems)) + " noteheads")
+    if len(noteheads_with_stems) == 0:
+        raise Exception("No noteheads found")
+
+    average_note_head_height = float(
+        np.median([notehead.notehead.size[1] for notehead in noteheads_with_stems])
+    )
+    eprint("Average note head height: " + str(average_note_head_height))
+
+    all_noteheads = [notehead.notehead for notehead in noteheads_with_stems]
+    all_stems = [note.stem for note in noteheads_with_stems if note.stem is not None]
+    bar_lines_or_rests = [
+        line
+        for line in symbols.bar_lines
+        if not line.is_overlapping_with_any(all_noteheads)
+        and not line.is_overlapping_with_any(all_stems)
+    ]
+    bar_line_boxes = detect_bar_lines(bar_lines_or_rests, average_note_head_height)
+    debug.write_bounding_boxes_alternating_colors("bar_lines", bar_line_boxes)
+    eprint("Found " + str(len(bar_line_boxes)) + " bar lines")
+
+    debug.write_bounding_boxes(
+        "anchor_input", symbols.staff_fragments + bar_line_boxes + symbols.clefs_keys
+    )
+
+    appdata.homr_progress = 15
+
+    staffs = detect_staff(
+        debug, predictions.staff, symbols.staff_fragments, symbols.clefs_keys, bar_line_boxes
+    )
+
+    appdata.homr_progress = 90
+
+    if len(staffs) == 0:
+        raise Exception("No staffs found")
+    debug.write_bounding_boxes_alternating_colors("staffs", staffs)
+
+    brace_dot_img = prepare_brace_dot_image(predictions.symbols, predictions.staff)
+    debug.write_threshold_image("brace_dot", brace_dot_img)
+    brace_dot = create_rotated_bounding_boxes(brace_dot_img, skip_merging=True, max_size=(100, -1))
+
+    notes = add_notes_to_staffs(
+        staffs, noteheads_with_stems, predictions.symbols, predictions.notehead
+    )
+
+    multi_staffs = find_braces_brackets_and_grand_staff_lines(debug, staffs, brace_dot)
+    eprint(
+        "Found",
+        len(multi_staffs),
+        "connected staffs (after merging grand staffs, multiple voices): ",
+        [len(staff.staffs) for staff in multi_staffs],
+    )
+
+    debug.write_all_bounding_boxes_alternating_colors("notes", multi_staffs, notes)
+
+    return multi_staffs, predictions.preprocessed, debug
+
+
+def download_weights(pytest: bool = False) -> tuple[bool, str]:
+    try:
+        error_occured = False
+        base_url = "https://github.com/aicelen/Andromr/releases/download/v1.0/"
+        missing_models = check_for_missing_models(pytest=pytest)
+
+        # if we run it inside a test it should not just skip the models
+        if len(missing_models) == 0:
+            return False, ""  # no error occured
+
+        appdata.downloaded_assets = f"Downloaded 0 of {len(missing_models)}"
+
+        eprint("Downloading", len(missing_models), "models - this is only required once")
+        for idx, model in enumerate(missing_models):
+            base_name = os.path.basename(model).split(".")[0]
+            print(base_name)
+            eprint(f"Downloading {base_name}")
+            try:
+                zip_name = base_name + ".zip"
+                download_url = base_url + zip_name
+                downloaded_zip = os.path.join(os.path.dirname(model), zip_name)
+                if download_utils.download_file(download_url, downloaded_zip, zip_name):
+                    destination_dir = os.path.dirname(model)
+                    download_utils.unzip_file(downloaded_zip, destination_dir)
+                else:
+                    error_occured = True
+            finally:
+                if os.path.exists(downloaded_zip):
+                    os.remove(downloaded_zip)
+
+            appdata.downloaded_assets = f"Downloaded {idx + 1} of {len(missing_models)}"
+
+    except Exception as e:
+        error_msg = f"An error occured while trying to download the models: {e}"
+        eprint(error_msg)
+        error_occured = True
+        return error_occured, error_msg
+    return error_occured, "The downloaded file is not the same as expected. Please redownload"
+
+
+def check_for_missing_models(pytest: bool = False) -> list:
+    """
+    Checks for missing models and returns a list with all the links to the missing models.
+    """
+    models = [
+        segnet_path_tflite,
+        default_config.filepaths.encoder_path,
+        default_config.filepaths.decoder_path,
+    ]
+    if platform == "android":
+        delete_unused_models(models)
+    missing_models = [model for model in models if not os.path.exists(model)]
+    if pytest:
+        return models
+    else:
+        return missing_models
+
+
+def delete_unused_models(models_used):
+    models = os.listdir(MODEL_STORAGE)
+    unused_models = [
+        os.path.join(MODEL_STORAGE, x)
+        for x in models
+        if os.path.join(MODEL_STORAGE, x) not in models_used
+    ]
+    print(f"Deleting: {unused_models}")
+    for path in unused_models:
+        os.remove(path)
+
+
+def homr(path, output_path):
+    t0 = perf_counter()
+    config = ProcessingConfig(False, False, False, False, -1, False)
+    xml_generator_args = XmlGeneratorArguments(False, False, False)
+    out_path = process_image(path, config, xml_generator_args, output_path=output_path)
+    eprint(f"Homr took {perf_counter() - t0} seconds.")
+    return out_path
+
+
+if __name__ == "__main__":
+    homr("test_data/entertainer/entertainer.png")

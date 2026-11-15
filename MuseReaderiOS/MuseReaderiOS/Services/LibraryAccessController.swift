@@ -95,6 +95,7 @@ final class LibraryAccessController {
     }
 
     func start() async {
+        if LibraryAccessPolicy.isCommunityBuild { status = .rolloutDisabled; return }
         guard !hasStarted else {
             return
         }
@@ -118,6 +119,7 @@ final class LibraryAccessController {
     }
 
     func refreshEntitlements() async {
+        if LibraryAccessPolicy.isCommunityBuild { status = .rolloutDisabled; return }
         if let simulationOverride, simulationOverride != .free {
             status = simulationOverride.initialStatus
             if product == nil {

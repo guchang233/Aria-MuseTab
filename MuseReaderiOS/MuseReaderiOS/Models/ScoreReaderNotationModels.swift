@@ -124,8 +124,8 @@ struct ScoreTimeSignatureValue: Equatable, Identifiable {
     var title: String {
         switch style {
         case .normal: return "\(numerator)/\(denominator)"
-        case .commonTime: return "Common Time"
-        case .cutTime: return "Cut Time"
+        case .commonTime: return "普通拍子（4/4）"
+        case .cutTime: return "二二拍（2/2）"
         }
     }
 }
@@ -146,8 +146,8 @@ enum ScoreSignatureApplyScope: String, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .fromSelectedMeasure: return "From Selected"
-        case .fromStart: return "From Start"
+        case .fromSelectedMeasure: return "从选中位置"
+        case .fromStart: return "从头开始"
         }
     }
 }

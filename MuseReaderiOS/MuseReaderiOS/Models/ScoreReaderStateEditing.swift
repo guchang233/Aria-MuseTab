@@ -229,9 +229,9 @@ enum ScoreAutoSystemBreaksMode: String, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .measuresPerSystem: return "Measures per system"
-        case .lockCurrentLayout: return "Lock current layout"
-        case .removeExisting: return "Remove existing breaks"
+        case .measuresPerSystem: return "每行小节数"
+        case .lockCurrentLayout: return "锁定当前排版"
+        case .removeExisting: return "移除已有换行与分页"
         }
     }
 }
@@ -256,11 +256,11 @@ enum ScoreTransposeMode: Int, CaseIterable {
     var title: String {
         switch self {
         case .diatonic:
-            return "Diatonic"
+            return "自然音阶"
         case .interval:
-            return "Interval"
+            return "音程"
         case .byKey:
-            return "To Key"
+            return "转至调性"
         }
     }
 }
@@ -272,9 +272,9 @@ enum ScoreTransposeDirection: Int, CaseIterable {
     var title: String {
         switch self {
         case .up:
-            return "Up"
+            return "向上"
         case .down:
-            return "Down"
+            return "向下"
         }
     }
 }
@@ -294,13 +294,13 @@ enum ScoreTransposeDiatonicStep: CaseIterable, ScoreReaderTransposeOption {
 
     var title: String {
         switch self {
-        case .second: return "2nd"
-        case .third: return "3rd"
-        case .fourth: return "4th"
-        case .fifth: return "5th"
-        case .sixth: return "6th"
-        case .seventh: return "7th"
-        case .octave: return "Octave"
+        case .second: return "二度"
+        case .third: return "三度"
+        case .fourth: return "四度"
+        case .fifth: return "五度"
+        case .sixth: return "六度"
+        case .seventh: return "七度"
+        case .octave: return "八度"
         }
     }
 
@@ -334,19 +334,19 @@ enum ScoreTransposeInterval: CaseIterable, ScoreReaderTransposeOption {
 
     var title: String {
         switch self {
-        case .minorSecond: return "Minor 2nd"
-        case .majorSecond: return "Major 2nd"
-        case .minorThird: return "Minor 3rd"
-        case .majorThird: return "Major 3rd"
-        case .perfectFourth: return "Perfect 4th"
-        case .augmentedFourth: return "Aug. 4th"
-        case .perfectFifth: return "Perfect 5th"
-        case .minorSixth: return "Minor 6th"
-        case .majorSixth: return "Major 6th"
-        case .minorSeventh: return "Minor 7th"
-        case .majorSeventh: return "Major 7th"
-        case .diminishedOctave: return "Dim. Octave"
-        case .perfectOctave: return "Perfect Octave"
+        case .minorSecond: return "小二度"
+        case .majorSecond: return "大二度"
+        case .minorThird: return "小三度"
+        case .majorThird: return "大三度"
+        case .perfectFourth: return "纯四度"
+        case .augmentedFourth: return "增四度"
+        case .perfectFifth: return "纯五度"
+        case .minorSixth: return "小六度"
+        case .majorSixth: return "大六度"
+        case .minorSeventh: return "小七度"
+        case .majorSeventh: return "大七度"
+        case .diminishedOctave: return "减八度"
+        case .perfectOctave: return "纯八度"
         }
     }
 
@@ -388,21 +388,21 @@ enum ScoreTransposeTargetKey: CaseIterable, ScoreReaderTransposeOption {
 
     var title: String {
         switch self {
-        case .cFlatMajor: return "Cb major / Ab minor"
-        case .gFlatMajor: return "Gb major / Eb minor"
-        case .dFlatMajor: return "Db major / Bb minor"
-        case .aFlatMajor: return "Ab major / F minor"
-        case .eFlatMajor: return "Eb major / C minor"
-        case .bFlatMajor: return "Bb major / G minor"
-        case .fMajor: return "F major / D minor"
-        case .cMajor: return "C major / A minor"
-        case .gMajor: return "G major / E minor"
-        case .dMajor: return "D major / B minor"
-        case .aMajor: return "A major / F# minor"
-        case .eMajor: return "E major / C# minor"
-        case .bMajor: return "B major / G# minor"
-        case .fSharpMajor: return "F# major / D# minor"
-        case .cSharpMajor: return "C# major / A# minor"
+        case .cFlatMajor: return "降 C 大调 / 降 A 小调"
+        case .gFlatMajor: return "降 G 大调 / 降 E 小调"
+        case .dFlatMajor: return "降 D 大调 / 降 B 小调"
+        case .aFlatMajor: return "降 A 大调 / F 小调"
+        case .eFlatMajor: return "降 E 大调 / C 小调"
+        case .bFlatMajor: return "降 B 大调 / G 小调"
+        case .fMajor: return "F 大调 / D 小调"
+        case .cMajor: return "C 大调 / A 小调"
+        case .gMajor: return "G 大调 / E 小调"
+        case .dMajor: return "D 大调 / B 小调"
+        case .aMajor: return "A 大调 / 升 F 小调"
+        case .eMajor: return "E 大调 / 升 C 小调"
+        case .bMajor: return "B 大调 / 升 G 小调"
+        case .fSharpMajor: return "升 F 大调 / 升 D 小调"
+        case .cSharpMajor: return "升 C 大调 / 升 A 小调"
         }
     }
 
@@ -1358,13 +1358,13 @@ extension ScoreReaderState {
     /// why nothing was saved.
     func updateScoreSetupMetadata(_ metadata: ScoreEditableMetadata) async throws {
         guard supportsEditing, let liveRenderSession = session.liveRenderSession else {
-            throw ScoreDocumentServiceError.bridgeFailure("This score cannot be edited.")
+            throw ScoreDocumentServiceError.bridgeFailure("此乐谱无法编辑。")
         }
         guard isEditingMode else {
-            throw ScoreDocumentServiceError.bridgeFailure("Switch to editing mode to change score info.")
+            throw ScoreDocumentServiceError.bridgeFailure("请切换到编辑模式修改乐谱信息。")
         }
         guard !isEditingActionInFlight else {
-            throw ScoreDocumentServiceError.bridgeFailure("Another edit is still being applied. Try again in a moment.")
+            throw ScoreDocumentServiceError.bridgeFailure("上一项修改仍在处理中，请稍后重试。")
         }
 
         isEditingActionInFlight = true
@@ -1784,7 +1784,7 @@ extension ScoreReaderState {
                 )
             case .fromMeasure:
                 guard let tick = context.tick else {
-                    throw ScoreDocumentServiceError.bridgeFailure("Select a measure before changing the instrument from that point.")
+                    throw ScoreDocumentServiceError.bridgeFailure("请先选择开始更换乐器的小节。")
                 }
                 return try await liveRenderSession.setInstrumentFromTick(
                     partID: context.partID,

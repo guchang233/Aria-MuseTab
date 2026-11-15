@@ -33,11 +33,11 @@ struct CreateNewScoreView: View {
                     ScrollView {
                         VStack(alignment: .leading, spacing: isPhone ? 14 : 12) {
                             VStack(alignment: .leading, spacing: 4) {
-                                Text("Create New Score")
+                                Text("创建新乐谱")
                                     .font(.system(size: isPhone ? 32 : 30, weight: .bold))
                                     .foregroundStyle(CreateScorePalette.ink)
 
-                                Text("Start from a blank score or choose a template.")
+                                Text("从空白乐谱开始，或选择模板。")
                                     .font(.system(size: isPhone ? 15 : 16, weight: .medium))
                                     .foregroundStyle(CreateScorePalette.mutedInk)
                             }
@@ -133,7 +133,7 @@ struct CreateScoreTopBar: View {
                 HStack(spacing: 5) {
                     Image(systemName: "chevron.left")
                     if !isPhone {
-                        Text("My Scores")
+                        Text("我的乐谱")
                     }
                 }
                 .font(.system(size: isPhone ? 20 : 17, weight: .medium))
@@ -143,7 +143,7 @@ struct CreateScoreTopBar: View {
             .buttonStyle(.plain)
 
             if isPhone {
-                Text("My Scores")
+                Text("我的乐谱")
                     .font(.system(size: 17, weight: .semibold))
                     .foregroundStyle(CreateScorePalette.ink)
             }
@@ -250,11 +250,11 @@ struct CreateScoreDetailsSection: View {
     var isPhone = false
 
     var body: some View {
-        CreateScoreSection(number: 1, title: "Score Details", isPhone: isPhone) {
+        CreateScoreSection(number: 1, title: "乐谱信息", isPhone: isPhone) {
             VStack(spacing: 12) {
-                CreateScoreTextField(label: "Title", placeholder: "New Score", text: $draft.title)
-                CreateScoreTextField(label: "Subtitle", placeholder: "Subtitle", text: $draft.subtitle, optional: true)
-                CreateScoreTextField(label: "Composer", placeholder: "Your Name", text: $draft.composer)
+                CreateScoreTextField(label: "标题", placeholder: "New Score", text: $draft.title)
+                CreateScoreTextField(label: "副标题", placeholder: "Subtitle", text: $draft.subtitle, optional: true)
+                CreateScoreTextField(label: "作曲", placeholder: "Your Name", text: $draft.composer)
             }
         }
     }
@@ -271,7 +271,7 @@ struct CreateScoreTextField: View {
             HStack(spacing: 4) {
                 Text(label)
                 if optional {
-                    Text("(Optional)")
+                    Text("（可选）")
                         .foregroundStyle(CreateScorePalette.subtle)
                 }
             }
@@ -309,7 +309,7 @@ struct CreateScoreTemplateSection: View {
     }
 
     var body: some View {
-        CreateScoreSection(number: 2, title: "Template", isPhone: isPhone) {
+        CreateScoreSection(number: 2, title: "模板", isPhone: isPhone) {
             AriaGrid(columns: columns, spacing: isPhone ? 8 : 10, items: NewScoreTemplate.allCases,
                      avoidsLoneLastItem: true) { template in
                 CreateScoreTemplateCard(
@@ -516,20 +516,20 @@ struct TemplateBrowserSheet: View {
 
     private var header: some View {
         HStack {
-            Button("Cancel") { dismiss() }
+            Button("取消") { dismiss() }
                 .font(.system(size: 16, weight: .medium))
                 .foregroundStyle(CreateScorePalette.accent)
                 .frame(minWidth: isPhoneInterface ? 62 : 110, alignment: .leading)
 
             Spacer()
 
-            Text("Choose Template")
+            Text("选择模板")
                 .font(.system(size: 17, weight: .semibold))
                 .foregroundStyle(CreateScorePalette.ink)
 
             Spacer()
 
-            Button("Use Template") {
+            Button("使用模板") {
                 selectAction(focusedTemplate)
             }
             .font(.system(size: isPhoneInterface ? 14 : 15, weight: .semibold))
@@ -610,7 +610,7 @@ struct TemplateBrowserSheet: View {
                 .font(.system(size: 14, weight: .medium))
                 .foregroundStyle(CreateScorePalette.mutedInk)
 
-            Text("Instrumentation")
+            Text("乐器编制")
                 .font(.system(size: 15, weight: .semibold))
                 .foregroundStyle(CreateScorePalette.ink)
 
@@ -713,10 +713,10 @@ struct CreateScoreInstrumentationSection: View {
     @State var isInstrumentPickerPresented = false
 
     var body: some View {
-        CreateScoreSection(number: 3, title: "Instrumentation", isPhone: isPhone) {
+        CreateScoreSection(number: 3, title: "乐器编制", isPhone: isPhone) {
             VStack(spacing: 0) {
                 if instruments.isEmpty {
-                    Text("Choose at least one instrument.")
+                    Text("请至少选择一种乐器。")
                         .font(.system(size: 14, weight: .medium))
                         .foregroundStyle(CreateScorePalette.mutedInk)
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -742,7 +742,7 @@ struct CreateScoreInstrumentationSection: View {
             Button(action: { isInstrumentPickerPresented = true }) {
                 HStack(spacing: 6) {
                     Image(systemName: "plus")
-                    Text("Add Instrument")
+                    Text("添加乐器")
                 }
                 .font(.system(size: 15, weight: .medium))
                 .foregroundStyle(CreateScorePalette.accent)
@@ -890,7 +890,7 @@ struct AddInstrumentSheet: View {
         }
         .background(Color.clear)
         .confirmationDialog(
-            "Remove Instrument?",
+            "移除乐器？",
             isPresented: Binding(
                 get: { removalCandidate != nil },
                 set: { if !$0 { removalCandidate = nil } }
@@ -898,14 +898,14 @@ struct AddInstrumentSheet: View {
             titleVisibility: .visible,
             presenting: removalCandidate
         ) { instrument in
-            Button("Remove \(instrument.name)", role: .destructive) {
+            Button("移除 \(instrument.name)", role: .destructive) {
                 removeConfirmed(instrument)
             }
-            Button("Cancel", role: .cancel) {
+            Button("取消", role: .cancel) {
                 removalCandidate = nil
             }
         } message: { instrument in
-            Text("This removes \(instrument.name) and its music from the score.")
+            Text("将从乐谱中移除 \(instrument.name) 及其音乐内容。")
         }
     }
 
@@ -915,14 +915,14 @@ struct AddInstrumentSheet: View {
 
     private var header: some View {
         HStack {
-            Button(showsCurrentInstruments ? "Close" : "Cancel") { dismiss() }
+            Button(showsCurrentInstruments ? "关闭" : "取消") { dismiss() }
                 .font(.system(size: 16, weight: .medium))
                 .foregroundStyle(CreateScorePalette.accent)
                 .frame(minWidth: isPhoneInterface ? 58 : 104, alignment: .leading)
 
             Spacer()
 
-            Text(showsCurrentInstruments ? "Add/Remove Instruments" : "Add Instruments")
+            Text(showsCurrentInstruments ? "添加或移除乐器" : "添加乐器")
                 .font(.system(size: 17, weight: .semibold))
                 .foregroundStyle(CreateScorePalette.ink)
                 .lineLimit(1)
@@ -930,7 +930,7 @@ struct AddInstrumentSheet: View {
 
             Spacer()
 
-            Button(showsCurrentInstruments ? "Done" : "Add \(selectedInstruments.count) Instrument\(selectedInstruments.count == 1 ? "" : "s")") {
+            Button(showsCurrentInstruments ? "完成" : "添加 \(selectedInstruments.count) 种乐器") {
                 commitAction(selectedInstruments)
                 dismiss()
             }
@@ -953,7 +953,7 @@ struct AddInstrumentSheet: View {
         HStack(spacing: 10) {
             Image(systemName: "magnifyingglass")
                 .foregroundStyle(CreateScorePalette.subtle)
-            TextField("Search instruments", text: $searchText)
+            TextField("搜索乐器", text: $searchText)
                 .textFieldStyle(.plain)
         }
         .font(.system(size: 16, weight: .medium))
@@ -969,7 +969,7 @@ struct AddInstrumentSheet: View {
                 Image(systemName: "magnifyingglass")
                     .foregroundStyle(CreateScorePalette.subtle)
                     .font(.system(size: 16, weight: .medium))
-                TextField("Search instruments…", text: $searchText)
+                TextField("搜索乐器…", text: $searchText)
                     .textFieldStyle(.plain)
                     .font(.system(size: 16, weight: .regular))
                 if !searchText.isEmpty {
@@ -996,7 +996,7 @@ struct AddInstrumentSheet: View {
                                 selectedCategory = .all
                             }
                         } label: {
-                            Text(genre.rawValue)
+                            Text(AriaLocalization.text(genre.rawValue))
                                 .font(.system(size: 14, weight: .semibold))
                                 .foregroundStyle(genre == selectedGenre ? .white : CreateScorePalette.ink)
                                 .padding(.horizontal, 14)
@@ -1025,7 +1025,7 @@ struct AddInstrumentSheet: View {
                                     selectedCategory = category
                                 }
                             } label: {
-                                Text(category.rawValue)
+                                Text(AriaLocalization.text(category.rawValue))
                                     .font(.system(size: 13, weight: .medium))
                                     .foregroundStyle(
                                         category == selectedCategory
@@ -1093,8 +1093,8 @@ struct AddInstrumentSheet: View {
                     HStack {
                         Text(
                             selectedInstruments.isEmpty
-                                ? "Selected Instruments"
-                                : "Selected (\(selectedInstruments.count))"
+                                ? "所选乐器"
+                                : "已选择（\(selectedInstruments.count)）"
                         )
                         .font(.system(size: 13, weight: .semibold))
                         .foregroundStyle(CreateScorePalette.mutedInk)
@@ -1105,7 +1105,7 @@ struct AddInstrumentSheet: View {
                             Button {
                                 selectedInstruments.removeAll()
                             } label: {
-                                Text("Clear All")
+                                Text("全部清除")
                                     .font(.system(size: 13, weight: .medium))
                                     .foregroundStyle(Color.red.opacity(0.78))
                             }
@@ -1122,7 +1122,7 @@ struct AddInstrumentSheet: View {
                             Image(systemName: "hand.tap")
                                 .font(.system(size: 15, weight: .medium))
                                 .foregroundStyle(CreateScorePalette.subtle)
-                            Text("Tap an instrument above to add it")
+                            Text("点击上方乐器进行添加")
                                 .font(.system(size: 14, weight: .regular))
                                 .foregroundStyle(CreateScorePalette.subtle)
                         }
@@ -1201,7 +1201,7 @@ struct AddInstrumentSheet: View {
                 Divider()
                 VStack(spacing: 0) {
                     HStack {
-                        Text("In Score (\(currentInstruments.count))")
+                        Text("乐谱中的乐器（\(currentInstruments.count)）")
                             .font(.system(size: 13, weight: .semibold))
                             .foregroundStyle(CreateScorePalette.mutedInk)
                         Spacer()
@@ -1257,7 +1257,7 @@ struct AddInstrumentSheet: View {
                         selectedCategory = .all
                     } label: {
                         HStack {
-                            Text(genre.rawValue)
+                            Text(AriaLocalization.text(genre.rawValue))
                                 .lineLimit(1)
                                 .minimumScaleFactor(0.84)
                             Spacer()
@@ -1283,7 +1283,7 @@ struct AddInstrumentSheet: View {
                         selectedCategory = category
                     } label: {
                         HStack(spacing: 0) {
-                            Text(category.rawValue)
+                            Text(AriaLocalization.text(category.rawValue))
                             Spacer()
                         }
                         .font(.system(size: 15, weight: .medium))
@@ -1335,7 +1335,7 @@ struct AddInstrumentSheet: View {
     private var selectedPanel: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 14) {
-                Text(showsCurrentInstruments ? "In Score (\(currentInstruments.count))" : "Selected (\(selectedInstruments.count))")
+                Text(showsCurrentInstruments ? "乐谱中的乐器（\(currentInstruments.count)）" : "已选择（\(selectedInstruments.count)）")
                     .font(.system(size: 15, weight: .semibold))
                     .foregroundStyle(CreateScorePalette.ink)
 
@@ -1463,10 +1463,10 @@ struct AddInstrumentSheet: View {
                 Image(systemName: "star")
                     .foregroundStyle(CreateScorePalette.subtle)
             }
-            detailRow("Category", instrument.category.rawValue)
-            detailRow("Staff", instrument.clef.instrumentLabel)
-            detailRow("Transposition", instrument.transposition)
-            detailRow("Playback", instrument.playbackName)
+            detailRow("分类", AriaLocalization.text(instrument.category.rawValue))
+            detailRow("谱表", instrument.clef.instrumentLabel)
+            detailRow("移调", instrument.transposition)
+            detailRow("播放", AriaLocalization.text(instrument.playbackName))
 
             VStack(alignment: .leading, spacing: 8) {
                 Text(instrument.name)
@@ -1640,14 +1640,14 @@ struct CreateScoreMusicSettingsSection: View {
     }
 
     var body: some View {
-        CreateScoreSection(number: 4, title: "Music Settings", isPhone: isPhone, collapsible: isPhone, startsCollapsed: isPhone) {
+        CreateScoreSection(number: 4, title: "音乐设置", isPhone: isPhone, collapsible: isPhone, startsCollapsed: isPhone) {
             AriaGrid(columns: columns, spacing: isPhone ? 10 : 14, items: CreateScoreMusicSetting.allCases) { setting in
                 switch setting {
                 case .keySignature:
-                    CreateScorePickerField(title: "Key Signature") {
+                    CreateScorePickerField(title: "调号") {
                         Button(action: { isKeySignaturePresented = true }) {
                             HStack {
-                                Text(draft.keySignature.rawValue)
+                                Text(AriaLocalization.text(draft.keySignature.rawValue))
                                     .foregroundStyle(CreateScorePalette.ink)
                                 Spacer()
                                 Image(systemName: "chevron.right")
@@ -1659,7 +1659,7 @@ struct CreateScoreMusicSettingsSection: View {
                         .buttonStyle(.plain)
                     }
                 case .timeSignature:
-                    CreateScorePickerField(title: "Time Signature") {
+                    CreateScorePickerField(title: "拍号") {
                         Button(action: { isTimeSignaturePresented = true }) {
                             HStack {
                                 Text(draft.timeSignature.rawValue)
@@ -1674,7 +1674,7 @@ struct CreateScoreMusicSettingsSection: View {
                         .buttonStyle(.plain)
                     }
                 case .tempo:
-                    CreateScorePickerField(title: "Tempo") {
+                    CreateScorePickerField(title: "速度") {
                         Stepper(value: $draft.tempo, in: 30...240, step: 4) {
                             HStack(spacing: 8) {
                                 Image(systemName: "music.note")
@@ -1683,7 +1683,7 @@ struct CreateScoreMusicSettingsSection: View {
                         }
                     }
                 case .measures:
-                    CreateScorePickerField(title: "Measures") {
+                    CreateScorePickerField(title: "小节数") {
                         Stepper(value: $draft.measureCount, in: 1...256, step: 1) {
                             Text("\(draft.measureCount)")
                                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -1779,10 +1779,10 @@ struct CreateScoreOptionsSection: View {
     }
 
     var body: some View {
-        CreateScoreSection(number: 5, title: "Options", isPhone: isPhone, collapsible: isPhone, startsCollapsed: isPhone) {
+        CreateScoreSection(number: 5, title: "选项", isPhone: isPhone, collapsible: isPhone, startsCollapsed: isPhone) {
             VStack(spacing: 12) {
                 Toggle(isOn: pickupEnabled) {
-                    CreateScoreOptionLabel(title: "Pickup Measure", detail: "Start with an incomplete measure.", isPhone: isPhone)
+                    CreateScoreOptionLabel(title: "弱起小节", detail: "以不完整的小节开始。", isPhone: isPhone)
                 }
                 if draft.hasPickupMeasure {
                     CreateScorePickupMeasureSummary(
@@ -1836,7 +1836,7 @@ struct CreateScorePickupMeasureSummary: View {
     var body: some View {
         Button(action: editAction) {
             HStack(spacing: 12) {
-                Text("Pickup Measure")
+                Text("弱起小节")
                     .font(.system(size: 14, weight: .semibold))
                     .foregroundStyle(CreateScorePalette.ink)
                 Spacer()
@@ -1904,7 +1904,7 @@ struct CreateScoreBottomBar: View {
             }
 
             Button(action: cancelAction) {
-                Text("Cancel")
+                Text("取消")
                     .font(.system(size: 16, weight: .semibold))
                     .foregroundStyle(CreateScorePalette.ink)
                     .frame(width: isPhone ? nil : 160, height: 44)
@@ -1924,7 +1924,7 @@ struct CreateScoreBottomBar: View {
                         ProgressView()
                             .tint(.white)
                     }
-                    Text(isCreating ? "Creating..." : "Create Score")
+                    Text(isCreating ? "正在创建…" : "创建乐谱")
                 }
                 .font(.system(size: 16, weight: .semibold))
                 .foregroundStyle(.white)

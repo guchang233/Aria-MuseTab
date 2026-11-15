@@ -51,7 +51,7 @@ struct ScoreReaderTempoRampSheet: View {
     private var controls: some View {
         VStack(alignment: .leading, spacing: 14) {
             HStack {
-                Text("Tempo Ramp")
+                Text("渐变速度")
                     .font(.title3.weight(.bold))
                     .accessibilityAddTraits(.isHeader)
                 Spacer()
@@ -64,18 +64,18 @@ struct ScoreReaderTempoRampSheet: View {
                         .background(Color.primary.opacity(0.06), in: Circle())
                 }
                 .buttonStyle(.plain)
-                .accessibilityLabel("Close")
+                .accessibilityLabel("关闭")
             }
 
             VStack(spacing: 0) {
                 settingRow("Starting tempo") {
                     percentStepper(value: $startSpeed, range: Self.speedRange, increment: 0.05,
-                                   accessibilityName: "starting speed")
+                                   accessibilityName: "起始速度")
                 }
                 Divider()
                 settingRow("Target tempo") {
                     percentStepper(value: $targetSpeed, range: Self.speedRange, increment: 0.05,
-                                   accessibilityName: "target speed")
+                                   accessibilityName: "目标速度")
                 }
                 Divider()
                 settingRow("Increase tempo by") { increaseStepper }
@@ -94,7 +94,7 @@ struct ScoreReaderTempoRampSheet: View {
                     .padding(12)
                     .background(Color.primary.opacity(0.05), in: RoundedRectangle(cornerRadius: 12))
             } else if ramp == nil {
-                Text("Set a target above the starting tempo.")
+                Text("目标速度应高于起始速度。")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                     #if os(Android)
@@ -106,7 +106,7 @@ struct ScoreReaderTempoRampSheet: View {
                 startAction(startSpeed, targetSpeed, step, repeatsPerStep)
                 dismiss()
             } label: {
-                Text("Start Ramp")
+                Text("开始渐变")
                     .font(.system(size: 17, weight: .semibold))
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity, minHeight: 50)
@@ -142,7 +142,7 @@ struct ScoreReaderTempoRampSheet: View {
                 Text(parts[1])
             }
             .accessibilityElement(children: .combine)
-            .accessibilityLabel(summary.replacingOccurrences(of: " → ", with: " to "))
+            .accessibilityLabel(summary.replacingOccurrences(of: " → ", with: "至"))
         } else {
             Text(summary)
         }
@@ -152,7 +152,7 @@ struct ScoreReaderTempoRampSheet: View {
     }
 
     private var loopingFootnote: some View {
-        Text("Playback keeps looping at \(Self.percent(targetSpeed)) until you stop.")
+        Text("之后将以 \(Self.percent(targetSpeed)) 持续循环，直到手动停止。")
             .font(.footnote)
             .foregroundStyle(.secondary)
             .multilineTextAlignment(.center)
@@ -181,12 +181,12 @@ struct ScoreReaderTempoRampSheet: View {
 
     private var increaseStepper: some View {
         percentStepper(value: $step, range: Self.stepRange, increment: 0.01,
-                       accessibilityName: "tempo increase", prefix: "+")
+                       accessibilityName: "每次提速", prefix: "+")
     }
 
     private var repeatStepper: some View {
         stepper(value: repeatsPerStep == 1 ? "1 loop" : "\(repeatsPerStep) loops",
-                accessibilityName: "loops per increase",
+                accessibilityName: "每次提速前循环次数",
                 decrease: { repeatsPerStep = max(1, repeatsPerStep - 1) },
                 increase: { repeatsPerStep += 1 })
     }
@@ -215,13 +215,13 @@ struct ScoreReaderTempoRampSheet: View {
     private func stepper(value: String, accessibilityName: String,
                          decrease: @escaping () -> Void, increase: @escaping () -> Void) -> some View {
         HStack(spacing: 4) {
-            stepButton("minus", label: "Lower \(accessibilityName)", action: decrease)
+            stepButton("minus", label: "降低 \(accessibilityName)", action: decrease)
             Text(value)
                 .font(.subheadline.weight(.semibold))
                 .monospacedDigit()
                 .fixedSize(horizontal: true, vertical: false)
                 .frame(minWidth: 66)
-            stepButton("plus", label: "Raise \(accessibilityName)", action: increase)
+            stepButton("plus", label: "提高 \(accessibilityName)", action: increase)
         }
     }
 

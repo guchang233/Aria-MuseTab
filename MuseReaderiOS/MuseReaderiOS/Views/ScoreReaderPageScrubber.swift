@@ -57,7 +57,7 @@ struct ScoreReaderPageScrubber: View {
         .background(.regularMaterial, in: Capsule())
         .shadow(color: Color.black.opacity(0.10), radius: 10, y: 4)
         .accessibilityElement()
-        .accessibilityLabel("Page")
+        .accessibilityLabel("页面")
         .accessibilityValue(label(for: currentPageIndex))
         .accessibilityAdjustableAction { direction in
             let step = usesTwoPageSpread ? 2 : 1
@@ -103,7 +103,7 @@ struct ScoreReaderPageScrubber: View {
             .frame(maxHeight: .infinity)
             .overlay(alignment: .topLeading) {
                 if isScrubbing {
-                    Text("Page " + label(for: shownIndex, includesTotal: false))
+                    Text("页面 " + label(for: shownIndex, includesTotal: false))
                         .font(.system(size: 15, weight: .semibold).monospacedDigit())
                         .foregroundStyle(Color.black.opacity(0.84))
                         .fixedSize()

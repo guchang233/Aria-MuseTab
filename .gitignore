@@ -68,6 +68,9 @@ temp_*
 *.local.cmake
 
 # Python
+/.local/
+/release/
+/checks/results/
 __pycache__/
 *.pyc
 .venv/

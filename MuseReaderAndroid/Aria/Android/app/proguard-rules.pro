@@ -15,3 +15,7 @@
 
 # Qt Core JNI_OnLoad and native plugin calls resolve these names/members directly.
 -keep class org.qtproject.qt.android.** { *; }
+
+# Chaquopy resolves these inference classes and members by Java reflection.
+-keep class aria.skip.omr.** { *; }
+-keep class com.chaquo.python.** { *; }

@@ -22,17 +22,17 @@ enum ManagedScoreLibraryError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .invalidLocation:
-            return "Aria could not access that file location."
+            return "无法访问此文件位置。"
         case .unsupportedFormat(let pathExtension):
-            return "Aria cannot import .\(pathExtension) into its score library yet."
+            return "暂不支持将 .\(pathExtension) 文件导入曲库。"
         case .missingDocument:
-            return "Aria could not find that score in its score library."
+            return "在本地曲库中找不到此乐谱。"
         case .couldNotCreateStorage:
-            return "Aria could not create its internal score library."
+            return "无法创建本地曲库。"
         case .missingTemplate(let name):
-            return "Aria could not find the \(name) score template."
+            return "找不到 \(name) 乐谱模板。"
         case .replacementFailed:
-            return "Aria could not safely replace the existing score."
+            return "无法安全地替换已有乐谱。"
         }
     }
 }

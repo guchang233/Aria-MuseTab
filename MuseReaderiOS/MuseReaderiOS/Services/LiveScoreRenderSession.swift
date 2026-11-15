@@ -16,9 +16,9 @@ enum LiveScoreRenderSessionError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .missingEditState:
-            return "The MuseScore render core repaired the score but did not return an editing state."
+            return "MuseScore 核心已修复乐谱，但未返回编辑状态。"
         case .unsupportedTimeSignatureDenominator(let denominator):
-            return "Time signature denominator \(denominator) is unsupported. Use 1, 2, 4, 8, or 16."
+            return "不支持分母为 \(denominator) 的拍号，请使用 1、2、4、8 或 16。"
         }
     }
 }
@@ -57,7 +57,7 @@ actor LiveScoreRenderSession {
     private static func makeScoreParts(from bridgeParts: [MSRScorePartInfo]) -> [ScorePart] {
         bridgeParts.map { part in
             let name = part.name.trimmingCharacters(in: .whitespacesAndNewlines)
-            let displayName = name.isEmpty ? "Part \(part.index + 1)" : name
+            let displayName = name.isEmpty ? "声部 \(part.index + 1)" : name
             return ScorePart(
                 id: part.partID,
                 index: part.index,
@@ -109,7 +109,7 @@ actor LiveScoreRenderSession {
 
         return ScorePage(
             index: renderedPage.pageIndex,
-            title: "Page \(renderedPage.pageIndex + 1)",
+            title: "第 \(renderedPage.pageIndex + 1) 页",
             sourcePath: "render://page-\(renderedPage.pageIndex + 1)",
             source: .liveMuseScoreRenderer,
             imageData: renderedPage.imageData.isEmpty ? nil : renderedPage.imageData,
@@ -1481,7 +1481,7 @@ actor LiveScoreRenderSession {
     @discardableResult
     func updateMetadata(_ metadata: ScoreEditableMetadata) throws -> ScoreEditingState {
         guard supportsEditing else {
-            throw ScoreDocumentServiceError.bridgeFailure("This score session does not support editing yet.")
+            throw ScoreDocumentServiceError.bridgeFailure("当前乐谱暂不支持编辑。")
         }
 
         try bridgeSession.updateMetadata(
@@ -1524,7 +1524,7 @@ actor LiveScoreRenderSession {
 
     func updateInitialKeySignature(_ keyValue: Int) throws {
         guard supportsEditing else {
-            throw ScoreDocumentServiceError.bridgeFailure("This score session does not support editing yet.")
+            throw ScoreDocumentServiceError.bridgeFailure("当前乐谱暂不支持编辑。")
         }
 
         try bridgeSession.updateInitialKeySignature(keyValue)
@@ -1533,7 +1533,7 @@ actor LiveScoreRenderSession {
 
     func save(to url: URL) throws {
         guard supportsEditing else {
-            throw ScoreDocumentServiceError.bridgeFailure("This score session does not support saving yet.")
+            throw ScoreDocumentServiceError.bridgeFailure("当前乐谱暂不支持保存。")
         }
 
         try RenderCoreWorkGate.sync {
@@ -1550,7 +1550,7 @@ actor LiveScoreRenderSession {
 
     private func makeEditingState(from editState: MSREditState, refreshScope: ScoreEditRefreshScope = .local) throws -> ScoreEditingState {
         guard let duration = ScoreNoteDuration(rawValue: editState.durationCode) else {
-            throw ScoreDocumentServiceError.bridgeFailure("Aria received an unsupported note duration from the score engine.")
+            throw ScoreDocumentServiceError.bridgeFailure("排谱核心返回了不支持的音符时值。")
         }
 
         let selection: ScoreSelectedElement?

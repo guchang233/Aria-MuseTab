@@ -61,25 +61,25 @@ enum NewScoreTemplate: String, CaseIterable, Identifiable, Sendable, Equatable {
 
     var title: String {
         switch self {
-        case .blank: return "Treble Clef"
-        case .piano: return "Piano"
-        case .leadSheet: return "Lead Sheet"
-        case .stringQuartet: return "String Quartet"
-        case .choir: return "Choir"
-        case .blankScore: return "Blank"
-        case .custom: return "More"
+        case .blank: return "高音谱号"
+        case .piano: return "钢琴"
+        case .leadSheet: return "旋律和弦谱"
+        case .stringQuartet: return "弦乐四重奏"
+        case .choir: return "合唱"
+        case .blankScore: return "空白"
+        case .custom: return "更多"
         }
     }
 
     var defaultTitle: String {
         switch self {
-        case .blank: return "New Treble Clef Score"
-        case .piano: return "New Piano Score"
-        case .leadSheet: return "New Lead Sheet"
-        case .stringQuartet: return "New String Quartet"
-        case .choir: return "New Choir Score"
-        case .blankScore: return "New Blank Score"
-        case .custom: return "New Score"
+        case .blank: return "新建高音谱表乐谱"
+        case .piano: return "新建钢琴谱"
+        case .leadSheet: return "新建旋律和弦谱"
+        case .stringQuartet: return "新建弦乐四重奏"
+        case .choir: return "新建合唱谱"
+        case .blankScore: return "新建空白乐谱"
+        case .custom: return "新建乐谱"
         }
     }
 
@@ -141,28 +141,28 @@ enum NewScoreTemplate: String, CaseIterable, Identifiable, Sendable, Equatable {
     var instruments: [NewScoreInstrument] {
         switch self {
         case .blank, .custom:
-            return [NewScoreInstrument(instanceID: "blank-treble-staff", instrumentID: "piano", name: "Treble Staff", category: .keyboards, clef: .treble)]
+            return [NewScoreInstrument(instanceID: "blank-treble-staff", instrumentID: "piano", name: "高音谱表", category: .keyboards, clef: .treble)]
         case .blankScore:
             return []
         case .piano:
             return [
-                NewScoreInstrument(instanceID: "piano", instrumentID: "piano", name: "Piano", category: .keyboards, clef: .treble)
+                NewScoreInstrument(instanceID: "piano", instrumentID: "piano", name: "钢琴", category: .keyboards, clef: .treble)
             ]
         case .leadSheet:
-            return [NewScoreInstrument(instanceID: "lead-sheet", instrumentID: "piano", name: "Lead Sheet", category: .keyboards, clef: .treble)]
+            return [NewScoreInstrument(instanceID: "lead-sheet", instrumentID: "piano", name: "旋律和弦谱", category: .keyboards, clef: .treble)]
         case .stringQuartet:
             return [
-                NewScoreInstrument(instanceID: "violin-1", instrumentID: "violin", name: "Violin I", category: .bowedStrings, clef: .treble, playbackName: "Violin"),
-                NewScoreInstrument(instanceID: "violin-2", instrumentID: "violin", name: "Violin II", category: .bowedStrings, clef: .treble, playbackName: "Violin"),
-                NewScoreInstrument(instanceID: "viola", instrumentID: "viola", name: "Viola", category: .bowedStrings, clef: .alto),
-                NewScoreInstrument(instanceID: "violoncello", instrumentID: "violoncello", name: "Cello", category: .bowedStrings, clef: .bass, playbackName: "Violoncello")
+                NewScoreInstrument(instanceID: "violin-1", instrumentID: "violin", name: "第一小提琴", category: .bowedStrings, clef: .treble, playbackName: "Violin"),
+                NewScoreInstrument(instanceID: "violin-2", instrumentID: "violin", name: "第二小提琴", category: .bowedStrings, clef: .treble, playbackName: "Violin"),
+                NewScoreInstrument(instanceID: "viola", instrumentID: "viola", name: "中提琴", category: .bowedStrings, clef: .alto),
+                NewScoreInstrument(instanceID: "violoncello", instrumentID: "violoncello", name: "大提琴", category: .bowedStrings, clef: .bass, playbackName: "Violoncello")
             ]
         case .choir:
             return [
-                NewScoreInstrument(instanceID: "soprano", instrumentID: "soprano", name: "Soprano", category: .vocals, clef: .treble),
-                NewScoreInstrument(instanceID: "alto", instrumentID: "alto", name: "Alto", category: .vocals, clef: .treble),
-                NewScoreInstrument(instanceID: "tenor", instrumentID: "tenor", name: "Tenor", category: .vocals, clef: .treble),
-                NewScoreInstrument(instanceID: "bass", instrumentID: "bass", name: "Bass", category: .vocals, clef: .bass)
+                NewScoreInstrument(instanceID: "soprano", instrumentID: "soprano", name: "女高音", category: .vocals, clef: .treble),
+                NewScoreInstrument(instanceID: "alto", instrumentID: "alto", name: "女低音", category: .vocals, clef: .treble),
+                NewScoreInstrument(instanceID: "tenor", instrumentID: "tenor", name: "男高音", category: .vocals, clef: .treble),
+                NewScoreInstrument(instanceID: "bass", instrumentID: "bass", name: "低音", category: .vocals, clef: .bass)
             ]
         }
     }
@@ -194,7 +194,7 @@ struct NewScoreTemplateChoice: Identifiable, Sendable, Equatable {
     {
         NewScoreTemplateChoice(
             title: title,
-            categoryTitle: "Quick Start",
+            categoryTitle: "快速开始",
             resourceDirectoryName: resourceDirectoryName,
             templateFileName: templateFileName,
             fallbackInstruments: instruments,
@@ -337,11 +337,11 @@ struct NewScoreTemplateChoice: Identifiable, Sendable, Equatable {
                                  _ entries: [(String, String, String)]) -> NewScoreTemplateCategory
     {
         NewScoreTemplateCategory(
-            title: title,
+            title: AriaLocalization.text(title),
             templates: entries.map { entry in
                 NewScoreTemplateChoice(
-                    title: entry.0,
-                    categoryTitle: title,
+                    title: AriaLocalization.text(entry.0),
+                    categoryTitle: AriaLocalization.text(title),
                     resourceDirectoryName: "\(directory)/\(entry.1)",
                     templateFileName: entry.2,
                     fallbackInstruments: [],
@@ -374,10 +374,10 @@ struct NewScoreInstrument: Identifiable, Sendable, Equatable {
     {
         self.instanceID = instanceID ?? UUID().uuidString
         self.instrumentID = instrumentID
-        self.name = name
+        self.name = AriaLocalization.text(name)
         self.category = category
         self.clef = clef
-        self.transposition = transposition
+        self.transposition = AriaLocalization.text(transposition)
         self.playbackName = playbackName ?? name
         self.genres = genres
     }
@@ -438,7 +438,7 @@ enum NewScoreInstrumentCategory: String, CaseIterable, Identifiable, Sendable, E
 
 extension NewScoreInstrument {
     var detailText: String {
-        "\(category.rawValue) · \(clef.instrumentLabel) · \(transposition)"
+        "\(AriaLocalization.text(category.rawValue)) · \(clef.instrumentLabel) · \(transposition)"
     }
 }
 
@@ -446,11 +446,11 @@ extension ScorePartClef {
     var instrumentLabel: String {
         switch self {
         case .treble:
-            return "Treble clef"
+            return "高音谱号"
         case .alto:
-            return "Alto clef"
+            return "中音谱号"
         case .bass:
-            return "Bass clef"
+            return "低音谱号"
         }
     }
 }

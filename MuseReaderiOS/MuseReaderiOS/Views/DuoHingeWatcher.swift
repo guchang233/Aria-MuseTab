@@ -189,7 +189,7 @@ struct DuoFakePoseOverlay: View {
             .shadow(color: .black.opacity(0.18), radius: 6, y: 2)
         }
         .buttonStyle(.plain)
-        .accessibilityLabel("Simulated Duo pose: \(monitor.pose.title)")
-        .accessibilityHint("Switches to the next pose")
+        .accessibilityLabel("模拟双屏姿态：\(monitor.pose.title)")
+        .accessibilityHint("切换到下一种姿态")
     }
 }

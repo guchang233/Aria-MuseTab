@@ -77,7 +77,7 @@ struct ScoreReaderFloatingToolPalette: View {
                     .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
-            .accessibilityLabel(isDockedLeft ? "Move palette right" : "Move palette left")
+            .accessibilityLabel(isDockedLeft ? "将工具面板移至右侧" : "将工具面板移至左侧")
         }
     }
 
@@ -96,7 +96,7 @@ struct ScoreReaderFloatingToolPalette: View {
 
         ScoreReaderPaletteButton(
             textSymbol: "\u{1D15F}.",
-            title: "Dot",
+            title: "附点",
             usesMusicFont: true,
             isSelected: selectedIsDotted,
             isEnabled: canUseRhythmTools,
@@ -107,7 +107,7 @@ struct ScoreReaderFloatingToolPalette: View {
 
         ScoreReaderPaletteButton(
             textSymbol: "\u{1D13D}",
-            title: "Rest",
+            title: "休止符",
             usesMusicFont: true,
             glyphBaselineOffset: 7,
             isSelected: selectedIsRest,
@@ -119,7 +119,7 @@ struct ScoreReaderFloatingToolPalette: View {
 
         ScoreReaderPaletteButton(
             textSymbol: "⌒",
-            title: "Tie",
+            title: "延音线",
             isSelected: editingState.selection?.isTiedForward == true,
             isEnabled: editingState.selection?.kind == .note && !isBusy,
             action: toggleTieAction
@@ -134,7 +134,7 @@ struct ScoreReaderFloatingToolPalette: View {
 
         ScoreReaderPaletteSeparator()
 
-        ScoreReaderPaletteButton(textSymbol: "♭", title: "Flat", isSelected: selectedAccidental == .flat, isEnabled: canEditPitch, action: {
+        ScoreReaderPaletteButton(textSymbol: "♭", title: "降号", isSelected: selectedAccidental == .flat, isEnabled: canEditPitch, action: {
             preferFlats = true
             if editingState.noteInputEnabled {
                 prepareAccidentalAction(.flat)
@@ -145,7 +145,7 @@ struct ScoreReaderFloatingToolPalette: View {
             }
         })
 
-        ScoreReaderPaletteButton(textSymbol: "♮", title: "Natural", isSelected: selectedAccidental == .natural, isEnabled: canEditPitch, action: {
+        ScoreReaderPaletteButton(textSymbol: "♮", title: "还原号", isSelected: selectedAccidental == .natural, isEnabled: canEditPitch, action: {
             if editingState.noteInputEnabled {
                 prepareAccidentalAction(.natural)
             } else if editingState.selection?.canChangePitch == true {
@@ -155,7 +155,7 @@ struct ScoreReaderFloatingToolPalette: View {
             }
         })
 
-        ScoreReaderPaletteButton(textSymbol: "♯", title: "Sharp", isSelected: selectedAccidental == .sharp, isEnabled: canEditPitch, action: {
+        ScoreReaderPaletteButton(textSymbol: "♯", title: "升号", isSelected: selectedAccidental == .sharp, isEnabled: canEditPitch, action: {
             preferFlats = false
             if editingState.noteInputEnabled {
                 prepareAccidentalAction(.sharp)
@@ -169,31 +169,31 @@ struct ScoreReaderFloatingToolPalette: View {
 
     @ViewBuilder
     private var repeatJumpTools: some View {
-        ScoreReaderPaletteButton(textSymbol: "1.", title: "First ending", isSelected: false, isEnabled: hasSelection, action: { addRepeatJumpAction("First ending") })
-        ScoreReaderPaletteButton(textSymbol: "2.", title: "Second ending", isSelected: false, isEnabled: hasSelection, action: { addRepeatJumpAction("Second ending") })
+        ScoreReaderPaletteButton(textSymbol: "1.", title: "第一结尾", isSelected: false, isEnabled: hasSelection, action: { addRepeatJumpAction("First ending") })
+        ScoreReaderPaletteButton(textSymbol: "2.", title: "第二结尾", isSelected: false, isEnabled: hasSelection, action: { addRepeatJumpAction("Second ending") })
         ScoreReaderPaletteSeparator()
-        ScoreReaderPaletteButton(textSymbol: "||:", title: "Start repeat", isSelected: false, isEnabled: hasSelection, action: { addRepeatJumpAction("Start repeat") })
-        ScoreReaderPaletteButton(textSymbol: ":||", title: "End repeat", isSelected: false, isEnabled: hasSelection, action: { addRepeatJumpAction("End repeat") })
+        ScoreReaderPaletteButton(textSymbol: "||:", title: "反复开始", isSelected: false, isEnabled: hasSelection, action: { addRepeatJumpAction("Start repeat") })
+        ScoreReaderPaletteButton(textSymbol: ":||", title: "反复结束", isSelected: false, isEnabled: hasSelection, action: { addRepeatJumpAction("End repeat") })
         ScoreReaderPaletteSeparator()
-        ScoreReaderPaletteButton(textSymbol: "D.S.", title: "D.S. al Coda", isSelected: false, isEnabled: hasSelection, action: { addRepeatJumpAction("D.S. al Coda") })
-        ScoreReaderPaletteButton(textSymbol: "D.S.", title: "D.S. al Fine", isSelected: false, isEnabled: hasSelection, action: { addRepeatJumpAction("D.S. al Fine") })
-        ScoreReaderPaletteButton(textSymbol: "D.C.", title: "D.C. al Coda", isSelected: false, isEnabled: hasSelection, action: { addRepeatJumpAction("D.C. al Coda") })
-        ScoreReaderPaletteButton(textSymbol: "D.C.", title: "D.C. al Fine", isSelected: false, isEnabled: hasSelection, action: { addRepeatJumpAction("D.C. al Fine") })
+        ScoreReaderPaletteButton(textSymbol: "D.S.", title: "从记号反复至尾声", isSelected: false, isEnabled: hasSelection, action: { addRepeatJumpAction("D.S. al Coda") })
+        ScoreReaderPaletteButton(textSymbol: "D.S.", title: "从记号反复至结束", isSelected: false, isEnabled: hasSelection, action: { addRepeatJumpAction("D.S. al Fine") })
+        ScoreReaderPaletteButton(textSymbol: "D.C.", title: "从头反复至尾声", isSelected: false, isEnabled: hasSelection, action: { addRepeatJumpAction("D.C. al Coda") })
+        ScoreReaderPaletteButton(textSymbol: "D.C.", title: "从头反复至结束", isSelected: false, isEnabled: hasSelection, action: { addRepeatJumpAction("D.C. al Fine") })
         ScoreReaderPaletteSeparator()
-        ScoreReaderPaletteButton(textSymbol: "\u{E047}", title: "Segno", usesMusicFont: true, isSelected: false, isEnabled: hasSelection, action: { addRepeatJumpAction("Segno") })
-        ScoreReaderPaletteButton(textSymbol: "To Coda", title: "To Coda", isSelected: false, isEnabled: hasSelection, action: { addRepeatJumpAction("To Coda") })
-        ScoreReaderPaletteButton(textSymbol: "\u{E048}", title: "Coda", usesMusicFont: true, isSelected: false, isEnabled: hasSelection, action: { addRepeatJumpAction("Coda") })
+        ScoreReaderPaletteButton(textSymbol: "\u{E047}", title: "反复记号", usesMusicFont: true, isSelected: false, isEnabled: hasSelection, action: { addRepeatJumpAction("Segno") })
+        ScoreReaderPaletteButton(textSymbol: "To Coda", title: "跳至尾声", isSelected: false, isEnabled: hasSelection, action: { addRepeatJumpAction("To Coda") })
+        ScoreReaderPaletteButton(textSymbol: "\u{E048}", title: "尾声", usesMusicFont: true, isSelected: false, isEnabled: hasSelection, action: { addRepeatJumpAction("Coda") })
     }
 
     @ViewBuilder
     private var textTools: some View {
-        ScoreReaderPaletteButton(systemImage: "text.alignleft", title: "Staff Text", isSelected: false, isEnabled: hasSelection, action: { addTextAction("Staff Text") })
-        ScoreReaderPaletteButton(systemImage: "text.badge.plus", title: "System Text", isSelected: false, isEnabled: hasSelection, action: { addTextAction("System Text") })
-        ScoreReaderPaletteButton(textSymbol: "A", title: "Rehearsal Mark", isSelected: false, isEnabled: hasSelection, action: { addTextAction("Rehearsal Mark") })
-        ScoreReaderPaletteButton(textSymbol: "C7", title: "Chord Text", isSelected: false, isEnabled: hasSelection, action: openChordEntryAction)
-        ScoreReaderPaletteButton(textSymbol: "Ly", title: "Lyrics", isSelected: false, isEnabled: hasSelection, action: openLyricsEntryAction)
+        ScoreReaderPaletteButton(systemImage: "text.alignleft", title: "谱表文字", isSelected: false, isEnabled: hasSelection, action: { addTextAction("Staff Text") })
+        ScoreReaderPaletteButton(systemImage: "text.badge.plus", title: "谱系文字", isSelected: false, isEnabled: hasSelection, action: { addTextAction("System Text") })
+        ScoreReaderPaletteButton(textSymbol: "A", title: "排练记号", isSelected: false, isEnabled: hasSelection, action: { addTextAction("Rehearsal Mark") })
+        ScoreReaderPaletteButton(textSymbol: "C7", title: "和弦文字", isSelected: false, isEnabled: hasSelection, action: openChordEntryAction)
+        ScoreReaderPaletteButton(textSymbol: "Ly", title: "歌词", isSelected: false, isEnabled: hasSelection, action: openLyricsEntryAction)
         ScoreReaderPaletteButton.fingering(isEnabled: editingState.selection?.canEditFingering == true && !isBusy, action: openFingeringAction)
-        ScoreReaderPaletteButton(systemImage: "metronome", title: "Tempo", isSelected: false, isEnabled: !isBusy, action: openTempoEditorAction)
+        ScoreReaderPaletteButton(systemImage: "metronome", title: "速度", isSelected: false, isEnabled: !isBusy, action: openTempoEditorAction)
     }
 
     @ViewBuilder
@@ -212,7 +212,7 @@ struct ScoreReaderFloatingToolPalette: View {
                 Image(systemName: "ellipsis")
                     .font(.system(size: 19, weight: .semibold))
                     .frame(height: 22)
-                Text("More")
+                Text("更多")
                     .font(.system(size: 9, weight: .medium))
                     .lineLimit(2)
                     .multilineTextAlignment(.center)
@@ -336,7 +336,7 @@ struct ScoreReaderPaletteButton: View {
     static let fingeringSystemImage = "hand.raised"
 
     static func fingering(isEnabled: Bool, action: @escaping () -> Void) -> Self {
-        Self(systemImage: fingeringSystemImage, title: "Fingering", isSelected: false, isEnabled: isEnabled, action: action)
+        Self(systemImage: fingeringSystemImage, title: "指法", isSelected: false, isEnabled: isEnabled, action: action)
     }
 
     var body: some View {

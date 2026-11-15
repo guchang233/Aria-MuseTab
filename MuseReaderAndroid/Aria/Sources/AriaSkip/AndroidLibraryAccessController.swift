@@ -47,6 +47,7 @@ final class LibraryAccessController {
     }
 
     func start() async {
+        if LibraryAccessPolicy.isCommunityBuild { status = .rolloutDisabled; return }
         guard !hasStarted else {
             return
         }
@@ -67,6 +68,7 @@ final class LibraryAccessController {
     deinit { purchaseUpdates?.cancel() }
 
     func refreshEntitlements() async {
+        if LibraryAccessPolicy.isCommunityBuild { status = .rolloutDisabled; return }
         if case .rolloutDisabled = status {
             status = .checking
         }

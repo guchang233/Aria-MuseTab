@@ -16,11 +16,11 @@ enum UnlimitedScoresReason: String, Codable, Equatable, Sendable {
     var settingsTitle: String {
         switch self {
         case .earlySupporter:
-            return "Early Supporter"
+            return "早期支持者"
         case .purchased:
-            return "Purchased"
+            return "已购买"
         case .familyShared:
-            return "Family Access"
+            return "家庭共享"
         }
     }
 }
@@ -32,6 +32,7 @@ enum LibraryAccessStatus: Equatable, Sendable {
     case unlimited(UnlimitedScoresReason)
 
     var hasUnlimitedScores: Bool {
+        if LibraryAccessPolicy.isCommunityBuild { return true }
         if case .rolloutDisabled = self {
             return true
         }
@@ -42,7 +43,7 @@ enum LibraryAccessStatus: Equatable, Sendable {
     }
 
     var showsMonetizationUI: Bool {
-        self != .rolloutDisabled
+        !LibraryAccessPolicy.isCommunityBuild && self != .rolloutDisabled
     }
 
     var unlimitedReason: UnlimitedScoresReason? {
@@ -125,6 +126,9 @@ struct LibraryOriginalAppVersionSimulation: Equatable, Sendable {
 }
 
 struct LibraryAccessPolicy {
+    // This GPL community fork does not use the upstream app's store products.
+    static let isCommunityBuild = true
+
     static let freeScoreLimit = 2
     static let grandfatheredThroughBuild = "1"
     // Aria Pro version 4.1 went live on August 29, 2026 at 19:02:37 UTC.

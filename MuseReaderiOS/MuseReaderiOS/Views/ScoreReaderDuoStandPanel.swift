@@ -49,9 +49,9 @@ struct ScoreReaderDuoStandPanel: View {
             positionRow
             Spacer(minLength: 14)
             HStack(spacing: 12) {
-                settingCard(title: "Metronome", systemImage: "metronome",
+                settingCard(title: "节拍器", systemImage: "metronome",
                             isOn: metronomeEnabled, action: toggleMetronomeAction)
-                settingCard(title: "Count-in", systemImage: "timer",
+                settingCard(title: "预备拍", systemImage: "timer",
                             isOn: countInEnabled, action: toggleCountInAction)
             }
         }
@@ -88,7 +88,7 @@ struct ScoreReaderDuoStandPanel: View {
                         .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 10, style: .continuous))
                 }
                 .buttonStyle(.plain)
-                .accessibilityLabel(twoPageEnabled ? "Use single-page view" : "Use two-page view")
+                .accessibilityLabel(twoPageEnabled ? "使用单页视图" : "使用双页视图")
             }
 
             if let keyControl {
@@ -99,7 +99,7 @@ struct ScoreReaderDuoStandPanel: View {
 
     private var transportRow: some View {
         HStack(alignment: .center, spacing: 12) {
-            pageTurnButton(title: "Prev Page", systemImage: "chevron.left",
+            pageTurnButton(title: "上一页", systemImage: "chevron.left",
                            isEnabled: currentPageIndex > 0, action: previousPageAction)
 
             Spacer(minLength: 4)
@@ -116,7 +116,7 @@ struct ScoreReaderDuoStandPanel: View {
 
             Spacer(minLength: 4)
 
-            pageTurnButton(title: "Next Page", systemImage: "chevron.right",
+            pageTurnButton(title: "下一页", systemImage: "chevron.right",
                            isEnabled: currentPageIndex < pageCount - (usesTwoPageSpread ? 2 : 1),
                            action: nextPageAction)
         }
@@ -132,7 +132,7 @@ struct ScoreReaderDuoStandPanel: View {
                 currentIndex: activeMeasureRegion?.measureIndex ?? 0,
                 showsTicks: true,
                 accentColor: Self.accentColor,
-                accessibilityName: "Measure",
+                accessibilityName: "小节",
                 markLabel: { "\($0 + 1)" },
                 bubbleLabel: { "m. \($0 + 1)" },
                 positionLabel: { "\($0 + 1) / \(axis.measureCount)" },
@@ -149,7 +149,7 @@ struct ScoreReaderDuoStandPanel: View {
                 currentIndex: currentPageIndex,
                 showsTicks: false,
                 accentColor: Self.accentColor,
-                accessibilityName: "Page",
+                accessibilityName: "页面",
                 markLabel: { "\($0 + 1)" },
                 bubbleLabel: { pageBubbleLabel(for: $0) },
                 positionLabel: { "\($0 + 1) / \(pageCount)" },
@@ -186,7 +186,7 @@ struct ScoreReaderDuoStandPanel: View {
     private var timeLabel: some View {
         Group {
             if isCountingIn {
-                Text("Count-in")
+                Text("预备拍")
             } else if let playbackPreparationMessage {
                 Text(playbackPreparationMessage)
             } else {
@@ -223,7 +223,7 @@ struct ScoreReaderDuoStandPanel: View {
         .buttonStyle(.plain)
         .disabled(!supportsPlayback || !playbackState.isAvailable || isPlaybackBusy)
         .opacity(supportsPlayback && playbackState.isAvailable ? 1 : 0.45)
-        .accessibilityLabel(playbackState.isPlaying ? "Pause playback" : "Play playback")
+        .accessibilityLabel(playbackState.isPlaying ? "暂停播放" : "开始播放")
     }
 
     private var stopButton: some View {
@@ -238,7 +238,7 @@ struct ScoreReaderDuoStandPanel: View {
         .buttonStyle(.plain)
         .disabled(!canStop)
         .opacity(canStop ? 1 : 0.4)
-        .accessibilityLabel("Stop playback")
+        .accessibilityLabel("停止播放")
     }
 
     private var mixerButton: some View {
@@ -251,8 +251,8 @@ struct ScoreReaderDuoStandPanel: View {
         }
         .buttonStyle(.plain)
         .disabled(!supportsPlayback)
-        .accessibilityLabel("Mixer")
-        .accessibilityValue(isMixerPresented ? "Open" : "Closed")
+        .accessibilityLabel("混音器")
+        .accessibilityValue(isMixerPresented ? "打开" : "已合拢")
     }
 
     private func pageTurnButton(title: String, systemImage: String, isEnabled: Bool,
@@ -288,7 +288,7 @@ struct ScoreReaderDuoStandPanel: View {
                     Text(title)
                         .font(.system(size: 18, weight: .semibold))
                         .foregroundStyle(isOn ? Self.accentColor : Color.black.opacity(0.88))
-                    Text(isOn ? "On" : "Off")
+                    Text(isOn ? "开启" : "关闭")
                         .font(.system(size: 15, weight: .medium))
                         .foregroundStyle(isOn ? Self.accentColor : Color.black.opacity(0.48))
                 }
@@ -308,7 +308,7 @@ struct ScoreReaderDuoStandPanel: View {
         .disabled(!playbackState.isAvailable || isPlaybackBusy)
         .opacity(playbackState.isAvailable ? 1 : 0.45)
         .accessibilityLabel(title)
-        .accessibilityValue(isOn ? "On" : "Off")
+        .accessibilityValue(isOn ? "开启" : "关闭")
     }
 
     /// Rounded at the top only: the bottom corners run past the screen's edge.
@@ -359,7 +359,7 @@ struct ScoreReaderDuoMeasureCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack {
-                Text("Measure \(shownMeasure + 1)")
+                Text("第 \(shownMeasure + 1) 小节")
                     .font(.system(size: 15, weight: .semibold).monospacedDigit())
                     .foregroundStyle(.white)
                     .padding(.horizontal, 12)
@@ -378,8 +378,8 @@ struct ScoreReaderDuoMeasureCard: View {
         .background(Color.white.opacity(0.9), in: RoundedRectangle(cornerRadius: 22, style: .continuous))
         .shadow(color: Color.black.opacity(0.08), radius: 10, y: 3)
         .accessibilityElement()
-        .accessibilityLabel("Measure")
-        .accessibilityValue("\(shownMeasure + 1) of \(measureCount)")
+        .accessibilityLabel("小节")
+        .accessibilityValue("第 \(shownMeasure + 1)/\(measureCount) 小节")
         .accessibilityAdjustableAction { direction in
             switch direction {
             case .increment:
@@ -498,19 +498,19 @@ struct ScoreReaderDuoPlaybackStrip: View {
                 circleButton(systemImage: playbackState.isPlaying ? "pause.fill" : "play.fill",
                              size: 48, isProminent: true, isActive: false,
                              isEnabled: supportsPlayback && playbackState.isAvailable && !isPlaybackBusy,
-                             label: playbackState.isPlaying ? "Pause playback" : "Play playback",
+                             label: playbackState.isPlaying ? "暂停播放" : "开始播放",
                              action: togglePlaybackAction)
                 circleButton(systemImage: "stop.fill", size: 40, isProminent: false, isActive: false,
                              isEnabled: playbackState.isAvailable && playbackState.status != .stopped && !isPlaybackBusy,
-                             label: "Stop playback", action: stopPlaybackAction)
+                             label: "停止播放", action: stopPlaybackAction)
                 circleButton(systemImage: "metronome", size: 40, isProminent: false,
                              isActive: metronomeEnabled,
                              isEnabled: playbackState.isAvailable && !isPlaybackBusy,
-                             label: "Metronome", action: toggleMetronomeAction)
-                    .accessibilityValue(metronomeEnabled ? "On" : "Off")
+                             label: "节拍器", action: toggleMetronomeAction)
+                    .accessibilityValue(metronomeEnabled ? "开启" : "关闭")
                 circleButton(systemImage: "slider.vertical.3", size: 40, isProminent: false,
                              isActive: isMixerPresented, isEnabled: supportsPlayback,
-                             label: "Mixer", action: toggleMixerAction)
+                             label: "混音器", action: toggleMixerAction)
 
                 Spacer(minLength: 6)
 
@@ -529,7 +529,7 @@ struct ScoreReaderDuoPlaybackStrip: View {
                     currentIndex: currentMeasure,
                     showsTicks: true,
                     accentColor: Self.accentColor,
-                    accessibilityName: "Measure",
+                    accessibilityName: "小节",
                     markLabel: { "\($0 + 1)" },
                     bubbleLabel: { "m. \($0 + 1)" },
                     positionLabel: { "\($0 + 1) / \(measureCount)" },
@@ -546,7 +546,7 @@ struct ScoreReaderDuoPlaybackStrip: View {
     private var timeLabel: some View {
         Group {
             if isCountingIn {
-                Text("Count-in")
+                Text("预备拍")
             } else if let playbackPreparationMessage {
                 Text(playbackPreparationMessage)
             } else {
@@ -573,7 +573,7 @@ struct ScoreReaderDuoPlaybackStrip: View {
                     .font(.system(size: 16, weight: .semibold))
                     .frame(width: 36, height: 40)
             }
-            .accessibilityLabel("Previous measure")
+            .accessibilityLabel("上一小节")
 
             Text("m. \(currentMeasure + 1)")
                 .font(.system(size: 16, weight: .semibold).monospacedDigit())
@@ -586,7 +586,7 @@ struct ScoreReaderDuoPlaybackStrip: View {
                     .font(.system(size: 16, weight: .semibold))
                     .frame(width: 36, height: 40)
             }
-            .accessibilityLabel("Next measure")
+            .accessibilityLabel("下一小节")
         }
         .buttonStyle(.plain)
         .foregroundStyle(Color.black.opacity(0.84))

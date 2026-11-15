@@ -141,11 +141,11 @@ open class MuseScorePackageBridge: NSObject, @unchecked Sendable {
         if fileExtension == "mscx" || isMusicXMLPathExtension(fileExtension) {
             let scoreData = try Data(contentsOf: url, options: .mappedIfSafe)
             guard let scoreXML = stringFromUTF8Data(scoreData) else {
-                throw bridgeError(.invalidScoreEncoding, "This MSCX file could not be decoded as text.")
+                throw bridgeError(.invalidScoreEncoding, "无法将此 MSCX 文件读取为文本。")
             }
             let isMSCX = fileExtension == "mscx"
             if !isMSCX && !isMusicXMLDocument(scoreXML) {
-                throw bridgeError(.unsupportedFormat, "This XML file is not a score-partwise or score-timewise MusicXML document.")
+                throw bridgeError(.unsupportedFormat, "此 XML 不是有效的 MusicXML 乐谱。")
             }
             return MSRDocumentPayload(format: isMSCX ? .MSCX : .musicXML, rootFilePath: url.lastPathComponent,
                                       scoreXML: scoreXML, packageEntries: [], previewAssets: [], thumbnailData: nil)
@@ -154,7 +154,7 @@ open class MuseScorePackageBridge: NSObject, @unchecked Sendable {
         let isMSCZ = fileExtension == "mscz"
         let isMXL = fileExtension == "mxl"
         guard isMSCZ || isMXL else {
-            throw bridgeError(.unsupportedFormat, "Only MSCZ, MSCX, MusicXML, and MXL files are supported right now.")
+            throw bridgeError(.unsupportedFormat, "当前仅支持 MSCZ、MSCX、MusicXML 和 MXL 乐谱文件。")
         }
 
         let archiveData = try Data(contentsOf: url, options: .mappedIfSafe)
@@ -164,14 +164,14 @@ open class MuseScorePackageBridge: NSObject, @unchecked Sendable {
             aria.zipOpen(&archive, raw.bindMemory(to: UInt8.self).baseAddress, raw.count, &zipError)
         }
         guard opened else {
-            throw bridgeError(.invalidArchive, "The score package is invalid: \(makeString(zipError))")
+            throw bridgeError(.invalidArchive, "乐谱文件包无效：\(makeString(zipError))")
         }
 
         func dataForEntry(_ entryPath: String) throws -> Data {
             var output = aria.Bytes()
             var message = std.string()
             guard aria.zipExtract(archive, std.string(entryPath), &output, &message) else {
-                throw bridgeError(.invalidArchive, "Could not read archive entry \(entryPath): \(makeString(message))")
+                throw bridgeError(.invalidArchive, "无法读取文件包条目 \(entryPath)：\(makeString(message))")
             }
             return makeData(output)
         }
@@ -182,17 +182,17 @@ open class MuseScorePackageBridge: NSObject, @unchecked Sendable {
         guard let rootScorePath = containerXML.flatMap({ rootScorePathFromContainer($0, includeMusicXML: isMXL) })
             ?? rootScorePathFromEntries(entries, includeMusicXML: isMXL) else {
             throw bridgeError(.missingScoreFile, isMXL
-                ? "The MXL package does not contain a root MusicXML score."
-                : "The MSCZ package does not contain a root MSCX score.")
+                ? "MXL 文件包中缺少主 MusicXML 乐谱。"
+                : "MSCZ 文件包中缺少主 MSCX 乐谱。")
         }
 
         let scoreData = try dataForEntry(rootScorePath)
         guard let scoreXML = stringFromUTF8Data(scoreData) else {
-            throw bridgeError(.invalidScoreEncoding, "The root score file in this package could not be decoded as text.")
+            throw bridgeError(.invalidScoreEncoding, "无法将文件包中的主乐谱读取为文本。")
         }
         if isMXL && !isMusicXMLDocument(scoreXML) {
             throw bridgeError(.unsupportedFormat,
-                              "The root file in this MXL package is not a score-partwise or score-timewise MusicXML document.")
+                              "MXL 文件包中的主文件不是有效的 MusicXML 乐谱。")
         }
 
         let previewAssets = previewPathsFromEntries(entries).compactMap { path in

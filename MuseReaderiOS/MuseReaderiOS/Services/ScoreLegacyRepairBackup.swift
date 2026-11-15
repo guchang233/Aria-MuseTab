@@ -6,7 +6,7 @@ enum ScoreLegacyRepairBackup {
               fileManager.fileExists(atPath: sourceURL.path),
               let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first
         else {
-            throw ScoreDocumentServiceError.bridgeFailure("The original score file could not be found for backup.")
+            throw ScoreDocumentServiceError.bridgeFailure("找不到需要备份的原始乐谱文件。")
         }
 
         let backupsRoot = documentsURL.appendingPathComponent("Aria Backups", isDirectory: true)
@@ -37,7 +37,7 @@ enum ScoreLegacyRepairBackup {
         let copiedSize = (try fileManager.attributesOfItem(atPath: destinationURL.path)[.size] as? NSNumber)?.int64Value ?? 0
         guard fileManager.fileExists(atPath: destinationURL.path), copiedSize > 0
         else {
-            throw ScoreDocumentServiceError.bridgeFailure("Aria could not verify the untouched backup copy.")
+            throw ScoreDocumentServiceError.bridgeFailure("无法校验原始备份副本。")
         }
         return destinationURL
     }
@@ -47,7 +47,7 @@ enum ScoreLegacyRepairBackup {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "en_US_POSIX")
         formatter.dateFormat = "yyyy-MM-dd HH.mm.ss"
-        let name = scoreName.isEmpty ? "Score" : scoreName
+        let name = scoreName.isEmpty ? "乐谱" : scoreName
         let base = "\(name) – \(formatter.string(from: Date()))"
 
         var candidate = root.appendingPathComponent(base, isDirectory: true)

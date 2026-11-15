@@ -23,9 +23,9 @@ enum ScorePageAssetSource: String, Sendable, Equatable {
     var displayName: String {
         switch self {
         case .embeddedPackagePreview:
-            return "Embedded Package Preview"
+            return "文件内嵌预览"
         case .liveMuseScoreRenderer:
-            return "MuseScore Render Core"
+            return "MuseScore 排谱核心"
         }
     }
 }
@@ -49,9 +49,9 @@ enum ScoreRenderPipeline: Sendable, Equatable {
     var detailText: String {
         switch self {
         case .liveMuseScoreRenderer:
-            return "This session is backed by the MuseScore engraving engine. The reader now requests pages on demand from a live score session so playback and editing can attach to the same open document later."
+            return "此乐谱由 MuseScore 排谱核心处理，按需生成页面，并在同一份乐谱上完成播放与编辑。"
         case .embeddedPackagePreview(let reason):
-            return reason ?? "This session is showing preview assets stored inside the MuseScore package. The reader shell is already session-oriented, so a live engraving renderer can replace these previews later without changing the app structure."
+            return reason ?? "当前显示 MuseScore 文件包中的内嵌预览，可在实时排谱就绪后切换为实际谱面。"
         case .waitingForLiveRenderer(let reason):
             return reason
         }
@@ -803,14 +803,14 @@ struct ScoreCorruptionIssue: Identifiable, Sendable, Equatable {
     var title: String {
         var parts = ["Measure \(measureNumber)", "Staff \(staffIndex + 1)"]
         if voice > 1 {
-            parts.append("Voice \(voice)")
+            parts.append("声部 \(voice)")
         }
         return parts.joined(separator: " · ")
     }
 
     /// "Bar too long", "Bar too short", "Voice too long" or "Broken measure repeat".
     var problemName: String {
-        kind == "Corrupted measure" ? "Broken measure repeat" : kind
+        kind == "损坏的小节" ? "异常的小节反复" : kind
     }
 
     /// Repairs that keep the music come first; Clear Bar is always last.
@@ -834,10 +834,10 @@ enum ScoreCorruptionRepair: Int, Sendable {
 
     var title: String {
         switch self {
-        case .clear: return "Clear Bar"
-        case .fillWithRests: return "Fill with Rests"
-        case .trimToFit: return "Trim to Fit"
-        case .fitTimeSignature: return "Change Time Signature"
+        case .clear: return "清空小节"
+        case .fillWithRests: return "用休止符填满"
+        case .trimToFit: return "裁剪至小节长度"
+        case .fitTimeSignature: return "更改拍号"
         }
     }
 
@@ -871,23 +871,23 @@ struct ScoreLegacyRepairIssue: Identifiable, Sendable, Equatable {
     var title: String {
         switch kind {
         case "partName":
-            return "Part Name · \(location)"
+            return "声部名称 · \(location)"
         case "missingRepeat":
-            return "Repeat Sign · \(location) · Measure \(measureNumber)"
+            return "反复记号 · \(location) · 第 \(measureNumber) 小节"
         case "missingTempo":
-            return "Tempo · \(location) · Measure \(measureNumber)"
+            return "速度 · \(location) · 第 \(measureNumber) 小节"
         case "tempo":
-            return "Tempo · \(location) · Measure \(measureNumber) · Staff \(staffIndex + 1)"
+            return "速度 · \(location) · 第 \(measureNumber) 小节 · 谱表 \(staffIndex + 1)"
         case "strayClef":
-            return "Extra Clef · \(location) · Measure \(measureNumber) · Staff \(staffIndex + 1)"
+            return "多余谱号 · \(location) · 第 \(measureNumber) 小节 · 谱表 \(staffIndex + 1)"
         case "emptyLyrics":
-            return "Empty Lyrics · \(location) · From Measure \(measureNumber)"
+            return "空歌词 · \(location) · 从第 \(measureNumber) 小节起"
         case "lyricHyphen":
-            return "Lyric Hyphens · \(location) · From Measure \(measureNumber)"
+            return "歌词连字符 · \(location) · 从第 \(measureNumber) 小节起"
         case "drumStaff":
-            return "Drum Staff · \(location) · Staff \(staffIndex + 1)"
+            return "打击乐谱表 · \(location) · 谱表 \(staffIndex + 1)"
         default:
-            return "Dynamic · \(location) · Measure \(measureNumber) · Staff \(staffIndex + 1)"
+            return "力度 · \(location) · 第 \(measureNumber) 小节 · 谱表 \(staffIndex + 1)"
         }
     }
 }

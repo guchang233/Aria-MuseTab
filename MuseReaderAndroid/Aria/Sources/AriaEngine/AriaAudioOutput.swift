@@ -16,7 +16,7 @@ public final class AriaAudioOutput: @unchecked Sendable {
         var errorMessage = std.string()
         guard let output = aria.audioOutputCreate(sampleRate ?? 0, Int32(playerCount), &errorMessage) else {
             throw NSError(domain: "Aria.AudioOutput", code: 1, userInfo: [
-                NSLocalizedDescriptionKey: String(errorMessage).isEmpty ? "The audio output could not be opened." : String(errorMessage)
+                NSLocalizedDescriptionKey: String(errorMessage).isEmpty ? "无法打开音频输出。" : String(errorMessage)
             ])
         }
         self.output = output

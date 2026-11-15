@@ -16,13 +16,13 @@ enum ScoreFileFormat: String, Codable, Sendable {
     var displayName: String {
         switch self {
         case .mscz:
-            return "MSCZ Package"
+            return "MSCZ 乐谱包"
         case .mscx:
-            return "MSCX Score"
+            return "MSCX 乐谱"
         case .mxl:
-            return "Compressed MusicXML"
+            return "压缩 MusicXML"
         case .musicxml:
-            return "MusicXML Score"
+            return "MusicXML 乐谱"
         }
     }
 }

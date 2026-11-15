@@ -9,27 +9,27 @@ struct ScoreReaderDynamicTool: Identifiable {
 
 enum ScoreReaderDynamicTools {
     static let primary: [ScoreReaderDynamicTool] = [
-        ScoreReaderDynamicTool(token: "f", title: "Forte"),
-        ScoreReaderDynamicTool(token: "mf", title: "Mezzo Forte"),
-        ScoreReaderDynamicTool(token: "p", title: "Piano"),
-        ScoreReaderDynamicTool(token: "mp", title: "Mezzo Piano")
+        ScoreReaderDynamicTool(token: "f", title: "强"),
+        ScoreReaderDynamicTool(token: "mf", title: "中强"),
+        ScoreReaderDynamicTool(token: "p", title: "弱"),
+        ScoreReaderDynamicTool(token: "mp", title: "中弱")
     ]
 
     static let additional: [ScoreReaderDynamicTool] = [
-        ScoreReaderDynamicTool(token: "ppp", title: "Pianississimo"),
-        ScoreReaderDynamicTool(token: "pp", title: "Pianissimo"),
-        ScoreReaderDynamicTool(token: "ff", title: "Fortissimo"),
-        ScoreReaderDynamicTool(token: "fff", title: "Fortississimo"),
-        ScoreReaderDynamicTool(token: "fp", title: "Forte Piano"),
-        ScoreReaderDynamicTool(token: "pf", title: "Piano Forte"),
-        ScoreReaderDynamicTool(token: "sf", title: "Sforzando"),
-        ScoreReaderDynamicTool(token: "sfz", title: "Sforzato"),
-        ScoreReaderDynamicTool(token: "sff", title: "Sforzando Fortissimo"),
-        ScoreReaderDynamicTool(token: "sffz", title: "Sforzando Fortissimo Z"),
-        ScoreReaderDynamicTool(token: "sfp", title: "Sforzando Piano"),
-        ScoreReaderDynamicTool(token: "rfz", title: "Rinforzando"),
-        ScoreReaderDynamicTool(token: "rf", title: "Rinforzando Forte"),
-        ScoreReaderDynamicTool(token: "fz", title: "Forzando")
+        ScoreReaderDynamicTool(token: "ppp", title: "极弱"),
+        ScoreReaderDynamicTool(token: "pp", title: "很弱"),
+        ScoreReaderDynamicTool(token: "ff", title: "很强"),
+        ScoreReaderDynamicTool(token: "fff", title: "极强"),
+        ScoreReaderDynamicTool(token: "fp", title: "强后弱"),
+        ScoreReaderDynamicTool(token: "pf", title: "弱后强"),
+        ScoreReaderDynamicTool(token: "sf", title: "突强"),
+        ScoreReaderDynamicTool(token: "sfz", title: "特强重音"),
+        ScoreReaderDynamicTool(token: "sff", title: "突强至很强"),
+        ScoreReaderDynamicTool(token: "sffz", title: "突强至很强（Z）"),
+        ScoreReaderDynamicTool(token: "sfp", title: "突强后弱"),
+        ScoreReaderDynamicTool(token: "rfz", title: "加强"),
+        ScoreReaderDynamicTool(token: "rf", title: "加强至强"),
+        ScoreReaderDynamicTool(token: "fz", title: "强重音")
     ]
 
     static let all = primary + additional
@@ -47,21 +47,21 @@ struct ScoreReaderArticulationTool: Identifiable {
 
 enum ScoreReaderArticulationTools {
     private static let common: [ScoreReaderArticulationTool] = [
-        ScoreReaderArticulationTool(token: "Accent", title: "Accent", symbol: ">"),
-        ScoreReaderArticulationTool(token: "Marcato", title: "Marcato", symbol: "^"),
-        ScoreReaderArticulationTool(token: "Tenuto", title: "Tenuto", symbol: "-"),
-        ScoreReaderArticulationTool(token: "Staccato", title: "Staccato", symbol: ".")
+        ScoreReaderArticulationTool(token: "Accent", title: "重音", symbol: ">"),
+        ScoreReaderArticulationTool(token: "Marcato", title: "强调", symbol: "^"),
+        ScoreReaderArticulationTool(token: "Tenuto", title: "保持音", symbol: "-"),
+        ScoreReaderArticulationTool(token: "Staccato", title: "跳音", symbol: ".")
     ]
 
     /// Its own button, ahead of Articulations, as in MuseScore's separate Fermatas palette:
     /// it also goes on rests, which the note-only articulations don't.
     static let fermata = ScoreReaderArticulationTool(
-        token: "Fermata", title: "Fermata", symbol: "\u{E4C0}", musicGlyph: "\u{E4C0}"
+        token: "Fermata", title: "延长记号", symbol: "\u{E4C0}", musicGlyph: "\u{E4C0}"
     )
 
     private static let bowing: [ScoreReaderArticulationTool] = [
-        ScoreReaderArticulationTool(token: "String Up", title: "String Up", symbol: "∨"),
-        ScoreReaderArticulationTool(token: "String Down", title: "String Down", symbol: "П")
+        ScoreReaderArticulationTool(token: "String Up", title: "上弓", symbol: "∨"),
+        ScoreReaderArticulationTool(token: "String Down", title: "下弓", symbol: "П")
     ]
 
     static func tools(supportsBowingArticulations: Bool) -> [ScoreReaderArticulationTool] {
@@ -88,7 +88,7 @@ struct ScoreReaderArticulationMenuButton: View {
                 Text(">")
                     .font(.system(size: 21, weight: .medium))
                     .frame(height: 22)
-                Text("Articulations")
+                Text("演奏记号")
                     .font(.system(size: 9, weight: .medium))
                     .lineLimit(2)
                     .multilineTextAlignment(.center)
@@ -115,13 +115,13 @@ struct ScoreReaderLineTool: Identifiable {
 
 enum ScoreReaderLineTools {
     static let primary: [ScoreReaderLineTool] = [
-        ScoreReaderLineTool(token: "Slur", title: "Slur", symbol: "⌒"),
-        ScoreReaderLineTool(token: "Crescendo", title: "Crescendo", symbol: "<"),
-        ScoreReaderLineTool(token: "Decrescendo", title: "Decrescendo", symbol: ">")
+        ScoreReaderLineTool(token: "Slur", title: "连音线", symbol: "⌒"),
+        ScoreReaderLineTool(token: "Crescendo", title: "渐强", symbol: "<"),
+        ScoreReaderLineTool(token: "Decrescendo", title: "渐弱", symbol: ">")
     ]
 
     static let all: [ScoreReaderLineTool] = [
-        ScoreReaderLineTool(token: "Pedal", title: "Pedal", symbol: "Ped."),
+        ScoreReaderLineTool(token: "Pedal", title: "踏板", symbol: "Ped."),
         ScoreReaderLineTool(token: "8va", title: "8va", symbol: "8va"),
         ScoreReaderLineTool(token: "8vb", title: "8vb", symbol: "8vb")
     ]
@@ -145,7 +145,7 @@ struct ScoreReaderLinesMenuButton: View {
                 Text("8va")
                     .font(.system(size: 17, weight: .semibold))
                     .frame(height: 22)
-                Text("Lines")
+                Text("线条")
                     .font(.system(size: 9, weight: .medium))
                     .lineLimit(2)
                     .multilineTextAlignment(.center)
@@ -247,31 +247,31 @@ struct ScoreReaderKeyboardContextToolbar: View {
         // Column by column over the main row below: 32nd and 64th over the eighth and 16th,
         // double dot over the dot.
         return [
-            ScoreReaderMoreNotesItem(id: "beam", glyph: "\u{266B}", title: "Beam", isEnabled: canChangeBeams,
+            ScoreReaderMoreNotesItem(id: "beam", glyph: "\u{266B}", title: "符杠", isEnabled: canChangeBeams,
                                      menu: ScoreReaderMoreNotesOption.beamModes),
-            ScoreReaderMoreNotesItem(id: "trem", glyph: "\u{E222}", title: "Tremolo", isEnabled: note,
+            ScoreReaderMoreNotesItem(id: "trem", glyph: "\u{E222}", title: "震音", isEnabled: note,
                                      menu: ScoreReaderMoreNotesOption.tremolos, glyphOffset: -6),
-            ScoreReaderMoreNotesItem(id: "acc", glyph: "\u{E560}", title: "Acciaccatura", isEnabled: note,
+            ScoreReaderMoreNotesItem(id: "acc", glyph: "\u{E560}", title: "短倚音", isEnabled: note,
                                      tool: .grace(.acciaccatura)),
-            ScoreReaderMoreNotesItem(id: "app", glyph: "\u{E562}", title: "Appoggiatura", isEnabled: note,
+            ScoreReaderMoreNotesItem(id: "app", glyph: "\u{E562}", title: "长倚音", isEnabled: note,
                                      tool: .grace(.appoggiatura)),
-            ScoreReaderMoreNotesItem(id: "32", glyph: ScoreNoteDuration.thirtySecond.bravuraTextGlyph, title: "32nd",
+            ScoreReaderMoreNotesItem(id: "32", glyph: ScoreNoteDuration.thirtySecond.bravuraTextGlyph, title: "三十二分",
                                      isSelected: selectedDuration == .thirtySecond, isEnabled: rhythm,
                                      tool: .duration(.thirtySecond)),
-            ScoreReaderMoreNotesItem(id: "64", glyph: ScoreNoteDuration.sixtyFourth.bravuraTextGlyph, title: "64th",
+            ScoreReaderMoreNotesItem(id: "64", glyph: ScoreNoteDuration.sixtyFourth.bravuraTextGlyph, title: "六十四分",
                                      isSelected: selectedDuration == .sixtyFourth, isEnabled: rhythm,
                                      tool: .duration(.sixtyFourth)),
-            ScoreReaderMoreNotesItem(id: "dd", glyph: "\u{1D15F}..", title: "Double Dot",
+            ScoreReaderMoreNotesItem(id: "dd", glyph: "\u{1D15F}..", title: "双附点",
                                      isSelected: selectedIsDoubleDotted, isEnabled: rhythm, tool: .doubleDot),
-            ScoreReaderMoreNotesItem(id: "tr", glyph: "\u{E566}", title: "Trill", isEnabled: note, tool: .ornament("trill")),
-            ScoreReaderMoreNotesItem(id: "mor", glyph: "\u{E56C}", title: "Mordent", isEnabled: note,
+            ScoreReaderMoreNotesItem(id: "tr", glyph: "\u{E566}", title: "颤音", isEnabled: note, tool: .ornament("trill")),
+            ScoreReaderMoreNotesItem(id: "mor", glyph: "\u{E56C}", title: "波音", isEnabled: note,
                                      tool: .ornament("mordent")),
-            ScoreReaderMoreNotesItem(id: "turn", glyph: "\u{E567}", title: "Turn", isEnabled: note, tool: .ornament("turn")),
-            ScoreReaderMoreNotesItem(id: "arp", glyph: "\u{E63C}", title: "Arpeggio", isEnabled: note,
+            ScoreReaderMoreNotesItem(id: "turn", glyph: "\u{E567}", title: "回音", isEnabled: note, tool: .ornament("turn")),
+            ScoreReaderMoreNotesItem(id: "arp", glyph: "\u{E63C}", title: "琶音", isEnabled: note,
                                      tool: .ornament("arpeggio"), glyphScale: 0.8),
-            ScoreReaderMoreNotesItem(id: "bb", glyph: "\u{E264}", title: "Double Flat", isEnabled: canChangeDoubleAccidental,
+            ScoreReaderMoreNotesItem(id: "bb", glyph: "\u{E264}", title: "重降", isEnabled: canChangeDoubleAccidental,
                                      tool: .doubleAccidental(sharp: false), glyphScale: 1.1, glyphOffset: 6),
-            ScoreReaderMoreNotesItem(id: "x", glyph: "\u{E263}", title: "Double Sharp", isEnabled: canChangeDoubleAccidental,
+            ScoreReaderMoreNotesItem(id: "x", glyph: "\u{E263}", title: "重升", isEnabled: canChangeDoubleAccidental,
                                      tool: .doubleAccidental(sharp: true), glyphScale: 1.6, glyphOffset: 3)
         ]
     }
@@ -326,7 +326,7 @@ struct ScoreReaderKeyboardContextToolbar: View {
             isEnabled: true,
             action: toggleMoreNotes
         )
-        .accessibilityLabel(moreNotesExpanded ? "Hide more note options" : "More note options")
+        .accessibilityLabel(moreNotesExpanded ? "收起更多音符选项" : "更多音符选项")
     }
 
     private func toggleMoreNotes() {
@@ -384,7 +384,7 @@ struct ScoreReaderKeyboardContextToolbar: View {
 
             ScoreReaderPaletteButton(
                 textSymbol: "\u{1D15F}.",
-                title: "Dot",
+                title: "附点",
                 usesMusicFont: true,
                 titledWidth: Self.columnButtonWidth,
                 isSelected: selectedIsDotted,
@@ -397,7 +397,7 @@ struct ScoreReaderKeyboardContextToolbar: View {
 
             ScoreReaderPaletteButton(
                 textSymbol: "\u{1D13D}",
-                title: "Rest",
+                title: "休止符",
                 usesMusicFont: true,
                 glyphBaselineOffset: 7,
                 titledWidth: Self.columnButtonWidth,
@@ -411,7 +411,7 @@ struct ScoreReaderKeyboardContextToolbar: View {
 
             ScoreReaderPaletteButton(
                 textSymbol: "⌒",
-                title: "Tie",
+                title: "延音线",
                 titledWidth: Self.columnButtonWidth,
                 isSelected: editingState.selection?.isTiedForward == true,
                 isEnabled: editingState.selection?.kind == .note && !isBusy,
@@ -478,7 +478,7 @@ struct ScoreReaderKeyboardContextToolbar: View {
                             isEnabled: canUseRhythmTools,
                             action: toggleDotAction
                         )
-                        .accessibilityLabel(selectedIsDotted ? "Remove dot" : "Add dot")
+                        .accessibilityLabel(selectedIsDotted ? "移除附点" : "添加附点")
 
                         ScoreReaderCompactGroupedDivider()
 
@@ -519,7 +519,7 @@ struct ScoreReaderKeyboardContextToolbar: View {
                             glyphBaselineOffset: 10,
                             isSelected: selectedIsRest,
                             isEnabled: canUseRhythmTools,
-                            accessibilityLabel: selectedIsRest ? "Note entry" : "Rest entry",
+                            accessibilityLabel: selectedIsRest ? "音符输入" : "输入休止符",
                             action: toggleRestAction
                         )
                         ScoreReaderCompactGroupedDivider()
@@ -527,7 +527,7 @@ struct ScoreReaderKeyboardContextToolbar: View {
                             systemImage: "trash",
                             isSelected: false,
                             isEnabled: editingState.canDeleteSelection && !isBusy,
-                            accessibilityLabel: "Delete selection",
+                            accessibilityLabel: "删除选区",
                             action: deleteSelectionAction
                         )
                         ScoreReaderCompactGroupedDivider()
@@ -535,7 +535,7 @@ struct ScoreReaderKeyboardContextToolbar: View {
                             textSymbol: "⌒",
                             isSelected: editingState.selection?.isTiedForward == true,
                             isEnabled: editingState.selection?.kind == .note && !isBusy,
-                            accessibilityLabel: "Tie",
+                            accessibilityLabel: "延音线",
                             action: toggleTieAction
                         )
                         ScoreReaderCompactGroupedDivider()
@@ -543,7 +543,7 @@ struct ScoreReaderKeyboardContextToolbar: View {
                             stackedChordIcon: true,
                             isSelected: stackedChordInputEnabled,
                             isEnabled: canUseStackedChordInput,
-                            accessibilityLabel: stackedChordInputEnabled ? "Single note entry" : "Build chord",
+                            accessibilityLabel: stackedChordInputEnabled ? "单音输入" : "构建和弦",
                             action: toggleStackedChordInputAction
                         )
                     }
@@ -554,7 +554,7 @@ struct ScoreReaderKeyboardContextToolbar: View {
                                 systemImage: moreNotesExpanded ? "chevron.down" : "chevron.up",
                                 isSelected: moreNotesExpanded,
                                 isEnabled: true,
-                                accessibilityLabel: moreNotesExpanded ? "Hide more note options" : "More note options",
+                                accessibilityLabel: moreNotesExpanded ? "收起更多音符选项" : "更多音符选项",
                                 action: toggleMoreNotes
                             )
                         }
@@ -588,7 +588,7 @@ struct ScoreReaderKeyboardContextToolbar: View {
                     textSymbol: "·",
                     isSelected: selectedIsDotted,
                     isEnabled: canUseRhythmTools,
-                    accessibilityLabel: selectedIsDotted ? "Remove dot" : "Add dot",
+                    accessibilityLabel: selectedIsDotted ? "移除附点" : "添加附点",
                     action: toggleDotAction
                 )
 
@@ -598,7 +598,7 @@ struct ScoreReaderKeyboardContextToolbar: View {
                         systemImage: moreNotesExpanded ? "chevron.down" : "chevron.up",
                         isSelected: moreNotesExpanded,
                         isEnabled: true,
-                        accessibilityLabel: moreNotesExpanded ? "Hide more note options" : "More note options",
+                        accessibilityLabel: moreNotesExpanded ? "收起更多音符选项" : "更多音符选项",
                         action: toggleMoreNotes
                     )
                 } else {
@@ -618,7 +618,7 @@ struct ScoreReaderKeyboardContextToolbar: View {
                     stackedChordIcon: true,
                     isSelected: stackedChordInputEnabled,
                     isEnabled: canUseStackedChordInput,
-                    accessibilityLabel: stackedChordInputEnabled ? "Single note entry" : "Build chord",
+                    accessibilityLabel: stackedChordInputEnabled ? "单音输入" : "构建和弦",
                     action: toggleStackedChordInputAction
                 )
 
@@ -626,7 +626,7 @@ struct ScoreReaderKeyboardContextToolbar: View {
                     textSymbol: "⌒",
                     isSelected: editingState.selection?.isTiedForward == true,
                     isEnabled: editingState.selection?.kind == .note && !isBusy,
-                    accessibilityLabel: "Tie",
+                    accessibilityLabel: "延音线",
                     action: toggleTieAction
                 )
 
@@ -638,7 +638,7 @@ struct ScoreReaderKeyboardContextToolbar: View {
                     glyphVerticalOffset: -3,
                     isSelected: selectedIsRest,
                     isEnabled: canUseRhythmTools,
-                    accessibilityLabel: selectedIsRest ? "Note entry" : "Rest entry",
+                    accessibilityLabel: selectedIsRest ? "音符输入" : "输入休止符",
                     action: toggleRestAction
                 )
 
@@ -653,7 +653,7 @@ struct ScoreReaderKeyboardContextToolbar: View {
                     systemImage: "trash",
                     isSelected: false,
                     isEnabled: editingState.canDeleteSelection && !isBusy,
-                    accessibilityLabel: "Delete selection",
+                    accessibilityLabel: "删除选区",
                     action: deleteSelectionAction
                 )
             }
@@ -834,11 +834,11 @@ struct ScoreReaderKeyboardContextToolbar: View {
     private func title(for accidentalKind: ScoreAccidentalKind) -> String {
         switch accidentalKind {
         case .flat:
-            return "Flat"
+            return "降号"
         case .natural:
-            return "Natural"
+            return "还原号"
         case .sharp:
-            return "Sharp"
+            return "升号"
         }
     }
 }
@@ -861,17 +861,17 @@ struct ScoreReaderMoreNotesOption: Identifiable {
 
     /// Desktop's beam modes for the selected notes.
     static let beamModes = [
-        ScoreReaderMoreNotesOption(title: "Auto", key: "beamauto"),
-        ScoreReaderMoreNotesOption(title: "Break Beam", key: "beambreak"),
-        ScoreReaderMoreNotesOption(title: "Join Beams", key: "beamjoin"),
-        ScoreReaderMoreNotesOption(title: "No Beam", key: "beamnone")
+        ScoreReaderMoreNotesOption(title: "自动", key: "beamauto"),
+        ScoreReaderMoreNotesOption(title: "断开符杠", key: "beambreak"),
+        ScoreReaderMoreNotesOption(title: "连接符杠", key: "beamjoin"),
+        ScoreReaderMoreNotesOption(title: "无符杠", key: "beamnone")
     ]
 
     /// Single-note tremolos; choosing the one already on the note removes it.
     static let tremolos = [
-        ScoreReaderMoreNotesOption(title: "1 Slash", key: "tremolo1"),
-        ScoreReaderMoreNotesOption(title: "2 Slashes", key: "tremolo2"),
-        ScoreReaderMoreNotesOption(title: "3 Slashes", key: "tremolo3")
+        ScoreReaderMoreNotesOption(title: "一道斜杠", key: "tremolo1"),
+        ScoreReaderMoreNotesOption(title: "两道斜杠", key: "tremolo2"),
+        ScoreReaderMoreNotesOption(title: "三道斜杠", key: "tremolo3")
     ]
 }
 
@@ -976,7 +976,7 @@ struct ScoreReaderTupletMenuButton: View {
                     .font(.system(size: 20, weight: .semibold))
                     .frame(height: 22)
 
-                Text("Tuplet")
+                Text("连音组")
                     .font(.system(size: 9, weight: .medium))
                     .lineLimit(1)
                     .minimumScaleFactor(0.78)
@@ -990,7 +990,7 @@ struct ScoreReaderTupletMenuButton: View {
         .buttonStyle(.plain)
         .disabled(!isEnabled)
         .opacity(isEnabled ? 1 : 0.42)
-        .accessibilityLabel("Tuplet")
+        .accessibilityLabel("连音组")
     }
 }
 
@@ -1227,7 +1227,7 @@ struct ScoreReaderCompactGridTupletMenuButton: View {
         .frame(maxWidth: .infinity)
         .disabled(!isEnabled)
         .opacity(isEnabled ? 1 : 0.42)
-        .accessibilityLabel("Tuplet")
+        .accessibilityLabel("连音组")
     }
 }
 
@@ -1264,7 +1264,7 @@ struct ScoreReaderCompactTupletMenuButton: View {
         .buttonStyle(.plain)
         .disabled(!isEnabled)
         .opacity(isEnabled ? 1 : 0.42)
-        .accessibilityLabel("Tuplet")
+        .accessibilityLabel("连音组")
     }
 }
 
@@ -1283,14 +1283,14 @@ enum ScoreReaderTupletPreset: Int, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .duplet: return "Duplet"
-        case .triplet: return "Triplet"
-        case .quadruplet: return "Quadruplet"
-        case .quintuplet: return "Quintuplet"
-        case .sextuplet: return "Sextuplet"
-        case .septuplet: return "Septuplet"
-        case .octuplet: return "Octuplet"
-        case .nonuplet: return "Nonuplet"
+        case .duplet: return "二连音"
+        case .triplet: return "三连音"
+        case .quadruplet: return "四连音"
+        case .quintuplet: return "五连音"
+        case .sextuplet: return "六连音"
+        case .septuplet: return "七连音"
+        case .octuplet: return "八连音"
+        case .nonuplet: return "九连音"
         }
     }
 }
@@ -1301,27 +1301,27 @@ struct ScoreReaderRepeatContextToolbar: View {
 
     var body: some View {
         ScoreReaderHorizontalContextToolbar {
-            ScoreReaderPaletteButton(textSymbol: "1.", title: "First ending", isSelected: false, isEnabled: isEnabled, action: { addRepeatJumpAction("First ending") })
+            ScoreReaderPaletteButton(textSymbol: "1.", title: "第一结尾", isSelected: false, isEnabled: isEnabled, action: { addRepeatJumpAction("First ending") })
             ScoreReaderContextDivider()
-            ScoreReaderPaletteButton(textSymbol: "2.", title: "Second ending", isSelected: false, isEnabled: isEnabled, action: { addRepeatJumpAction("Second ending") })
+            ScoreReaderPaletteButton(textSymbol: "2.", title: "第二结尾", isSelected: false, isEnabled: isEnabled, action: { addRepeatJumpAction("Second ending") })
             ScoreReaderContextDivider()
-            ScoreReaderPaletteButton(textSymbol: "||:", title: "Start repeat", isSelected: false, isEnabled: isEnabled, action: { addRepeatJumpAction("Start repeat") })
+            ScoreReaderPaletteButton(textSymbol: "||:", title: "反复开始", isSelected: false, isEnabled: isEnabled, action: { addRepeatJumpAction("Start repeat") })
             ScoreReaderContextDivider()
-            ScoreReaderPaletteButton(textSymbol: ":||", title: "End repeat", isSelected: false, isEnabled: isEnabled, action: { addRepeatJumpAction("End repeat") })
+            ScoreReaderPaletteButton(textSymbol: ":||", title: "反复结束", isSelected: false, isEnabled: isEnabled, action: { addRepeatJumpAction("End repeat") })
             ScoreReaderContextDivider()
-            ScoreReaderPaletteButton(textSymbol: "D.S.", title: "D.S. al Coda", isSelected: false, isEnabled: isEnabled, action: { addRepeatJumpAction("D.S. al Coda") })
+            ScoreReaderPaletteButton(textSymbol: "D.S.", title: "从记号反复至尾声", isSelected: false, isEnabled: isEnabled, action: { addRepeatJumpAction("D.S. al Coda") })
             ScoreReaderContextDivider()
-            ScoreReaderPaletteButton(textSymbol: "D.S.", title: "D.S. al Fine", isSelected: false, isEnabled: isEnabled, action: { addRepeatJumpAction("D.S. al Fine") })
+            ScoreReaderPaletteButton(textSymbol: "D.S.", title: "从记号反复至结束", isSelected: false, isEnabled: isEnabled, action: { addRepeatJumpAction("D.S. al Fine") })
             ScoreReaderContextDivider()
-            ScoreReaderPaletteButton(textSymbol: "D.C.", title: "D.C. al Coda", isSelected: false, isEnabled: isEnabled, action: { addRepeatJumpAction("D.C. al Coda") })
+            ScoreReaderPaletteButton(textSymbol: "D.C.", title: "从头反复至尾声", isSelected: false, isEnabled: isEnabled, action: { addRepeatJumpAction("D.C. al Coda") })
             ScoreReaderContextDivider()
-            ScoreReaderPaletteButton(textSymbol: "D.C.", title: "D.C. al Fine", isSelected: false, isEnabled: isEnabled, action: { addRepeatJumpAction("D.C. al Fine") })
+            ScoreReaderPaletteButton(textSymbol: "D.C.", title: "从头反复至结束", isSelected: false, isEnabled: isEnabled, action: { addRepeatJumpAction("D.C. al Fine") })
             ScoreReaderContextDivider()
-            ScoreReaderPaletteButton(textSymbol: "\u{E047}", title: "Segno", usesMusicFont: true, isSelected: false, isEnabled: isEnabled, action: { addRepeatJumpAction("Segno") })
+            ScoreReaderPaletteButton(textSymbol: "\u{E047}", title: "反复记号", usesMusicFont: true, isSelected: false, isEnabled: isEnabled, action: { addRepeatJumpAction("Segno") })
             ScoreReaderContextDivider()
-            ScoreReaderPaletteButton(textSymbol: "To Coda", title: "To Coda", isSelected: false, isEnabled: isEnabled, action: { addRepeatJumpAction("To Coda") })
+            ScoreReaderPaletteButton(textSymbol: "To Coda", title: "跳至尾声", isSelected: false, isEnabled: isEnabled, action: { addRepeatJumpAction("To Coda") })
             ScoreReaderContextDivider()
-            ScoreReaderPaletteButton(textSymbol: "\u{E048}", title: "Coda", usesMusicFont: true, isSelected: false, isEnabled: isEnabled, action: { addRepeatJumpAction("Coda") })
+            ScoreReaderPaletteButton(textSymbol: "\u{E048}", title: "尾声", usesMusicFont: true, isSelected: false, isEnabled: isEnabled, action: { addRepeatJumpAction("Coda") })
         }
     }
 }
@@ -1337,19 +1337,19 @@ struct ScoreReaderTextContextToolbar: View {
 
     var body: some View {
         ScoreReaderHorizontalContextToolbar {
-            ScoreReaderPaletteButton(systemImage: "text.alignleft", title: "Staff Text", isSelected: false, isEnabled: isEnabled, action: { addTextAction("Staff Text") })
+            ScoreReaderPaletteButton(systemImage: "text.alignleft", title: "谱表文字", isSelected: false, isEnabled: isEnabled, action: { addTextAction("Staff Text") })
             ScoreReaderContextDivider()
-            ScoreReaderPaletteButton(systemImage: "text.badge.plus", title: "System Text", isSelected: false, isEnabled: isEnabled, action: { addTextAction("System Text") })
+            ScoreReaderPaletteButton(systemImage: "text.badge.plus", title: "谱系文字", isSelected: false, isEnabled: isEnabled, action: { addTextAction("System Text") })
             ScoreReaderContextDivider()
-            ScoreReaderPaletteButton(textSymbol: "A", title: "Rehearsal Mark", isSelected: false, isEnabled: isEnabled, action: { addTextAction("Rehearsal Mark") })
+            ScoreReaderPaletteButton(textSymbol: "A", title: "排练记号", isSelected: false, isEnabled: isEnabled, action: { addTextAction("Rehearsal Mark") })
             ScoreReaderContextDivider()
-            ScoreReaderPaletteButton(textSymbol: "C7", title: "Chord Text", isSelected: false, isEnabled: isEnabled, action: openChordEntryAction)
+            ScoreReaderPaletteButton(textSymbol: "C7", title: "和弦文字", isSelected: false, isEnabled: isEnabled, action: openChordEntryAction)
             ScoreReaderContextDivider()
-            ScoreReaderPaletteButton(textSymbol: "Ly", title: "Lyrics", isSelected: false, isEnabled: isEnabled, action: openLyricsEntryAction)
+            ScoreReaderPaletteButton(textSymbol: "Ly", title: "歌词", isSelected: false, isEnabled: isEnabled, action: openLyricsEntryAction)
             ScoreReaderContextDivider()
             ScoreReaderPaletteButton.fingering(isEnabled: fingeringEnabled, action: openFingeringAction)
             ScoreReaderContextDivider()
-            ScoreReaderPaletteButton(systemImage: "metronome", title: "Tempo", isSelected: false, isEnabled: isEnabled, action: openTempoEditorAction)
+            ScoreReaderPaletteButton(systemImage: "metronome", title: "速度", isSelected: false, isEnabled: isEnabled, action: openTempoEditorAction)
         }
     }
 }
@@ -1367,7 +1367,7 @@ struct ScoreReaderFingeringPanel: View {
         VStack(spacing: isCompact ? 14 : 24) {
             HStack {
                 Button(action: backAction) {
-                    Label("Text", systemImage: "chevron.left")
+                    Label("文字", systemImage: "chevron.left")
                         .font(.system(size: 14, weight: .semibold))
                 }
                 .buttonStyle(.plain)
@@ -1388,7 +1388,7 @@ struct ScoreReaderFingeringPanel: View {
             .frame(maxWidth: 720)
 
             if !isEnabled {
-                Text("Select a note to add or remove fingering.")
+                Text("请选择一个音符以添加或移除指法。")
                     .font(.caption)
                     .foregroundStyle(Color.secondary)
             }
@@ -1423,7 +1423,7 @@ struct ScoreReaderFingeringPanel: View {
         .buttonStyle(.plain)
         .disabled(!isEnabled)
         .opacity(isEnabled ? 1 : 0.4)
-        .accessibilityLabel(finger == 0 ? "Remove fingering" : "Fingering \(finger)")
+        .accessibilityLabel(finger == 0 ? "移除指法" : "指法 \(finger)")
     }
 }
 
@@ -1443,7 +1443,7 @@ struct ScoreReaderExpressionContextToolbar: View {
             }
             ScoreReaderContextDivider()
             Menu {
-                Button("Laissez vibrer") {
+                Button("任其延响") {
                     addExpressionAction("LaissezVib")
                 }
 
@@ -1457,7 +1457,7 @@ struct ScoreReaderExpressionContextToolbar: View {
                     Image(systemName: "ellipsis")
                         .font(.system(size: 19, weight: .semibold))
                         .frame(height: 22)
-                    Text("More")
+                    Text("更多")
                         .font(.system(size: 9, weight: .medium))
                         .lineLimit(2)
                         .multilineTextAlignment(.center)
@@ -1510,33 +1510,33 @@ struct ScoreReaderLayoutContextToolbar: View {
 
     var body: some View {
         ScoreReaderHorizontalContextToolbar {
-            ScoreReaderPaletteButton(textSymbol: "----", title: "System Break", isSelected: false, isEnabled: isEnabled, action: { addLayoutBreakAction("System Break") })
+            ScoreReaderPaletteButton(textSymbol: "----", title: "换行", isSelected: false, isEnabled: isEnabled, action: { addLayoutBreakAction("System Break") })
             ScoreReaderContextDivider()
-            ScoreReaderPaletteButton(systemImage: "line.3.horizontal", title: "Page Break", isSelected: false, isEnabled: isEnabled, action: { addLayoutBreakAction("Page Break") })
+            ScoreReaderPaletteButton(systemImage: "line.3.horizontal", title: "分页", isSelected: false, isEnabled: isEnabled, action: { addLayoutBreakAction("Page Break") })
             ScoreReaderContextDivider()
-            ScoreReaderPaletteButton(systemImage: "link", title: "Keep Bars Together", isSelected: false, isEnabled: isEnabled, action: { addLayoutBreakAction("Keep Bars Together") })
+            ScoreReaderPaletteButton(systemImage: "link", title: "保持小节同行", isSelected: false, isEnabled: isEnabled, action: { addLayoutBreakAction("Keep Bars Together") })
             ScoreReaderContextDivider()
-            ScoreReaderPaletteButton(systemImage: "lock.rectangle.stack", title: "Auto Breaks", isSelected: false, isEnabled: canOpenAutoBreaks, action: openAutoBreaksAction)
+            ScoreReaderPaletteButton(systemImage: "lock.rectangle.stack", title: "自动换行与分页", isSelected: false, isEnabled: canOpenAutoBreaks, action: openAutoBreaksAction)
             ScoreReaderContextDivider()
-            ScoreReaderPaletteButton(textSymbol: "M", title: "Multi Rest", isSelected: createMultiMeasureRests, isEnabled: canOpenAutoBreaks, action: {
+            ScoreReaderPaletteButton(textSymbol: "M", title: "多小节休止符", isSelected: createMultiMeasureRests, isEnabled: canOpenAutoBreaks, action: {
                 updateLayoutOptionsAction(ScoreLayoutOptionsValue(
                     createMultiMeasureRests: !createMultiMeasureRests,
                     hideEmptyStaves: hideEmptyStaves
                 ))
             })
             ScoreReaderContextDivider()
-            ScoreReaderPaletteButton(systemImage: "eye.slash", title: "Hide Empty", isSelected: hideEmptyStaves, isEnabled: canOpenAutoBreaks, action: {
+            ScoreReaderPaletteButton(systemImage: "eye.slash", title: "隐藏空谱表", isSelected: hideEmptyStaves, isEnabled: canOpenAutoBreaks, action: {
                 updateLayoutOptionsAction(ScoreLayoutOptionsValue(
                     createMultiMeasureRests: createMultiMeasureRests,
                     hideEmptyStaves: !hideEmptyStaves
                 ))
             })
             ScoreReaderContextDivider()
-            ScoreReaderPaletteButton(systemImage: "list.bullet", title: "Instrument Layout", isSelected: false, isEnabled: canOpenGlobalLayoutSettings, action: openInstrumentLayoutAction)
+            ScoreReaderPaletteButton(systemImage: "list.bullet", title: "乐器与谱表", isSelected: false, isEnabled: canOpenGlobalLayoutSettings, action: openInstrumentLayoutAction)
             ScoreReaderContextDivider()
-            ScoreReaderPaletteButton(systemImage: "doc", title: "Page Settings", isSelected: false, isEnabled: canOpenGlobalLayoutSettings, action: openPageSettingsAction)
+            ScoreReaderPaletteButton(systemImage: "doc", title: "页面设置", isSelected: false, isEnabled: canOpenGlobalLayoutSettings, action: openPageSettingsAction)
             ScoreReaderContextDivider()
-            ScoreReaderPaletteButton(textSymbol: "--x--", title: "Remove Break", isSelected: false, isEnabled: isEnabled, action: removeLayoutBreakAction)
+            ScoreReaderPaletteButton(textSymbol: "--x--", title: "移除换行或分页", isSelected: false, isEnabled: isEnabled, action: removeLayoutBreakAction)
                 .foregroundStyle(Color.red)
         }
     }
@@ -1563,29 +1563,29 @@ struct ScoreReaderMoreContextToolbar: View {
 
     var body: some View {
         ScoreReaderHorizontalContextToolbar {
-            ScoreReaderPaletteButton(systemImage: "slider.horizontal.3", title: "Score Setup", isSelected: false, isEnabled: isEnabled, action: openScoreSetupAction)
+            ScoreReaderPaletteButton(systemImage: "slider.horizontal.3", title: "乐谱设置", isSelected: false, isEnabled: isEnabled, action: openScoreSetupAction)
             ScoreReaderContextDivider()
-            ScoreReaderPaletteButton(systemImage: "music.note.list", title: "Add/Remove Instrument", isSelected: false, isEnabled: isEnabled, action: openAddInstrumentAction)
+            ScoreReaderPaletteButton(systemImage: "music.note.list", title: "添加或移除乐器", isSelected: false, isEnabled: isEnabled, action: openAddInstrumentAction)
             ScoreReaderContextDivider()
-            ScoreReaderPaletteButton(systemImage: "arrow.up.arrow.down", title: "Transpose Score", isSelected: false, isEnabled: isEnabled, action: openTransposeScoreAction)
+            ScoreReaderPaletteButton(systemImage: "arrow.up.arrow.down", title: "乐谱移调", isSelected: false, isEnabled: isEnabled, action: openTransposeScoreAction)
             if showsConcertPitchControl {
                 ScoreReaderContextDivider()
-                ScoreReaderPaletteButton(systemImage: "music.quarternote.3", title: "Concert Pitch", isSelected: concertPitchEnabled, isEnabled: isEnabled, action: toggleConcertPitchAction)
+                ScoreReaderPaletteButton(systemImage: "music.quarternote.3", title: "实音", isSelected: concertPitchEnabled, isEnabled: isEnabled, action: toggleConcertPitchAction)
             }
             ScoreReaderContextDivider()
-            ScoreReaderPaletteButton(textSymbol: "𝄞", title: "Change Clef", isSelected: false, isEnabled: isEnabled, action: openClefEditorAction)
+            ScoreReaderPaletteButton(textSymbol: "𝄞", title: "更改谱号", isSelected: false, isEnabled: isEnabled, action: openClefEditorAction)
             ScoreReaderContextDivider()
-            ScoreReaderPaletteButton(textSymbol: "♯♭", title: "Key Signature", isSelected: false, isEnabled: isEnabled, action: openKeySignatureAction)
+            ScoreReaderPaletteButton(textSymbol: "♯♭", title: "调号", isSelected: false, isEnabled: isEnabled, action: openKeySignatureAction)
             ScoreReaderContextDivider()
-            ScoreReaderPaletteButton(textSymbol: "4⁄4", title: "Time Signature", isSelected: false, isEnabled: isEnabled, action: openTimeSignatureAction)
+            ScoreReaderPaletteButton(textSymbol: "4⁄4", title: "拍号", isSelected: false, isEnabled: isEnabled, action: openTimeSignatureAction)
             ScoreReaderContextDivider()
-            ScoreReaderPaletteButton(systemImage: "metronome", title: "Tempo", isSelected: false, isEnabled: isEnabled, action: openTempoEditorAction)
+            ScoreReaderPaletteButton(systemImage: "metronome", title: "速度", isSelected: false, isEnabled: isEnabled, action: openTempoEditorAction)
             ScoreReaderContextDivider()
-            ScoreReaderPaletteButton(systemImage: "forward.end", title: "Create Pickup", isSelected: false, isEnabled: isEnabled, action: openPickupMeasureAction)
+            ScoreReaderPaletteButton(systemImage: "forward.end", title: "创建弱起小节", isSelected: false, isEnabled: isEnabled, action: openPickupMeasureAction)
             ScoreReaderContextDivider()
-            ScoreReaderPaletteButton(textSymbol: "////", title: "Fill with Slashes", isSelected: false, isEnabled: canFillWithSlashes, action: fillSelectionWithSlashesAction)
+            ScoreReaderPaletteButton(textSymbol: "////", title: "填充斜线记谱", isSelected: false, isEnabled: canFillWithSlashes, action: fillSelectionWithSlashesAction)
             ScoreReaderContextDivider()
-            ScoreReaderPaletteButton(textSymbol: "/ /", title: "Rhythmic Notation", isSelected: false, isEnabled: canReplaceWithRhythmicSlashes, action: replaceSelectionWithRhythmicSlashesAction)
+            ScoreReaderPaletteButton(textSymbol: "/ /", title: "节奏记谱", isSelected: false, isEnabled: canReplaceWithRhythmicSlashes, action: replaceSelectionWithRhythmicSlashesAction)
         }
     }
 }

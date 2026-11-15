@@ -1,5 +1,7 @@
 # Aria
 
+**Community fork / 社区开发版：** [中文说明与当前状态](README.zh-CN.md)。本目录直接基于 Aria 开发云端曲库、离线 PDF 转换和中文界面；当前尚未完成整包构建与实机验收。
+
 Aria is a score reader and editor for MuseScore and MusicXML files on iPhone, iPad, and Android phones and tablets. It combines a touch-oriented library and editor with a MuseScore Studio-derived render core for notation, playback, saving, and export.
 
 Aria is not affiliated with, sponsored by, or endorsed by MuseScore, Muse Group, or MuseScore Studio. MuseScore names are used descriptively to identify supported file formats and the upstream codebase this project derives from.

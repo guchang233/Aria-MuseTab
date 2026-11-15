@@ -20,7 +20,7 @@ open class MuseScoreRenderCoreBridge: NSObject, @unchecked Sendable {
         var message = std.string()
         guard let session = aria.openSession(std.string(url.path), &message) else {
             let text = makeString(message)
-            throw bridgeError(.renderCoreFailure, text.isEmpty ? "The MuseScore render core failed to open this score." : text)
+            throw bridgeError(.renderCoreFailure, text.isEmpty ? "MuseScore 核心无法打开此乐谱。" : text)
         }
         return MSRRenderSession(session: OpaquePointer(session),
                                 totalPageCount: Int(session.pointee.totalPageCount()),

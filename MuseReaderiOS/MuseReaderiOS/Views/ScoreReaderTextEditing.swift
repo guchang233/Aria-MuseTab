@@ -25,7 +25,7 @@ struct ScoreReaderTextEditorDraft: Identifiable {
 
     init(selection: ScoreSelectedElement) {
         selectionID = selection.textEditorID
-        title = selection.kind == .chordText ? "Chord Text" : (selection.textKind ?? "Text")
+        title = selection.kind == .chordText ? "和弦文字" : (selection.textKind ?? "文字")
         text = selection.textContent ?? ""
         isChordText = selection.kind == .chordText
         isLyrics = selection.textKind == "Lyrics"
@@ -33,7 +33,7 @@ struct ScoreReaderTextEditorDraft: Identifiable {
 
     init(lyricsText: String = "") {
         selectionID = "lyrics-\(UUID().uuidString)"
-        title = "Lyrics"
+        title = "歌词"
         text = lyricsText
         isChordText = false
         isLyrics = true
@@ -76,14 +76,14 @@ struct ScoreReaderTextEditSheet: View {
                     } else if draft.isLyrics {
                         ScoreReaderLyricsTextInputField(
                             text: $text,
-                            placeholder: "Lyrics",
+                            placeholder: "歌词",
                             isFirstResponder: true,
                             commitAction: commit,
                             spaceAction: commitAndAdvance
                         )
                         .frame(height: 44)
                     } else {
-                        TextField("Text", text: $text, axis: .vertical)
+                        TextField("文字", text: $text, axis: .vertical)
                             .textInputAutocapitalization(.sentences)
                             .autocorrectionDisabled(false)
                             .focused($isTextFieldFocused)
@@ -96,13 +96,13 @@ struct ScoreReaderTextEditSheet: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
+                    Button("取消") {
                         dismiss()
                     }
                 }
 
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Done", action: commit)
+                    Button("完成", action: commit)
                         .disabled(isBusy || text.trimmedToNil == nil)
                 }
             }

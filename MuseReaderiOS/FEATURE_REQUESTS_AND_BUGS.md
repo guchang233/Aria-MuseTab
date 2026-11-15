@@ -239,3 +239,11 @@ The iPad sheet placed every selected-instrument row in an unbounded vertical sta
 **Reference**
 
 - Original feedback (French): “Quand je suis sur la fenêtre « Add Instruments », quand 7 instruments ou plus sont sélectionnés, tout défile vers le bas et à partir de 9 les boutons « Cancel » et « Add X Instruments » sont carrément hors du cadre et on ne peut pas remonter pour les atteindre.”
+
+## Community fork
+
+| ID | Status | Feature | Notes |
+| --- | --- | --- | --- |
+| IOS-041 | In progress | 只读云端曲库 | 静态清单、下载校验、详情及缓存；App 内验收待完成 |
+| IOS-042 | In progress | 完整中文界面 | 共享界面与术语汉化，待整包和实机验收 |
+| IOS-043 | In progress | 离线 PDF 转可播放曲谱 | Android 独立进程接入；桌面识别基线通过，设备链路待验证 |

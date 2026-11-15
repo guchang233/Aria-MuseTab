@@ -51,7 +51,7 @@ struct ScoreReaderPracticePanel: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text("Playback & Practice")
+            Text("播放与练习")
                 .font(.system(size: usesCompactTypography ? 16 : 17, weight: .bold))
                 .padding(.horizontal, 18)
                 .padding(.top, 16)
@@ -79,16 +79,16 @@ struct ScoreReaderPracticePanel: View {
 
             HStack {
                 Button(action: resetAction) {
-                    Label("Reset", systemImage: "arrow.counterclockwise")
+                    Label("重置", systemImage: "arrow.counterclockwise")
                         .font(optionFont)
                         .padding(.horizontal, 12)
                         .frame(minHeight: 36)
                         .background(Color.black.opacity(0.05), in: RoundedRectangle(cornerRadius: 9))
                 }
                 .buttonStyle(.plain)
-                .accessibilityHint("Metronome off, written tempo, no count-in")
+                .accessibilityHint("节拍器关闭，采用谱面速度，无预备拍")
                 Spacer(minLength: 8)
-                Text("Changes apply automatically")
+                Text("修改自动生效")
                     .font(.system(size: 12))
                     .foregroundStyle(.secondary)
                     .lineLimit(1)
@@ -107,9 +107,9 @@ struct ScoreReaderPracticePanel: View {
     private var metronomeRow: some View {
         Toggle(isOn: Binding(get: { metronomeEnabled }, set: setMetronomeEnabledAction)) {
             VStack(alignment: .leading, spacing: 2) {
-                Text("Metronome")
+                Text("节拍器")
                     .font(sectionFont)
-                Text("Clicks during playback")
+                Text("播放时打拍")
                     .font(detailFont)
                     .foregroundStyle(.secondary)
             }
@@ -121,9 +121,9 @@ struct ScoreReaderPracticePanel: View {
         VStack(alignment: .leading, spacing: 10) {
             HStack(alignment: .firstTextBaseline) {
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("Practice speed")
+                    Text("练习速度")
                         .font(sectionFont)
-                    Text("For this score · relative to written tempo")
+                    Text("仅此乐谱 · 相对于谱面速度")
                         .font(detailFont)
                         .foregroundStyle(.secondary)
                         .lineLimit(2)
@@ -164,7 +164,7 @@ struct ScoreReaderPracticePanel: View {
                     }
                 }
             )
-            .accessibilityLabel("Practice speed")
+            .accessibilityLabel("练习速度")
             .accessibilityValue(writtenTempoBpm > 0
                 ? "\(Self.percent(shownSpeed)), \(Self.bpm(writtenTempoBpm * shownSpeed))"
                 : Self.percent(shownSpeed))
@@ -216,9 +216,9 @@ struct ScoreReaderPracticePanel: View {
     private var countInSection: some View {
         VStack(alignment: .leading, spacing: 10) {
             VStack(alignment: .leading, spacing: 2) {
-                Text("Count-in")
+                Text("预备拍")
                     .font(sectionFont)
-                Text("Clicks before playback starts")
+                Text("开始播放前打拍")
                     .font(detailFont)
                     .foregroundStyle(.secondary)
             }
@@ -244,7 +244,7 @@ struct ScoreReaderPracticePanel: View {
                 }
             }
 
-            Text("Count-in follows the practice speed and time signature, and plays only at the start, not on loop repeats.")
+            Text("预备拍跟随练习速度与拍号，仅在开始时播放，循环反复时不重复。")
                 .font(.system(size: 12))
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)

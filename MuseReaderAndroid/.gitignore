@@ -4,6 +4,7 @@
 !/.gitignore
 !/README.md
 !/SOURCE_RELEASES.md
+!/IOS_CHANGES.md
 !/THIRD_PARTY_NOTICES.md
 !/ios-shared-sources.txt
 !/Aria/
@@ -11,6 +12,7 @@
 !/scripts/
 
 /scripts/*
+!/scripts/build-community-android.sh
 !/scripts/build-engine.sh
 !/scripts/build-render-core.sh
 !/scripts/generate-bridge-types.py

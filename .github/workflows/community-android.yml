@@ -1,0 +1,78 @@
+name: Aria MuseTab Android (manual)
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: aria-musetab-android
+  cancel-in-progress: false
+jobs:
+  android:
+    runs-on: macos-15-intel
+    timeout-minutes: 240
+    env:
+      ANDROID_HOME: ${{ github.workspace }}/.local/android-sdk
+      ANDROID_SDK_ROOT: ${{ github.workspace }}/.local/android-sdk
+      QT_ANDROID: ${{ github.workspace }}/.local/Qt/6.11.1/android_arm64_v8a
+      QT_HOST: ${{ github.workspace }}/.local/Qt/6.11.1/macos
+      CMAKE_BUILD_PARALLEL_LEVEL: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - uses: swift-actions/setup-swift@v2
+        with:
+          swift-version: '6.4.1'
+      - uses: android-actions/setup-android@v3
+      - name: Install build tools
+        run: |
+          brew install cmake ninja gradle skip
+          sdkmanager "platforms;android-36" "build-tools;36.0.0" "ndk;27.2.12479018"
+          skip android sdk install --version 6.4.1
+          echo "ARIA_BUILD_PYTHON=$(command -v python)" >> "$GITHUB_ENV"
+      - name: Qt host tools
+        id: qt-host
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '6.11.1'
+          host: mac
+          target: desktop
+          arch: clang_64
+          dir: ${{ github.workspace }}/.local/Qt
+          set-env: false
+      - name: Qt Android
+        id: qt-android
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '6.11.1'
+          host: mac
+          target: android
+          arch: android_arm64_v8a
+          dir: ${{ github.workspace }}/.local/Qt
+          set-env: false
+      - name: Build Android APK
+        env:
+          QT_ANDROID: ${{ steps.qt-android.outputs.qt-root-dir }}
+          QT_HOST: ${{ steps.qt-host.outputs.qt-root-dir }}
+        run: bash MuseReaderAndroid/scripts/build-community-android.sh
+      - name: Android APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Aria-MuseTab-android-debug
+          path: release/
+          if-no-files-found: error
+      - name: Build logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-build-logs
+          path: |
+            build-aria-android-arm64/CMakeFiles/CMakeConfigureLog.yaml
+            MuseReaderAndroid/Aria/.build/Android/app/build/reports/

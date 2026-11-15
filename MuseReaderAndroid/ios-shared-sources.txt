@@ -92,3 +92,12 @@ Views/UpdateNoticeSheet.swift
 # Views/UpdateNoticeLoopingVideo.swift  -- AVPlayerLooper; Android: AndroidPendingPorts.swift
 Views/ScoreReaderVideoExportSheet.swift
 # Views/ScoreReaderVideoPlatformViews.swift  -- AVPlayerViewController, UIView, PresentationSizing, Layout; Android: AndroidVideoExportViews.swift
+
+# MuseTab community fork: cloud library and offline conversion
+Services/CloudScoreLibrary.swift
+Services/PlayableConversion.swift
+Models/CloudLibraryModel.swift
+Views/CloudLibraryView.swift
+Views/PlayableConversionView.swift
+Services/AriaLocalization.swift
+Views/OriginalPDFView.swift

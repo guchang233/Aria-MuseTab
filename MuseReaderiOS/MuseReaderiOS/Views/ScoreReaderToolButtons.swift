@@ -34,29 +34,29 @@ struct ScoreReaderModeToolbar: View {
 
     @ViewBuilder
     private var regularButtons: some View {
-        ScoreReaderModeToolbarButton(title: "Note\nEntry", systemImage: "music.note.list", showsPlusBadge: true, isActive: selectedToolCategory == .notes, isEnabled: categoryEnabled(.notes), isTight: isTight, action: noteInputModeAction)
-        ScoreReaderModeToolbarButton(title: "Select", systemImage: "cursorarrow", isActive: selectedToolCategory == .select, isEnabled: !isBusy, isTight: isTight, action: selectModeAction)
+        ScoreReaderModeToolbarButton(title: "音符\n输入", systemImage: "music.note.list", showsPlusBadge: true, isActive: selectedToolCategory == .notes, isEnabled: categoryEnabled(.notes), isTight: isTight, action: noteInputModeAction)
+        ScoreReaderModeToolbarButton(title: "选择", systemImage: "cursorarrow", isActive: selectedToolCategory == .select, isEnabled: !isBusy, isTight: isTight, action: selectModeAction)
 
         Divider()
             .frame(height: 34)
             .padding(.horizontal, isTight ? 3 : 6)
 
-        categoryButton(.repeats, title: "Repeats", systemImage: "repeat")
-        categoryButton(.text, title: "Text", systemImage: "textformat")
-        categoryButton(.expression, title: "Expression", textSymbol: "f")
-        categoryButton(.layout, title: "Layout", systemImage: "square.grid.2x2")
-        categoryButton(.more, title: "More", systemImage: "ellipsis")
+        categoryButton(.repeats, title: "反复", systemImage: "repeat")
+        categoryButton(.text, title: "文字", systemImage: "textformat")
+        categoryButton(.expression, title: "表情", textSymbol: "f")
+        categoryButton(.layout, title: "排版", systemImage: "square.grid.2x2")
+        categoryButton(.more, title: "更多", systemImage: "ellipsis")
     }
 
     @ViewBuilder
     private var compactButtons: some View {
-        compactCategoryButton(.notes, title: "Note", systemImage: "music.note", showsPlusBadge: true, action: noteInputModeAction)
+        compactCategoryButton(.notes, title: "音符", systemImage: "music.note", showsPlusBadge: true, action: noteInputModeAction)
         compactSelectButton
-        compactCategoryButton(.text, title: "Text", systemImage: "textformat")
-        compactCategoryButton(.repeats, title: "Repeats", systemImage: "repeat")
-        compactCategoryButton(.expression, title: "Expr", textSymbol: "f")
-        compactCategoryButton(.layout, title: "Layout", systemImage: "square.grid.2x2")
-        compactCategoryButton(.more, title: "More", systemImage: "ellipsis")
+        compactCategoryButton(.text, title: "文字", systemImage: "textformat")
+        compactCategoryButton(.repeats, title: "反复", systemImage: "repeat")
+        compactCategoryButton(.expression, title: "表情", textSymbol: "f")
+        compactCategoryButton(.layout, title: "排版", systemImage: "square.grid.2x2")
+        compactCategoryButton(.more, title: "更多", systemImage: "ellipsis")
     }
 
     private func categoryButton(_ category: ScoreReaderToolCategory, title: String, systemImage: String? = nil, textSymbol: String? = nil) -> some View {
@@ -84,7 +84,7 @@ struct ScoreReaderModeToolbar: View {
             selectedToolCategory = .select
         } label: {
             ScoreReaderCompactModeToolbarLabel(
-                title: "Select",
+                title: "选择",
                 systemImage: "cursorarrow",
                 isActive: selectedToolCategory == .select
             )
@@ -331,7 +331,7 @@ struct ScoreReaderUndoRedoControls: View {
             }
             .disabled(!canUndo || isBusy)
             .opacity(canUndo && !isBusy ? 1 : 0.38)
-            .accessibilityLabel("Undo")
+            .accessibilityLabel("撤销")
 
             Button(action: redoAction) {
                 Image(systemName: "arrow.uturn.forward")
@@ -341,7 +341,7 @@ struct ScoreReaderUndoRedoControls: View {
             }
             .disabled(!canRedo || isBusy)
             .opacity(canRedo && !isBusy ? 1 : 0.38)
-            .accessibilityLabel("Redo")
+            .accessibilityLabel("重做")
         }
         .buttonStyle(.plain)
         .foregroundStyle(Color.black.opacity(0.78))
@@ -361,7 +361,7 @@ struct ScoreReaderPreviousNextControls: View {
                     .frame(width: 34, height: 34)
                     .contentShape(Rectangle())
             }
-            .accessibilityLabel("Select Previous")
+            .accessibilityLabel("选择上一个")
 
             Button(action: nextAction) {
                 Image(systemName: "chevron.right")
@@ -369,7 +369,7 @@ struct ScoreReaderPreviousNextControls: View {
                     .frame(width: 34, height: 34)
                     .contentShape(Rectangle())
             }
-            .accessibilityLabel("Select Next")
+            .accessibilityLabel("选择下一个")
         }
         .buttonStyle(.plain)
         .disabled(!isEnabled)
@@ -407,7 +407,7 @@ struct ScoreReaderVoiceSelector: View {
         Menu {
             ForEach(0..<4, id: \.self) { voice in
                 if voice != currentVoice {
-                    Button("Voice \(voice + 1)") {
+                    Button("声部 \(voice + 1)") {
                         action(voice)
                     }
                 }
@@ -417,7 +417,7 @@ struct ScoreReaderVoiceSelector: View {
         }
         .disabled(!isEnabled)
         .opacity(isEnabled ? 1 : 0.42)
-        .accessibilityLabel("Voice \(currentVoice + 1)")
+        .accessibilityLabel("声部 \(currentVoice + 1)")
         #else
         Button {
             isExpanded = true
@@ -427,7 +427,7 @@ struct ScoreReaderVoiceSelector: View {
         .buttonStyle(.plain)
         .disabled(!isEnabled)
         .opacity(isEnabled ? 1 : 0.42)
-        .accessibilityLabel("Voice \(currentVoice + 1)")
+        .accessibilityLabel("声部 \(currentVoice + 1)")
         .popover(isPresented: $isExpanded, attachmentAnchor: .point(.top), arrowEdge: .bottom) {
             HStack(spacing: 8) {
                 ForEach(0..<4, id: \.self) { voice in
@@ -450,7 +450,7 @@ struct ScoreReaderVoiceSelector: View {
                                 }
                         }
                         .buttonStyle(.plain)
-                        .accessibilityLabel("Voice \(voice + 1)")
+                        .accessibilityLabel("声部 \(voice + 1)")
                     }
                 }
             }

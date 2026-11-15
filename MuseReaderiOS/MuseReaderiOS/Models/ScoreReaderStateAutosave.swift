@@ -244,8 +244,8 @@ extension ScoreReaderState {
 
     func saveBeforeClosing() async -> Bool {
         await savePendingChanges(
-            busyMessage: "Finish the current edit before closing the score.",
-            unavailableMessage: "MuseReader could not save this score before closing."
+            busyMessage: "请先完成当前编辑，再关闭乐谱。",
+            unavailableMessage: "关闭前无法保存此乐谱。"
         )
     }
 

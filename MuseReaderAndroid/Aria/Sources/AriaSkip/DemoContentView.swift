@@ -4,11 +4,11 @@ struct DemoContentView: View {
     var body: some View {
         TabView {
             ScoreDemoView()
-                .tabItem { Label("Score", systemImage: "music.note") }
+                .tabItem { Label("乐谱", systemImage: "music.note") }
             KeyboardDemoView()
-                .tabItem { Label("Keyboard", systemImage: "pianokeys") }
+                .tabItem { Label("键盘", systemImage: "pianokeys") }
             PlaybackDemoView()
-                .tabItem { Label("Playback", systemImage: "play.fill") }
+                .tabItem { Label("播放", systemImage: "play.fill") }
         }
     }
 }

@@ -23,7 +23,7 @@ struct ScoreReaderEditorRail: View {
                 systemImage: "cursorarrow",
                 isEnabled: !isBusy,
                 isActive: !editingState.noteInputEnabled,
-                accessibilityLabel: "Selection mode",
+                accessibilityLabel: "选择模式",
                 action: selectModeAction
             )
 
@@ -31,7 +31,7 @@ struct ScoreReaderEditorRail: View {
                 systemImage: "pencil.tip.crop.circle.badge.plus",
                 isEnabled: !isBusy,
                 isActive: editingState.noteInputEnabled,
-                accessibilityLabel: "Note input mode",
+                accessibilityLabel: "音符输入模式",
                 action: noteInputModeAction
             )
 
@@ -52,14 +52,14 @@ struct ScoreReaderEditorRail: View {
                 systemImage: editingState.noteInputInsertsRests ? "pause.rectangle.fill" : "music.note",
                 isEnabled: !isBusy,
                 isActive: editingState.noteInputInsertsRests,
-                accessibilityLabel: editingState.noteInputInsertsRests ? "Rest mode enabled" : "Note mode enabled",
+                accessibilityLabel: editingState.noteInputInsertsRests ? "已开启休止符输入" : "已开启音符输入",
                 action: toggleRestAction
             )
 
             ScoreReaderEditorRailButton(
                 systemImage: "trash",
                 isEnabled: editingState.canDeleteSelection && !isBusy,
-                accessibilityLabel: "Delete selection",
+                accessibilityLabel: "删除选区",
                 action: deleteSelectionAction
             )
 
@@ -68,14 +68,14 @@ struct ScoreReaderEditorRail: View {
             ScoreReaderEditorRailButton(
                 systemImage: "arrow.uturn.backward",
                 isEnabled: editingState.canUndo && !isBusy,
-                accessibilityLabel: "Undo",
+                accessibilityLabel: "撤销",
                 action: undoAction
             )
 
             ScoreReaderEditorRailButton(
                 systemImage: "arrow.uturn.forward",
                 isEnabled: editingState.canRedo && !isBusy,
-                accessibilityLabel: "Redo",
+                accessibilityLabel: "重做",
                 action: redoAction
             )
 
@@ -84,7 +84,7 @@ struct ScoreReaderEditorRail: View {
             ScoreReaderEditorRailButton(
                 systemImage: "square.and.arrow.down",
                 isEnabled: !isBusy,
-                accessibilityLabel: "Save score",
+                accessibilityLabel: "保存乐谱",
                 action: saveAction
             )
         }
@@ -144,18 +144,18 @@ struct ScoreReaderEditingDeck: View {
                     } else if editingState.noteInputEnabled {
                         ScoreReaderEditorStatusBadge(
                             title: pitchLabel(for: pendingPitchClass),
-                            subtitle: editingState.noteInputInsertsRests ? "Rest entry" : "Next note"
+                            subtitle: editingState.noteInputInsertsRests ? "输入休止符" : "下一音符"
                         )
                     } else {
                         ScoreReaderEditorStatusBadge(
-                            title: keyboardEnabled ? "Keyboard Ready" : "Pitch Locked",
-                            subtitle: keyboardEnabled ? "Selected note active" : "Select a pitched note"
+                            title: keyboardEnabled ? "键盘已就绪" : "音高已锁定",
+                            subtitle: keyboardEnabled ? "当前选中音符" : "选择有音高的音符"
                         )
                     }
                 }
 
                 HStack(alignment: .top, spacing: 14) {
-                    ScoreReaderEditorControlGroup(title: "Spelling") {
+                    ScoreReaderEditorControlGroup(title: "等音拼写") {
                         HStack(spacing: 8) {
                             ScoreReaderEditorPillToggle(
                                 title: "♯",
@@ -173,33 +173,33 @@ struct ScoreReaderEditingDeck: View {
                         }
                     }
 
-                    ScoreReaderEditorControlGroup(title: "Shift") {
+                    ScoreReaderEditorControlGroup(title: "移动") {
                         HStack(spacing: 10) {
                             ScoreReaderEditorRoundButton(
                                 systemImage: "arrow.down",
                                 isEnabled: pitchEditEnabled && !isBusy,
-                                accessibilityLabel: "Lower pitch by semitone",
+                                accessibilityLabel: "降低半音",
                                 action: { semitoneShiftAction(-1) }
                             )
 
                             ScoreReaderEditorRoundButton(
                                 systemImage: "arrow.up",
                                 isEnabled: pitchEditEnabled && !isBusy,
-                                accessibilityLabel: "Raise pitch by semitone",
+                                accessibilityLabel: "升高半音",
                                 action: { semitoneShiftAction(1) }
                             )
 
                             ScoreReaderEditorRoundButton(
                                 systemImage: "chevron.down.2",
                                 isEnabled: pitchEditEnabled && !isBusy,
-                                accessibilityLabel: "Lower pitch by octave",
+                                accessibilityLabel: "降低八度",
                                 action: { octaveShiftAction(-1) }
                             )
 
                             ScoreReaderEditorRoundButton(
                                 systemImage: "chevron.up.2",
                                 isEnabled: pitchEditEnabled && !isBusy,
-                                accessibilityLabel: "Raise pitch by octave",
+                                accessibilityLabel: "升高八度",
                                 action: { octaveShiftAction(1) }
                             )
                         }
@@ -517,39 +517,39 @@ extension ScoreSelectedElementKind {
     var displayName: String {
         switch self {
         case .note:
-            return "Note"
+            return "音符"
         case .rest:
-            return "Rest"
+            return "休止符"
         case .bar:
-            return "Bar"
+            return "小节"
         case .measure:
-            return "Measure"
+            return "小节"
         case .timeSignature:
-            return "Time Signature"
+            return "拍号"
         case .keySignature:
-            return "Key Signature"
+            return "调号"
         case .tempo:
-            return "Tempo"
+            return "速度"
         case .layoutBreak:
-            return "Layout Break"
+            return "换行与分页"
         case .dynamic:
-            return "Dynamic"
+            return "力度"
         case .marker:
-            return "Marker"
+            return "标记"
         case .instrumentName:
-            return "Instrument"
+            return "乐器"
         case .instrumentChange:
-            return "Instrument Change"
+            return "乐器切换"
         case .text:
-            return "Text"
+            return "文字"
         case .chordText:
-            return "Chord Text"
+            return "和弦文字"
         case .expressionSpanner:
-            return "Expression"
+            return "表情"
         case .tie:
-            return "Tie"
+            return "延音线"
         case .other:
-            return "Selection"
+            return "选区"
         }
     }
 }

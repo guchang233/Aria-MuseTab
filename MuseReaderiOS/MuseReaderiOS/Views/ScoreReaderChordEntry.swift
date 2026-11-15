@@ -142,7 +142,7 @@ struct ScoreReaderChordEntryPanel: View {
                     .background(keyFill, in: RoundedRectangle(cornerRadius: 10))
             }
             .buttonStyle(.plain)
-            .accessibilityLabel("Back to Text")
+            .accessibilityLabel("返回文字")
             .frame(minWidth: doneButtonWidth, alignment: .leading)
             Spacer(minLength: 4)
             #if os(Android)
@@ -155,7 +155,7 @@ struct ScoreReaderChordEntryPanel: View {
                 if hasChanges { insertAction(draft.text) } else if removesChord { removeAction(nil) }
                 doneAction()
             } label: {
-                Text("Done")
+                Text("完成")
                     .font(.system(size: 15, weight: .semibold))
                     .foregroundStyle(Color.white)
                     .frame(minWidth: doneButtonWidth, minHeight: 44)
@@ -228,7 +228,7 @@ struct ScoreReaderChordEntryPanel: View {
                 .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
-        .accessibilityLabel("Erase chord character")
+        .accessibilityLabel("删除和弦字符")
         .onLongPressGesture { updateDraft { $0.clear() } }
     }
 
@@ -256,7 +256,7 @@ struct ScoreReaderChordEntryPanel: View {
         .buttonStyle(.plain)
         .disabled(!enabled)
         .opacity(enabled ? 1 : 0.4)
-        .accessibilityLabel(accessibilityName ?? (title == "♭" ? "Chord flat" : title == "#" ? "Chord sharp" : title))
+        .accessibilityLabel(accessibilityName ?? (title == "♭" ? "和弦降号" : title == "#" ? "和弦升号" : title))
     }
 
     private var navigation: some View {
@@ -264,12 +264,12 @@ struct ScoreReaderChordEntryPanel: View {
             Button {
                 if hasChanges { insertAndGoBackAction(draft.text) } else if removesChord { removeAction(false) } else { previousAction() }
             } label: {
-                Label("Previous", systemImage: "chevron.left")
+                Label("上一个", systemImage: "chevron.left")
                     .frame(minHeight: 44)
                     .padding(.horizontal, isCompact ? 10 : 20)
                     .background(Color.black.opacity(0.04), in: RoundedRectangle(cornerRadius: 10))
             }
-            .accessibilityLabel("Previous chord position")
+            .accessibilityLabel("上一个和弦位置")
             .disabled(hasIncompleteDraft)
             Spacer(minLength: 4)
             Text(positionText)
@@ -281,7 +281,7 @@ struct ScoreReaderChordEntryPanel: View {
                 if hasChanges { insertAndAdvanceAction(draft.text) } else if removesChord { removeAction(true) } else { nextAction() }
             } label: {
                 HStack {
-                    Text("Enter")
+                    Text("输入")
                     Image(systemName: "chevron.right")
                 }
                 .foregroundStyle(Color.white)
@@ -289,7 +289,7 @@ struct ScoreReaderChordEntryPanel: View {
                 .padding(.horizontal, isCompact ? 16 : 32)
                 .background(Color.blue, in: RoundedRectangle(cornerRadius: 10))
             }
-            .accessibilityLabel("Enter chord and advance")
+            .accessibilityLabel("输入和弦并前进")
             .disabled(hasIncompleteDraft)
         }
         .font(.system(size: isCompact ? 14 : 16, weight: .semibold))
@@ -329,7 +329,7 @@ struct ScoreReaderChordPreview: View {
                 .frame(height: 1)
         }
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("Chord preview")
+        .accessibilityLabel("和弦预听")
         .accessibilityValue(text)
         .accessibilityHidden(text.isEmpty)
     }
@@ -456,7 +456,7 @@ struct ScoreReaderLyricsEntryPanel: View {
                 extensionButton
             }
 
-            Text("Space: next note • - joins syllables • _ extends")
+            Text("空格：下一音符 · - 连接音节 · _ 延长音节")
                 .font(.system(size: 12, weight: .medium))
                 .foregroundStyle(Color.black.opacity(0.48))
                 .fixedSize(horizontal: false, vertical: true)
@@ -496,7 +496,7 @@ struct ScoreReaderLyricsEntryPanel: View {
             VStack(spacing: 1) {
                 Text("_")
                     .font(.system(size: 20, weight: .semibold, design: .rounded))
-                Text("Extend")
+                Text("延长")
                     .font(.system(size: 9, weight: .semibold))
             }
             .foregroundStyle(Color.black.opacity(isInsertEnabled ? 0.72 : 0.30))
@@ -505,7 +505,7 @@ struct ScoreReaderLyricsEntryPanel: View {
         }
         .buttonStyle(.plain)
         .disabled(!isInsertEnabled)
-        .accessibilityLabel("Extend lyric syllable")
+        .accessibilityLabel("延长歌词音节")
     }
 
     private var dismissButton: some View {

@@ -182,7 +182,7 @@ struct AndroidDragPreviewLayer: View {
                 HStack(spacing: 6) {
                     Image(systemName: "music.note")
                         .font(.system(size: 14, weight: .semibold))
-                    Text("Score")
+                    Text("乐谱")
                         .font(.system(size: 14, weight: .semibold))
                 }
                 .foregroundStyle(.white)
@@ -471,13 +471,13 @@ extension ContentUnavailableView where Label == SwiftUI.Label<Text, Image>, Desc
     }
 
     static func search(text: String) -> ContentUnavailableView<SwiftUI.Label<Text, Image>, Text, EmptyView> {
-        ContentUnavailableView("No Results for “\(text)”", systemImage: "magnifyingglass",
-                               description: Text("Check the spelling or try a new search."))
+        ContentUnavailableView("未找到“\(text)”的结果", systemImage: "magnifyingglass",
+                               description: Text("请检查拼写，或尝试其他关键词。"))
     }
 
     static var search: ContentUnavailableView<SwiftUI.Label<Text, Image>, Text, EmptyView> {
-        ContentUnavailableView("No Results", systemImage: "magnifyingglass",
-                               description: Text("Check the spelling or try a new search."))
+        ContentUnavailableView("没有搜索结果", systemImage: "magnifyingglass",
+                               description: Text("请检查拼写，或尝试其他关键词。"))
     }
 }
 
@@ -500,7 +500,7 @@ extension View {
         )
         let alert = item.wrappedValue.map(content)
         return self.alert(alert?.title ?? Text(""), isPresented: isPresented) {
-            Button("OK", role: .cancel) {}
+            Button("确定", role: .cancel) {}
         } message: {
             alert?.message ?? Text("")
         }

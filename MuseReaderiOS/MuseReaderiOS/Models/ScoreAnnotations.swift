@@ -22,10 +22,10 @@ enum ScoreAnnotationTool: String, Codable, CaseIterable, Sendable {
 
     var title: String {
         switch self {
-        case .pen: return "Pen"
-        case .highlighter: return "Highlighter"
-        case .eraser: return "Eraser"
-        case .lasso: return "Lasso"
+        case .pen: return "画笔"
+        case .highlighter: return "荧光笔"
+        case .eraser: return "橡皮"
+        case .lasso: return "套索"
         }
     }
 
@@ -205,7 +205,7 @@ private struct ScoreAnnotationStore {
             data = try Data(contentsOf: sourceURL)
         } catch {
             // The file may still be fine; never overwrite what could not be read.
-            return ScoreAnnotationLoadResult(isWritable: false, message: "Annotations could not be read, so changes won't be saved.")
+            return ScoreAnnotationLoadResult(isWritable: false, message: "无法读取批注，本次修改不会保存。")
         }
 
         let decoder = JSONDecoder()
@@ -215,7 +215,7 @@ private struct ScoreAnnotationStore {
         if version > ScoreAnnotationDocument.currentVersion {
             return ScoreAnnotationLoadResult(
                 isWritable: false,
-                message: "These annotations were made by a newer version of Aria and can't be edited here."
+                message: "批注由较新版本创建，当前版本无法编辑。"
             )
         }
 
@@ -257,9 +257,9 @@ private struct ScoreAnnotationStore {
         do {
             try fileManager.moveItem(at: url, to: keptURL)
         } catch {
-            return ScoreAnnotationLoadResult(isWritable: false, message: "Annotations could not be read, so changes won't be saved.")
+            return ScoreAnnotationLoadResult(isWritable: false, message: "无法读取批注，本次修改不会保存。")
         }
-        return ScoreAnnotationLoadResult(message: "Earlier annotations could not be read and were kept aside.")
+        return ScoreAnnotationLoadResult(message: "旧批注无法读取，已单独保留。")
     }
 
     private static func fileName(for key: String) -> String {

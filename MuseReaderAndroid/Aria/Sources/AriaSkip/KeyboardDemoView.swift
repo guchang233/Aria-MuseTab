@@ -9,10 +9,10 @@ struct KeyboardDemoView: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 24) {
-                Text(lastKey.map { "Tapped \(noteName($0.midiPitch)) (MIDI \($0.midiPitch))" } ?? "Tap a key")
+                Text(lastKey.map { "已点击 \(noteName($0.midiPitch))（MIDI \($0.midiPitch)）" } ?? "点击琴键")
                     .font(.headline)
 
-                Toggle("Use flats", isOn: $useFlats)
+                Toggle("使用降号", isOn: $useFlats)
                     .padding(.horizontal)
 
                 ScoreReaderWidePitchKeyboard(
@@ -28,8 +28,8 @@ struct KeyboardDemoView: View {
 
                 ScoreReaderPitchStrip(
                     isEnabled: lastKey != nil,
-                    semitoneShiftAction: { shift in transposeLog.append("Semitone \(shift > 0 ? "+" : "")\(shift)") },
-                    octaveShiftAction: { shift in transposeLog.append("Octave \(shift > 0 ? "+" : "")\(shift)") }
+                    semitoneShiftAction: { shift in transposeLog.append("半音 \(shift > 0 ? "+" : "")\(shift)") },
+                    octaveShiftAction: { shift in transposeLog.append("八度 \(shift > 0 ? "+" : "")\(shift)") }
                 )
                 // The size iOS gives it next to the keyboard (ScoreReaderNoteEntrySurface).
                 .frame(width: 74, height: 122)
@@ -40,7 +40,7 @@ struct KeyboardDemoView: View {
                 Spacer()
             }
             .padding(.top, 24)
-            .navigationTitle("Note entry keyboard")
+            .navigationTitle("音符输入键盘")
         }
     }
 

@@ -80,7 +80,7 @@ struct ScoreReaderViewKeyControl: View {
                 Button {
                     selectKey(key)
                 } label: {
-                    let title = key == originalKey ? "\(key.title) (original)" : key.title
+                    let title = key == originalKey ? "\(key.title)（原调）" : key.title
                     if key == currentKey {
                         Label(title, systemImage: "checkmark")
                     } else {
@@ -92,8 +92,8 @@ struct ScoreReaderViewKeyControl: View {
             chipLabel
         }
         .disabled(isBusy)
-        .accessibilityLabel("Viewing key, \(currentKey.title)")
-        .accessibilityHint("Choose a temporary key for this score view")
+        .accessibilityLabel("显示调性：\(currentKey.title)")
+        .accessibilityHint("为看谱选择临时调性")
         #else
         Button {
             isKeyPickerPresented = true
@@ -102,8 +102,8 @@ struct ScoreReaderViewKeyControl: View {
         }
         .buttonStyle(.plain)
         .disabled(isBusy)
-        .accessibilityLabel("Viewing key, \(currentKey.title)")
-        .accessibilityHint("Choose a temporary key for this score view")
+        .accessibilityLabel("显示调性：\(currentKey.title)")
+        .accessibilityHint("为看谱选择临时调性")
         .popover(isPresented: $isKeyPickerPresented, attachmentAnchor: .rect(.bounds), arrowEdge: .bottom) {
             ScoreReaderViewKeyPicker(
                 currentKey: currentKey,
@@ -126,12 +126,12 @@ struct ScoreReaderViewKeyPicker: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack(spacing: 10) {
-                Text("Viewing Key")
+                Text("显示调性")
                     .font(.system(size: 16, weight: .semibold))
 
                 Spacer(minLength: 8)
 
-                Label("Original Key", systemImage: "music.note")
+                Label("原调", systemImage: "music.note")
                     .font(.system(size: 11, weight: .semibold))
                     .foregroundStyle(Color.blue)
             }
@@ -439,7 +439,7 @@ struct ScoreReaderView: View {
                                 .transition(.opacity.combined(with: .scale(scale: 0.7)))
                                 .animation(.easeOut(duration: 0.18), value: beat)
                                 .allowsHitTesting(false)
-                                .accessibilityLabel("Count-in beat \(beat)")
+                                .accessibilityLabel("预备拍第 \(beat) 拍")
                         }
                     }
                     .overlay(alignment: .bottom) {
@@ -543,7 +543,7 @@ struct ScoreReaderView: View {
                                 Image(systemName: "exclamationmark.triangle.fill")
                                     .foregroundStyle(.red)
                                 VStack(alignment: .leading, spacing: 2) {
-                                    Text(readerState.saveNeedsChordSymbolRemovalApproval ? "Chord Symbols Removed" : "Not Saved")
+                                    Text(readerState.saveNeedsChordSymbolRemovalApproval ? "和弦符号已移除" : "未保存")
                                         .font(.system(size: 13, weight: .bold))
                                     Text(visibleSaveFailureMessage)
                                         .font(.system(size: 12, weight: .medium))
@@ -551,11 +551,11 @@ struct ScoreReaderView: View {
                                 }
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 if readerState.saveNeedsChordSymbolRemovalApproval {
-                                    Button("Save Without Chords", action: saveWithoutChordSymbols)
+                                    Button("不保留和弦保存", action: saveWithoutChordSymbols)
                                         .font(.system(size: 13, weight: .bold))
                                         .disabled(readerState.isEditingActionInFlight)
                                 } else {
-                                    Button("Retry Save", action: retryVisibleSaveFailure)
+                                    Button("重新保存", action: retryVisibleSaveFailure)
                                         .font(.system(size: 13, weight: .bold))
                                         .disabled(readerState.isEditingActionInFlight)
                                 }
@@ -608,7 +608,7 @@ struct ScoreReaderView: View {
                     }
                     .overlay(alignment: .center) {
                         if isClosingScore {
-                            ScoreReaderSavingHUD(label: "Saving…")
+                            ScoreReaderSavingHUD(label: "正在保存…")
                         } else if isTransitioningScore {
                             ScoreReaderSavingHUD(label: adjacentScoreLoadingLabel)
                         }
@@ -641,7 +641,7 @@ struct ScoreReaderView: View {
                     }
                     .overlay(alignment: .bottom) {
                         if savedViewModeConfirmationIsVisible {
-                            Text("Saved · View mode")
+                            Text("已保存 · 看谱模式")
                                 .font(.system(size: 13, weight: .semibold))
                                 .foregroundStyle(Color.black.opacity(0.82))
                                 .padding(.horizontal, 14)
@@ -659,7 +659,7 @@ struct ScoreReaderView: View {
                            readerState.playbackFollowIsSuspended
                         {
                             Button(action: readerState.resumePlaybackFollow) {
-                                Label("Resume Follow", systemImage: "location.fill")
+                                Label("恢复跟随", systemImage: "location.fill")
                                     .font(.system(size: 13, weight: .semibold))
                                     .padding(.horizontal, 14)
                                     .frame(height: 38)
@@ -1303,7 +1303,7 @@ struct ScoreReaderView: View {
         .scoreReaderSheet(item: $transposeSheetContext) { context in
             ScoreReaderTransposePanel(
                 currentKey: context.currentKey,
-                title: context.scope == .score ? "Transpose Score" : "Transpose",
+                title: context.scope == .score ? "乐谱移调" : "移调",
                 isSheetStyle: true,
                 cancelAction: { transposeSheetContext = nil },
                 applyAction: { request in
@@ -1355,31 +1355,31 @@ struct ScoreReaderView: View {
 
     private var readerPresentedBody: some View {
         readerSheetsBody
-        .confirmationDialog("Change Clef", isPresented: $isClefPickerPresented, titleVisibility: .visible) {
-            Button("Treble Clef") { readerState.changeClef("Treble") }
-            Button("Alto Clef") { readerState.changeClef("Alto") }
-            Button("Tenor Clef") { readerState.changeClef("Tenor") }
-            Button("Bass Clef") { readerState.changeClef("Bass") }
-            Button("Cancel", role: .cancel) {}
+        .confirmationDialog("更改谱号", isPresented: $isClefPickerPresented, titleVisibility: .visible) {
+            Button("高音谱号") { readerState.changeClef("高音") }
+            Button("中音谱号") { readerState.changeClef("女低音") }
+            Button("次中音谱号") { readerState.changeClef("男高音") }
+            Button("低音谱号") { readerState.changeClef("低音") }
+            Button("取消", role: .cancel) {}
         }
-        .alert("Export Failed", isPresented: exportErrorIsPresented) {
-            Button("OK", role: .cancel) {}
+        .alert("导出失败", isPresented: exportErrorIsPresented) {
+            Button("确定", role: .cancel) {}
         } message: {
-            Text(exportErrorMessage ?? "Aria could not export this score.")
+            Text(exportErrorMessage ?? "无法导出此乐谱。")
         }
-        .alert("Edit Not Applied", isPresented: editErrorIsPresented) {
-            Button("OK", role: .cancel) {
+        .alert("修改未应用", isPresented: editErrorIsPresented) {
+            Button("确定", role: .cancel) {
                 readerState.editingErrorMessage = nil
             }
         } message: {
-            Text(readerState.editingErrorMessage ?? "Aria could not apply that edit.")
+            Text(readerState.editingErrorMessage ?? "无法应用此项修改。")
         }
-        .alert("View Key Not Changed", isPresented: viewTransposeErrorIsPresented) {
-            Button("OK", role: .cancel) {
+        .alert("显示调性未改变", isPresented: viewTransposeErrorIsPresented) {
+            Button("确定", role: .cancel) {
                 readerState.viewTransposeErrorMessage = nil
             }
         } message: {
-            Text(readerState.viewTransposeErrorMessage ?? "Aria could not change the temporary viewing key.")
+            Text(readerState.viewTransposeErrorMessage ?? "无法更改看谱临时调性。")
         }
         // Drive the hidden state from scenePhase so locking/unlocking forces
         // SwiftUI to re-push preferredStatusBarHidden. Otherwise the bar can stay
@@ -1397,14 +1397,14 @@ struct ScoreReaderView: View {
     @MainActor
     private func applyLegacyRepairs(_ indexes: [Int], from prompt: ScoreLegacyRepairPrompt) async throws {
         guard let liveRenderSession = session.liveRenderSession, !indexes.isEmpty else {
-            throw ScoreDocumentServiceError.bridgeFailure("No score fixes were selected.")
+            throw ScoreDocumentServiceError.bridgeFailure("未选择乐谱修复项。")
         }
         guard await readerState.savePendingChanges() else {
-            throw ScoreDocumentServiceError.bridgeFailure(readerState.editingErrorMessage ?? "Aria could not save current edits before making a backup.")
+            throw ScoreDocumentServiceError.bridgeFailure(readerState.editingErrorMessage ?? "备份前无法保存当前修改。")
         }
         let currentIssues = try await liveRenderSession.legacyRepairIssues()
         guard currentIssues == prompt.issues else {
-            throw ScoreDocumentServiceError.bridgeFailure("The score changed. Close and reopen it to review the fixes again.")
+            throw ScoreDocumentServiceError.bridgeFailure("乐谱已更改，请关闭后重新打开，再查看修复项。")
         }
 
         let scoreURL = session.document.url
@@ -1415,11 +1415,11 @@ struct ScoreReaderView: View {
         let editingState = try await liveRenderSession.applyLegacyRepairs(indexes)
         let remaining = try await liveRenderSession.legacyRepairIssues()
         guard remaining.count == currentIssues.count - indexes.count else {
-            throw ScoreDocumentServiceError.bridgeFailure("Aria made a repair, but could not verify every selected issue. The untouched backup is in Aria Backups.")
+            throw ScoreDocumentServiceError.bridgeFailure("已进行修复，但未能验证全部所选问题。原始备份保留在 Aria Backups 中。")
         }
         readerState.refreshAfterScoreMutation(with: editingState)
         guard await readerState.savePendingChanges() else {
-            throw ScoreDocumentServiceError.bridgeFailure("The fixes could not be saved. The untouched backup is in Aria Backups.")
+            throw ScoreDocumentServiceError.bridgeFailure("无法保存修复结果。原始备份保留在 Aria Backups 中。")
         }
     }
 
@@ -2002,7 +2002,7 @@ struct ScoreReaderView: View {
                     .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 10, style: .continuous))
                     .shadow(color: Color.black.opacity(0.10), radius: 10, y: 4)
 
-                Text("Two-page view")
+                Text("双页视图")
                     .font(.system(size: 10, weight: .semibold))
                     .foregroundStyle(Color.black.opacity(0.68))
                     .lineLimit(1)
@@ -2011,8 +2011,8 @@ struct ScoreReaderView: View {
         }
         .buttonStyle(.plain)
         .padding(.bottom, 10)
-        .accessibilityLabel(showsTwoPages ? "Use single-page view" : "Use two-page view")
-        .accessibilityValue(showsTwoPages ? "Two pages" : "One page")
+        .accessibilityLabel(showsTwoPages ? "使用单页视图" : "使用双页视图")
+        .accessibilityValue(showsTwoPages ? "双页" : "单页")
     }
 
     private func toggleTwoPageView() {
@@ -2086,7 +2086,7 @@ struct ScoreReaderView: View {
                                 .contentShape(Rectangle())
                                 .onTapGesture(perform: toggleViewChrome)
                                 .accessibilityElement()
-                                .accessibilityLabel("Show or hide viewer controls")
+                                .accessibilityLabel("显示或隐藏看谱工具")
                                 .accessibilityAddTraits(.isButton)
                         }
                     }
@@ -2165,7 +2165,7 @@ struct ScoreReaderView: View {
                                     transitionToAdjacentScore(.next)
                                 } label: {
                                     VStack(spacing: 6) {
-                                        Text("Next Score")
+                                        Text("下一首")
                                             .font(.system(size: 13, weight: .semibold))
                                             .foregroundStyle(Color.blue)
                                         Text(nextTitle)
@@ -2184,14 +2184,14 @@ struct ScoreReaderView: View {
                                 }
                                 .buttonStyle(.plain)
                                 .disabled(isTransitioningScore)
-                                .accessibilityLabel("Next Score, \(nextTitle)")
+                                .accessibilityLabel("下一首：\(nextTitle)")
                                 .padding(.horizontal, 24)
                             } else {
                                 VStack(spacing: 5) {
                                     Image(systemName: "checkmark.circle.fill")
                                         .font(.system(size: 24, weight: .semibold))
                                         .foregroundStyle(Color.blue)
-                                    Text("End of Setlist")
+                                    Text("已到曲目单末尾")
                                         .font(.system(size: 17, weight: .bold))
                                         .foregroundStyle(Color.black.opacity(0.78))
                                 }
@@ -3313,8 +3313,8 @@ struct ScoreReaderView: View {
             }
             do {
                 guard await readerState.savePendingChanges(
-                    busyMessage: "Finish the current edit before sharing the score.",
-                    unavailableMessage: "Aria could not save the latest score before sharing.",
+                    busyMessage: "请先完成当前编辑，再分享乐谱。",
+                    unavailableMessage: "分享前无法保存乐谱的最新修改。",
                     waitsForInFlightAction: true
                 ) else {
                     throw NSError(
@@ -3322,7 +3322,7 @@ struct ScoreReaderView: View {
                         code: 2,
                         userInfo: [
                             NSLocalizedDescriptionKey: readerState.editingErrorMessage
-                                ?? "Aria could not save the latest score before sharing."
+                                ?? "分享前无法保存乐谱的最新修改。"
                         ]
                     )
                 }
@@ -4054,11 +4054,11 @@ struct ScoreReaderCorruptionMenu: View {
                 .foregroundStyle(Color(red: 0.78, green: 0.10, blue: 0.08))
 
             VStack(alignment: .leading, spacing: 2) {
-                Text("This score has \(report.issues.count) problem\(report.issues.count == 1 ? "" : "s")")
+                Text("此乐谱有 \(report.issues.count) 个问题")
                     .font(.system(size: 14, weight: .semibold))
                     .foregroundStyle(Color.black.opacity(0.88))
 
-                Text("It plays, edits and saves as it is. The original is kept in Aria Backups.")
+                Text("此乐谱仍可播放、编辑和保存，原文件保留在 Aria Backups 中。")
                     .font(.caption2.weight(.medium))
                     .foregroundStyle(Color.black.opacity(0.58))
             }
@@ -4068,7 +4068,7 @@ struct ScoreReaderCorruptionMenu: View {
                     Button {
                         selectIssueAction(firstIssue)
                     } label: {
-                        Label("Go to First Problem", systemImage: "scope")
+                        Label("前往第一个问题", systemImage: "scope")
                     }
                 }
 
@@ -4081,7 +4081,7 @@ struct ScoreReaderCorruptionMenu: View {
                         Button {
                             selectIssueAction(issue)
                         } label: {
-                            Label("Go to Bar", systemImage: "location")
+                            Label("跳至小节", systemImage: "location")
                         }
                         ForEach(issue.repairs, id: \.rawValue) { repair in
                             Button(role: repair == .clear ? .destructive : nil) {
@@ -4103,7 +4103,7 @@ struct ScoreReaderCorruptionMenu: View {
                     .shadow(color: Color.black.opacity(0.16), radius: 8, y: 3)
             }
             .disabled(isBusy || report.issues.isEmpty)
-            .accessibilityLabel("Score problems")
+            .accessibilityLabel("乐谱问题")
 
             Button(action: dismissAction) {
                 Image(systemName: "xmark")
@@ -4112,7 +4112,7 @@ struct ScoreReaderCorruptionMenu: View {
                     .frame(width: 30, height: 34)
             }
             .buttonStyle(.plain)
-            .accessibilityLabel("Hide")
+            .accessibilityLabel("隐藏")
         }
         .padding(.leading, 13)
         .padding(.trailing, 8)
@@ -4127,7 +4127,7 @@ struct ScoreReaderCorruptionMenu: View {
 }
 
 struct ScoreReaderSavingHUD: View {
-    var label = "Saving…"
+    var label = "正在保存…"
 
     var body: some View {
         HStack(spacing: 10) {

@@ -21,6 +21,7 @@ struct ContentView: View {
 
     var body: some View {
         LibraryView(model: appModel)
+            .environment(\.locale, Locale(identifier: "zh-Hans"))
             .onOpenURL { url in
                 appModel.handleOpenURL(url)
             }

@@ -35,7 +35,7 @@ struct ScoreReaderMixerPanel: View {
         return parts + [ScorePart(
             id: NativePlaybackController.chordSymbolsStemID,
             index: parts.count,
-            name: "Chords",
+            name: "和弦",
             clef: .treble
         )]
     }
@@ -78,9 +78,9 @@ struct ScoreReaderMixerPanel: View {
                 .frame(width: 32, height: 32)
 
             VStack(alignment: .leading, spacing: 1) {
-                Text("Mixer")
+                Text("混音器")
                     .font(.system(size: 17, weight: .bold))
-                Text("\(parts.count) \(parts.count == 1 ? "instrument" : "instruments")")
+                Text("\(parts.count) \(parts.count == 1 ? "乐器" : "乐器")")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
@@ -100,7 +100,7 @@ struct ScoreReaderMixerPanel: View {
             Button {
                 readerState.updateMixer(ScoreMixerSettings())
             } label: {
-                Label("Reset", systemImage: "arrow.counterclockwise")
+                Label("重置", systemImage: "arrow.counterclockwise")
             }
             .font(.subheadline.weight(.medium))
             .foregroundStyle(Color.blue)
@@ -115,7 +115,7 @@ struct ScoreReaderMixerPanel: View {
                     .frame(width: 44, height: 44)
             }
             .buttonStyle(.plain)
-            .accessibilityLabel("Close mixer")
+            .accessibilityLabel("关闭混音器")
         }
     }
 
@@ -132,9 +132,9 @@ struct ScoreReaderMixerPanel: View {
                     .frame(width: 40, height: 40)
 
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("Mixer")
+                    Text("混音器")
                         .font(.title2.bold())
-                    Text("\(parts.count) \(parts.count == 1 ? "instrument" : "instruments") · \(readerState.scoreTitle)")
+                    Text("\(parts.count) \(parts.count == 1 ? "乐器" : "乐器") · \(readerState.scoreTitle)")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                         .lineLimit(1)
@@ -145,7 +145,7 @@ struct ScoreReaderMixerPanel: View {
                 Button {
                     readerState.updateMixer(ScoreMixerSettings())
                 } label: {
-                    Label("Reset mix", systemImage: "arrow.counterclockwise")
+                    Label("重置混音", systemImage: "arrow.counterclockwise")
                 }
                 .font(.subheadline.weight(.medium))
                 .foregroundStyle(Color.blue)
@@ -160,7 +160,7 @@ struct ScoreReaderMixerPanel: View {
                         .frame(width: 44, height: 44)
                 }
                 .buttonStyle(.plain)
-                .accessibilityLabel("Close mixer")
+                .accessibilityLabel("关闭混音器")
             }
             .padding(.horizontal, 24)
         }
@@ -204,7 +204,7 @@ struct ScoreReaderMixerPanel: View {
 
     private func mixerMasterChannel(width: CGFloat, compact: Bool = false) -> some View {
         mixerChannelStrip(
-            name: "Master",
+            name: "总输出",
             color: .blue,
             volume: Binding(
                 get: { readerState.mixerSettings.masterVolume },
@@ -297,7 +297,7 @@ struct ScoreReaderMixerPanel: View {
                 if let muted {
                     mixerButton(
                         "M",
-                        accessibilityName: "Mute \(name)",
+                        accessibilityName: "静音 \(name)",
                         color: .red,
                         selected: muted,
                         compact: compact
@@ -306,7 +306,7 @@ struct ScoreReaderMixerPanel: View {
                 if let solo {
                     mixerButton(
                         "S",
-                        accessibilityName: "Solo \(name)",
+                        accessibilityName: "独奏 \(name)",
                         color: .blue,
                         selected: solo,
                         compact: compact
@@ -326,7 +326,7 @@ struct ScoreReaderMixerPanel: View {
                 VerticalMixerFader(
                     value: volume,
                     color: color,
-                    accessibilityName: "\(name) volume",
+                    accessibilityName: "\(name) 音量",
                     compact: compact
                 )
                 StereoLevelMeter(level: level)
@@ -340,7 +340,7 @@ struct ScoreReaderMixerPanel: View {
             VStack(spacing: 1) {
                 Slider(value: pan, in: -1...1)
                     .tint(.secondary)
-                    .accessibilityLabel("\(name) pan")
+                    .accessibilityLabel("\(name) 声像")
                     .accessibilityValue(panLabel(pan.wrappedValue))
 
                 HStack {
@@ -354,7 +354,7 @@ struct ScoreReaderMixerPanel: View {
                             .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
-                    .accessibilityLabel("Center \(name) pan")
+                    .accessibilityLabel("将 \(name) 声像居中")
                     Spacer()
                     Text("R")
                 }
@@ -400,7 +400,7 @@ struct ScoreReaderMixerPanel: View {
         .contentShape(Rectangle())
         .buttonStyle(.plain)
         .accessibilityLabel(accessibilityName)
-        .accessibilityValue(selected.wrappedValue ? "On" : "Off")
+        .accessibilityValue(selected.wrappedValue ? "开启" : "关闭")
         .accessibilitySelected(selected.wrappedValue)
     }
 
@@ -521,7 +521,7 @@ struct ScoreReaderMixerPanel: View {
     }
 
     private var emptyMixer: some View {
-        Text("No playable instruments in this part.")
+        Text("此声部中没有可播放的乐器。")
             .foregroundStyle(.secondary)
             .padding()
     }
@@ -586,7 +586,7 @@ struct VerticalMixerFader: View {
         .frame(width: compact ? 34 : 44)
         .accessibilityElement()
         .accessibilityLabel(accessibilityName)
-        .accessibilityValue("\(Int(value * 100)) percent")
+        .accessibilityValue("百分之 \(Int(value * 100))")
         .accessibilityAdjustableAction { direction in
             switch direction {
             case .increment:

@@ -36,8 +36,8 @@ struct ScoreDetailView: View {
         contentView
             .sheet(item: $exportedMIDIFile, content: shareSheet)
             .sheet(isPresented: $isEditingMetadataPresented, content: metadataEditorSheet)
-            .alert("Playback Export Error", isPresented: exportErrorIsPresented, actions: exportErrorActions, message: exportErrorMessageView)
-            .alert("Could Not Save Score Info", isPresented: metadataSaveErrorIsPresented, actions: metadataSaveErrorActions, message: metadataSaveErrorMessageView)
+            .alert("播放数据导出失败", isPresented: exportErrorIsPresented, actions: exportErrorActions, message: exportErrorMessageView)
+            .alert("无法保存乐谱信息", isPresented: metadataSaveErrorIsPresented, actions: metadataSaveErrorActions, message: metadataSaveErrorMessageView)
     }
 
     private var contentView: some View {
@@ -95,11 +95,11 @@ struct ScoreDetailView: View {
     }
 
     private func exportErrorActions() -> some View {
-        Button("OK", role: .cancel) {}
+        Button("确定", role: .cancel) {}
     }
 
     private func exportErrorMessageView() -> some View {
-        Text(exportErrorMessage ?? "Aria could not export MIDI for this score.")
+        Text(exportErrorMessage ?? "无法为此乐谱导出 MIDI。")
     }
 
     private func openReader(at pageIndex: Int) {
@@ -200,45 +200,45 @@ struct ScoreDetailView: View {
     }
 
     private func metadataSaveErrorActions() -> some View {
-        Button("OK", role: .cancel) {}
+        Button("确定", role: .cancel) {}
     }
 
     private func metadataSaveErrorMessageView() -> some View {
-        Text(metadataSaveErrorMessage ?? "Aria could not save these score details.")
+        Text(metadataSaveErrorMessage ?? "无法保存这些乐谱信息。")
     }
 
     private func metadataEditorSheet() -> some View {
         NavigationStack {
             Form {
-                Section("Title Page") {
-                    TextField("Title", text: $editableMetadata.title)
-                    TextField("Subtitle", text: $editableMetadata.subtitle)
+                Section("标题页") {
+                    TextField("标题", text: $editableMetadata.title)
+                    TextField("副标题", text: $editableMetadata.subtitle)
                 }
 
-                Section("Credits") {
-                    TextField("Composer", text: $editableMetadata.composer)
-                    TextField("Arranger", text: $editableMetadata.arranger)
-                    TextField("Lyricist", text: $editableMetadata.lyricist)
+                Section("署名") {
+                    TextField("作曲", text: $editableMetadata.composer)
+                    TextField("编曲", text: $editableMetadata.arranger)
+                    TextField("作词", text: $editableMetadata.lyricist)
                 }
 
                 Section {
-                    Text("These changes save back to Aria’s imported library copy and reopen the live score session.")
+                    Text("这些修改会保存到本地导入副本，并重新打开乐谱。")
                         .font(.footnote)
                         .foregroundStyle(.secondary)
                 }
             }
-            .navigationTitle("Edit Score Info")
+            .navigationTitle("编辑乐谱信息")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
+                    Button("取消") {
                         isEditingMetadataPresented = false
                     }
                     .disabled(isSavingMetadata)
                 }
 
                 ToolbarItem(placement: .confirmationAction) {
-                    Button(isSavingMetadata ? "Saving…" : "Save") {
+                    Button(isSavingMetadata ? "正在保存…" : "保存") {
                         saveEditedMetadata()
                     }
                     .disabled(isSavingMetadata)
@@ -322,15 +322,15 @@ struct ScoreHeroSection: View {
                     .frame(maxWidth: 560, alignment: .leading)
 
                 HStack(spacing: 16) {
-                    ScoreHeroMetric(value: "\(session.pageCount)", label: session.pageCount == 1 ? "page" : "pages")
-                    ScoreHeroMetric(value: "\(session.document.partCount)", label: session.document.partCount == 1 ? "part" : "parts")
-                    ScoreHeroMetric(value: session.capabilities.supportsLivePageRendering ? "Live" : "Preview", label: "render path")
+                    ScoreHeroMetric(value: "\(session.pageCount)", label: session.pageCount == 1 ? "页" : "页")
+                    ScoreHeroMetric(value: "\(session.document.partCount)", label: session.document.partCount == 1 ? "声部" : "声部")
+                    ScoreHeroMetric(value: session.capabilities.supportsLivePageRendering ? "Live" : "Preview", label: "渲染路径")
                 }
 
                 if openReaderAction != nil || editInfoAction != nil || exportMIDIAction != nil {
                     HStack(spacing: 12) {
                         if let openReaderAction {
-                            Button("Open Reader", systemImage: "arrow.up.left.and.arrow.down.right", action: openReaderAction)
+                            Button("打开看谱", systemImage: "arrow.up.left.and.arrow.down.right", action: openReaderAction)
                                 .buttonStyle(.borderedProminent)
                                 .tint(ScoreDetailPalette.accent)
                         }
@@ -338,9 +338,9 @@ struct ScoreHeroSection: View {
                         if let editInfoAction {
                             Button(action: editInfoAction) {
                                 if isSavingMetadata {
-                                    Label("Saving Info", systemImage: "square.and.pencil")
+                                    Label("正在保存信息", systemImage: "square.and.pencil")
                                 } else {
-                                    Label("Edit Info", systemImage: "square.and.pencil")
+                                    Label("编辑信息", systemImage: "square.and.pencil")
                                 }
                             }
                             .buttonStyle(.bordered)
@@ -351,9 +351,9 @@ struct ScoreHeroSection: View {
                         if let exportMIDIAction {
                             Button(action: exportMIDIAction) {
                                 if isPreparingMIDIExport {
-                                    Label("Preparing MIDI", systemImage: "arrow.down.circle")
+                                    Label("正在准备 MIDI", systemImage: "arrow.down.circle")
                                 } else {
-                                    Label("Export MIDI", systemImage: "square.and.arrow.up")
+                                    Label("导出 MIDI", systemImage: "square.and.arrow.up")
                                 }
                             }
                             .buttonStyle(.bordered)
@@ -488,15 +488,15 @@ struct ScorePreviewStripSection: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            SectionHeadingView(title: "Session Pages")
+            SectionHeadingView(title: "乐谱页面")
 
             if session.previewPages.isEmpty {
                 LiveRenderingCallout(
-                    title: session.pageCount > 0 ? "Live reader is ready" : "No pages available yet",
+                    title: session.pageCount > 0 ? "实时看谱已就绪" : "暂无可用页面",
                     detail: session.pageCount > 0
-                        ? "This score does not have cached preview pages, but Aria can still open the score and render pages directly from the live session."
+                        ? "此乐谱没有预览缓存，仍可打开并实时生成谱面。"
                         : session.renderPipeline.detailText,
-                    buttonTitle: session.pageCount > 0 ? "Open Reader" : nil,
+                    buttonTitle: session.pageCount > 0 ? "打开看谱" : nil,
                     buttonAction: session.pageCount > 0 ? { openPageAction(0) } : nil
                 )
             } else {
@@ -546,7 +546,7 @@ struct ScorePreviewCard: View {
                             }
                     }
 
-                    Text("Page \(page.index + 1)")
+                    Text("第 \(page.index + 1) 页")
                         .font(.caption.weight(.bold))
                         .padding(.horizontal, 10)
                         .padding(.vertical, 8)
@@ -564,7 +564,7 @@ struct ScorePreviewCard: View {
                         .font(.subheadline.weight(.semibold))
                         .foregroundStyle(ScoreDetailPalette.ink)
 
-                    Text("Open this page in the reader")
+                    Text("在看谱中打开此页")
                         .font(.caption.weight(.medium))
                         .foregroundStyle(.secondary)
                 }
@@ -617,37 +617,37 @@ struct ScoreCapabilitiesSection: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            SectionHeadingView(title: "Session Capabilities")
+            SectionHeadingView(title: "当前乐谱支持的功能")
 
             LazyVGrid(columns: columns, spacing: 16) {
                 CapabilityCard(
-                    title: "Package Inspection",
+                    title: "文件包检查",
                     isAvailable: session.capabilities.supportsPackageInspection,
-                    detail: "Aria reads MuseScore archives and XML directly, including metadata, root score selection, package entries, and embedded previews."
+                    detail: "Aria 直接读取 MuseScore 文件包与 XML，包括乐谱信息、主谱、文件条目和内嵌预览。"
                 )
 
                 CapabilityCard(
-                    title: "Live Page Rendering",
+                    title: "实时排谱",
                     isAvailable: session.capabilities.supportsLivePageRendering,
                     detail: session.capabilities.supportsLivePageRendering
-                        ? "Pages are rendered on demand from the reusable MuseScore engraving core instead of being fully materialized up front."
-                        : "This score is currently limited to embedded preview assets until the live render session is available."
+                        ? "页面由 MuseScore 排谱核心按需生成。"
+                        : "实时排谱就绪前，此乐谱仅能显示内嵌预览。"
                 )
 
                 CapabilityCard(
-                    title: "Playback",
+                    title: "播放",
                     isAvailable: session.capabilities.supportsPlayback,
                     detail: session.capabilities.supportsPlayback
-                        ? "Playback is available from this same live score session through MuseScore playback events and the native iPad audio stream."
-                        : "Planned. Playback will attach to this same open score session once the engine layer is exposed."
+                        ? "通过 MuseScore 播放事件与原生音频输出，可以直接播放当前乐谱。"
+                        : "计划功能：核心接口就绪后，将接入当前乐谱播放。"
                 )
 
                 CapabilityCard(
-                    title: "Editing",
+                    title: "编辑",
                     isAvailable: session.capabilities.supportsEditing,
                     detail: session.capabilities.supportsEditing
-                        ? "Aria can now update core score information and save it back through the same live MuseScore session."
-                        : "Planned. Edit commands and save-back will be layered onto the same score session after the reader is solid."
+                        ? "可在当前 MuseScore 乐谱会话中修改并保存乐谱信息。"
+                        : "计划功能：在看谱稳定后，为当前乐谱接入编辑与保存。"
                 )
             }
         }
@@ -665,26 +665,26 @@ struct ScoreMetadataSection: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(alignment: .center) {
-                SectionHeadingView(title: "Score Summary")
+                SectionHeadingView(title: "乐谱摘要")
 
                 Spacer(minLength: 0)
 
                 if let editInfoAction {
-                    Button("Edit Info", systemImage: "square.and.pencil", action: editInfoAction)
+                    Button("编辑信息", systemImage: "square.and.pencil", action: editInfoAction)
                         .buttonStyle(.bordered)
                         .tint(ScoreDetailPalette.accent)
                 }
             }
 
             LazyVGrid(columns: columns, spacing: 16) {
-                MetadataCard(title: "Composer", value: document.composer)
-                MetadataCard(title: "Lyricist", value: document.lyricist)
-                MetadataCard(title: "Arranger", value: document.arranger)
-                MetadataCard(title: "Parts", value: "\(document.partCount)")
-                MetadataCard(title: "Root Score File", value: document.rootFilePath)
-                MetadataCard(title: "File Size", value: formattedFileSize)
-                MetadataCard(title: "Last Modified", value: formattedDate)
-                MetadataCard(title: "Package Entries", value: "\(document.packageEntries.count)")
+                MetadataCard(title: "作曲", value: document.composer)
+                MetadataCard(title: "作词", value: document.lyricist)
+                MetadataCard(title: "编曲", value: document.arranger)
+                MetadataCard(title: "声部", value: "\(document.partCount)")
+                MetadataCard(title: "主乐谱文件", value: document.rootFilePath)
+                MetadataCard(title: "文件大小", value: formattedFileSize)
+                MetadataCard(title: "修改时间", value: formattedDate)
+                MetadataCard(title: "文件包条目", value: "\(document.packageEntries.count)")
             }
         }
     }
@@ -711,7 +711,7 @@ struct ScorePackageContentsSection: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            SectionHeadingView(title: "Package Contents")
+            SectionHeadingView(title: "文件包内容")
 
             VStack(alignment: .leading, spacing: 8) {
                 ForEach(entries.prefix(30), id: \.self) { entry in
@@ -721,7 +721,7 @@ struct ScorePackageContentsSection: View {
                 }
 
                 if entries.count > 30 {
-                    Text("+ \(entries.count - 30) more")
+                    Text("另有 \(entries.count - 30) 项")
                         .font(.footnote.weight(.semibold))
                         .foregroundStyle(.secondary)
                 }
@@ -738,7 +738,7 @@ struct ScoreSourceSection: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            SectionHeadingView(title: "XML Excerpt")
+            SectionHeadingView(title: "XML 摘要")
 
             Text(excerpt)
                 .font(.system(.body, design: .monospaced))
@@ -796,7 +796,7 @@ struct CapabilityCard: View {
             }
             .font(.headline)
 
-            Text(isAvailable ? "Available" : "Planned")
+            Text(isAvailable ? "可用" : "计划中")
                 .font(.caption.weight(.bold))
                 .foregroundStyle(.secondary)
 

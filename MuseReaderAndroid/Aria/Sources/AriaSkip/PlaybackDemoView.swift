@@ -14,15 +14,15 @@ struct PlaybackDemoView: View {
                 Text(status).font(.footnote).foregroundStyle(.secondary)
                 Text(position).font(.title2)
                 HStack(spacing: 24) {
-                    Button("Play") { play() }
-                    Button("Pause") { try? controller?.pause() }
-                    Button("Stop") { try? controller?.stop() }
-                    Button("Note") { NotePreview.shared.play(midiPitches: [67], fallbackMIDIPitch: nil, playbackBank: 0, playbackProgram: 0, playbackSetupData: nil) }
+                    Button("播放") { play() }
+                    Button("暂停") { try? controller?.pause() }
+                    Button("停止") { try? controller?.stop() }
+                    Button("音符") { NotePreview.shared.play(midiPitches: [67], fallbackMIDIPitch: nil, playbackBank: 0, playbackProgram: 0, playbackSetupData: nil) }
                 }
                 .buttonStyle(.borderedProminent)
             }
             .padding()
-            .navigationTitle("Playback")
+            .navigationTitle("播放")
         }
         .task { await open() }
         .task {

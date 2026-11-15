@@ -67,7 +67,7 @@ actor AndroidNotePreviewWorker {
         guard loadedProgram != program || engine == nil else { return }
         guard let url = AppResources.url(forResource: "MuseScore_General", withExtension: "sf2") else {
             throw NSError(domain: "AriaNotePreview", code: 1,
-                userInfo: [NSLocalizedDescriptionKey: "MuseScore_General.sf2 is unavailable."])
+                userInfo: [NSLocalizedDescriptionKey: "MuseScore_General.sf2 音色库不可用。"])
         }
         let outputEngine = engine ?? AVAudioEngine()
         let instrument = sampler ?? AVAudioUnitSampler()

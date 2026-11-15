@@ -39,15 +39,15 @@ enum DuoPose: String, CaseIterable {
     var title: String {
         switch self {
         case .notDuo:
-            return "Not a Duo"
+            return "非双屏设备"
         case .closed:
-            return "Closed"
+            return "已合拢"
         case .open:
-            return "Open"
+            return "打开"
         case .book:
-            return "Book"
+            return "书本"
         case .stand:
-            return "Stand"
+            return "支架"
         }
     }
 }

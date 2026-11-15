@@ -37,13 +37,13 @@ struct ScoreReaderAnnotationPalette: View {
             sectionSpacer
             paletteButton(
                 systemImage: annotationsVisible ? "eye" : "eye.slash",
-                label: annotationsVisible ? "Hide annotations" : "Show annotations",
+                label: annotationsVisible ? "隐藏批注" : "显示批注",
                 isEnabled: true,
                 action: toggleVisibilityAction
             )
             paletteButton(
                 systemImage: "trash",
-                label: "Delete selected annotations",
+                label: "删除所选批注",
                 isEnabled: hasSelection,
                 action: deleteSelectionAction
             )
@@ -78,7 +78,7 @@ struct ScoreReaderAnnotationPalette: View {
                 }
                 .buttonStyle(.plain)
                 .accessibilityLabel(candidate.title)
-                .accessibilityValue(tool == candidate ? "Selected" : "")
+                .accessibilityValue(tool == candidate ? "已选择" : "")
             }
         }
     }
@@ -110,29 +110,29 @@ struct ScoreReaderAnnotationPalette: View {
                 }
                 .buttonStyle(.plain)
                 .accessibilityLabel(candidate.accessibilityName)
-                .accessibilityValue(color == candidate ? "Selected" : "")
+                .accessibilityValue(color == candidate ? "已选择" : "")
             }
         }
     }
 
     private var widthControls: some View {
         HStack(spacing: 2) {
-            widthButton(value: 2, diameter: 5, label: "Thin")
-            widthButton(value: 4, diameter: 9, label: "Medium")
-            widthButton(value: 7, diameter: 13, label: "Thick")
+            widthButton(value: 2, diameter: 5, label: "细")
+            widthButton(value: 4, diameter: 9, label: "中")
+            widthButton(value: 7, diameter: 13, label: "粗")
         }
     }
 
     private var historyControls: some View {
         HStack(spacing: 2) {
-            paletteButton(systemImage: "arrow.uturn.backward", label: "Undo annotation", isEnabled: canUndo, action: undoAction)
-            paletteButton(systemImage: "arrow.uturn.forward", label: "Redo annotation", isEnabled: canRedo, action: redoAction)
+            paletteButton(systemImage: "arrow.uturn.backward", label: "撤销批注", isEnabled: canUndo, action: undoAction)
+            paletteButton(systemImage: "arrow.uturn.forward", label: "重做批注", isEnabled: canRedo, action: redoAction)
         }
     }
 
     private var doneButton: some View {
         Button(action: doneAction) {
-            Text("Done")
+            Text("完成")
                 .font(.system(size: 14, weight: .bold))
                 .foregroundStyle(Color.white)
                 .padding(.horizontal, 16)
@@ -141,7 +141,7 @@ struct ScoreReaderAnnotationPalette: View {
                 .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
-        .accessibilityLabel("Finish annotating")
+        .accessibilityLabel("结束批注")
     }
 
     private var paletteDivider: some View {
@@ -192,8 +192,8 @@ struct ScoreReaderAnnotationPalette: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
-        .accessibilityLabel("\(label) stroke")
-        .accessibilityValue(width == value ? "Selected" : "")
+        .accessibilityLabel("\(label) 笔画")
+        .accessibilityValue(width == value ? "已选择" : "")
     }
 
     private func toolIcon(_ candidate: ScoreAnnotationTool) -> some View {
@@ -211,15 +211,15 @@ struct ScoreReaderAnnotationPageNavigator: View {
 
     var body: some View {
         HStack(spacing: 2) {
-            pageButton(systemImage: "chevron.left", label: "Previous page", isEnabled: currentPageIndex > 0, action: previousAction)
+            pageButton(systemImage: "chevron.left", label: "上一页", isEnabled: currentPageIndex > 0, action: previousAction)
 
-            Text("\(currentPageIndex + 1) of \(pageCount)")
+            Text("第 \(currentPageIndex + 1)/\(pageCount) 页")
                 .font(.system(size: 12, weight: .semibold))
                 .monospacedDigit()
                 .foregroundStyle(Color.black.opacity(0.70))
                 .frame(minWidth: 62)
 
-            pageButton(systemImage: "chevron.right", label: "Next page", isEnabled: currentPageIndex + 1 < pageCount, action: nextAction)
+            pageButton(systemImage: "chevron.right", label: "下一页", isEnabled: currentPageIndex + 1 < pageCount, action: nextAction)
         }
         .padding(5)
         .background(.regularMaterial, in: Capsule())
@@ -251,11 +251,11 @@ struct ScoreReaderAnnotationPageNavigator: View {
 private extension ScoreAnnotationColor {
     var accessibilityName: String {
         switch self {
-        case .red: return "Red"
-        case .blue: return "Blue"
-        case .green: return "Green"
-        case .yellow: return "Yellow"
-        case .black: return "Black"
+        case .red: return "红色"
+        case .blue: return "蓝色"
+        case .green: return "绿色"
+        case .yellow: return "黄色"
+        case .black: return "黑色"
         }
     }
 

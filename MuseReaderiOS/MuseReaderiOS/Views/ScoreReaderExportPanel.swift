@@ -69,14 +69,14 @@ struct ScoreReaderExportPanel: View {
     private func panelContent(includesFooter: Bool) -> some View {
         VStack(alignment: .leading, spacing: isPhone ? 10 : 18) {
             VStack(alignment: .leading, spacing: isPhone ? 2 : 4) {
-                Text("Export Score")
+                Text("导出乐谱")
                     .font(.system(size: isPhone ? 18 : 20, weight: .semibold))
                 if !isPhone {
-                    Text("Choose content and format")
+                    Text("选择内容与格式")
                         .font(.subheadline)
                         .foregroundStyle(Color.black.opacity(0.52))
                 }
-                Text("Sharing: \(sharingDescription)")
+                Text("分享内容：\(sharingDescription)")
                     .font(.system(size: isPhone ? 12 : 13, weight: .semibold))
                     .foregroundStyle(Color.blue.opacity(0.86))
             }
@@ -85,7 +85,7 @@ struct ScoreReaderExportPanel: View {
                 sectionTitle("What to export")
                 VStack(spacing: 0) {
                     exportContentRow(
-                        title: "Full Score",
+                        title: "总谱",
                         isSelected: draft.includesFullScore,
                         isRequiredSelection: !draft.includesParts
                     ) {
@@ -96,7 +96,7 @@ struct ScoreReaderExportPanel: View {
                     }
                     Divider().padding(.leading, 40)
                     exportContentRow(
-                        title: "Parts",
+                        title: "声部",
                         isSelected: draft.includesParts,
                         isRequiredSelection: !draft.includesFullScore
                     ) {
@@ -151,7 +151,7 @@ struct ScoreReaderExportPanel: View {
     private var footerButtons: some View {
         HStack(spacing: isPhone ? 8 : 10) {
             Button(action: cancelAction) {
-                Text("Cancel")
+                Text("取消")
                     .frame(maxWidth: .infinity)
             }
             .buttonStyle(ScoreReaderExportFooterButtonStyle(isPrimary: false, isCompact: isPhone))
@@ -164,7 +164,7 @@ struct ScoreReaderExportPanel: View {
                 }
             } label: {
                 if isPreparingExport, let exportProgress {
-                    Text("Rendering \(Int((exportProgress * 100).rounded()))%")
+                    Text("正在渲染 \(Int((exportProgress * 100).rounded()))%")
                         .monospacedDigit()
                         .frame(maxWidth: .infinity)
                 } else if isPreparingExport {
@@ -173,7 +173,7 @@ struct ScoreReaderExportPanel: View {
                         .tint(.white)
                         .frame(maxWidth: .infinity)
                 } else {
-                    Text(draft.format == .video ? "Video Export" : "Export")
+                    Text(draft.format == .video ? "视频导出" : "导出")
                         .frame(maxWidth: .infinity)
                 }
             }
@@ -215,7 +215,7 @@ struct ScoreReaderExportPanel: View {
                 Text(title)
                 Spacer()
                 if isRequiredSelection && !isPhone {
-                    Text("Required")
+                    Text("必选")
                         .font(.caption2.weight(.semibold))
                         .foregroundStyle(Color.black.opacity(0.38))
                 }
@@ -229,7 +229,7 @@ struct ScoreReaderExportPanel: View {
 
     private var partSelector: some View {
         VStack(alignment: .leading, spacing: isPhone ? 6 : 9) {
-            Text("Select Parts")
+            Text("选择分谱")
                 .font(.caption.weight(.semibold))
                 .foregroundStyle(Color.black.opacity(0.64))
 
@@ -281,18 +281,18 @@ struct ScoreReaderExportPanel: View {
                     HStack(spacing: 6) {
                         Text(format.title)
                         if showsTransposedLabel(for: format) {
-                            Text("(Transposed)")
+                            Text("（移调）")
                                 .font(.caption2.weight(.semibold))
                                 .foregroundStyle(Color.blue.opacity(0.82))
                         }
                         if !format.isAvailable {
-                            Text("Soon")
+                            Text("即将提供")
                                 .font(.caption2.weight(.bold))
                                 .foregroundStyle(Color.black.opacity(0.42))
                         }
                         // Until the video sheet has been opened once.
                         if format == .video && !hasOpenedVideoExport {
-                            Text("New")
+                            Text("新建")
                                 .font(.caption2.weight(.bold))
                                 .foregroundStyle(.white)
                                 .padding(.horizontal, 6)
@@ -324,7 +324,7 @@ struct ScoreReaderExportPanel: View {
 
     private var filenameRow: some View {
         HStack {
-            Text("Filename")
+            Text("文件名")
             #if os(Android)
             // Android's field scrolls a long name to its end and clips it mid-letter, so
             // it takes the row's spare width (with a Spacer beside it, Skip's HStack
@@ -371,7 +371,7 @@ struct ScoreReaderExportPanel: View {
             openVideoSettingsAction()
         } label: {
             HStack {
-                Text("Video settings")
+                Text("视频设置")
                 Spacer()
                 Text(draft.videoStyle.title + (draft.videoVertical ? " · 9:16" : ""))
                     .foregroundStyle(.secondary)
@@ -397,7 +397,7 @@ struct ScoreReaderExportPanel: View {
                 Image(systemName: draft.exportPartsInConcertPitch ? "checkmark.square.fill" : "square")
                     .foregroundStyle(draft.exportPartsInConcertPitch ? Color.blue : Color.black.opacity(0.34))
                     .font(.system(size: isPhone ? 17 : 20, weight: .semibold))
-                Text("Export parts in concert")
+                Text("以实音导出分谱")
                 Spacer()
             }
             .padding(.horizontal, isPhone ? 12 : 16)
@@ -419,7 +419,7 @@ struct ScoreReaderExportPanel: View {
                 Image(systemName: draft.exportPartsInOriginalKey ? "checkmark.square.fill" : "square")
                     .foregroundStyle(draft.exportPartsInOriginalKey ? Color.blue : Color.black.opacity(0.34))
                     .font(.system(size: isPhone ? 17 : 20, weight: .semibold))
-                Text("Export parts in Original Key")
+                Text("以原调导出分谱")
                 Spacer()
             }
             .padding(.horizontal, isPhone ? 12 : 16)

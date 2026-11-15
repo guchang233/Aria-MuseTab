@@ -20,12 +20,41 @@ if (ariaPhoneAudit) {
 }
 
 plugins {
+    id("com.chaquo.python")
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.android.application)
     id("skip-build-plugin")
 }
 
 skip {
+}
+
+val ariaProjectRoot = rootProject.file("../../..")
+val ariaQtAndroid = providers.environmentVariable("QT_ANDROID")
+    .orElse(File(ariaProjectRoot, ".local/Qt/6.11.1/android_arm64_v8a").path)
+val omrAssets = layout.buildDirectory.dir("offlineOmrAssets")
+val omrPython = providers.environmentVariable("ARIA_BUILD_PYTHON").orElse("python3")
+val prepareOfflineOmrModels by tasks.registering(Exec::class) {
+    commandLine(omrPython.get(), File(ariaProjectRoot, "extensions/omr/prepare_models.py").path,
+        omrAssets.get().asFile.path)
+    inputs.file(File(ariaProjectRoot, "extensions/omr/models.json"))
+    inputs.file(File(ariaProjectRoot, "extensions/omr/prepare_models.py"))
+    outputs.dir(omrAssets)
+}
+chaquopy {
+    defaultConfig {
+        version = "3.10"
+        buildPython(omrPython.get())
+        pip {
+            install("numpy==1.26.2")
+            install("opencv-python-headless==4.5.1.48")
+            install("pillow==11.0.0")
+            install("typing_extensions==4.14.1")
+            install("requests==2.32.5")
+            install("musicxml==1.4")
+        }
+    }
+    sourceSets.getByName("main").srcDir(File(ariaProjectRoot, "extensions/omr/python"))
 }
 
 // Aria: the shared render core (libaria_engine.so), Qt and Qt's offscreen plugin, from
@@ -41,7 +70,7 @@ val stageBaseResources by tasks.registering(Sync::class) {
     from("ios-assets") { exclude("**/*.sf2", "**/.DS_Store") }
     into(baseResources)
 }
-tasks.named("preBuild") { dependsOn(copyAriaNativeLibs, stageBaseResources) }
+tasks.named("preBuild") { dependsOn(copyAriaNativeLibs, stageBaseResources, prepareOfflineOmrModels) }
 
 kotlin {
     compilerOptions {
@@ -68,6 +97,7 @@ android {
     }
 
     sourceSets["main"].jniLibs.srcDir(ariaJniLibsDir)
+    sourceSets["main"].assets.srcDir(omrAssets)
     // Local optimized profiling only. The normal release/upload manifest has no
     // profileable element; do not supply this property when building an upload AAB.
     if (providers.gradleProperty("ariaProfileableRelease").isPresent) {
@@ -157,10 +187,12 @@ android {
 }
 
 dependencies {
+    implementation("com.google.ai.edge.litert:litert:2.1.6")
+    implementation("com.microsoft.onnxruntime:onnxruntime-android:1.27.0")
     androidTestImplementation("androidx.test:runner:1.7.0")
     androidTestImplementation("junit:junit:4.13.2")
     // Aria: Qt's Java side; Qt Core's JNI_OnLoad looks up these classes.
-    implementation(files("${System.getProperty("user.home")}/Qt/android/6.11.1/android_arm64_v8a/jar/Qt6Android.jar"))
+    implementation(files("${ariaQtAndroid.get()}/jar/Qt6Android.jar"))
     // Aria Pro purchase (AriaBilling.kt), the App Store purchase on iOS.
     implementation("com.android.billingclient:billing:8.0.0")
     // App review prompt (AriaReview.kt), StoreKit's requestReview on iOS.

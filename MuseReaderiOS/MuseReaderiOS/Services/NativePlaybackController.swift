@@ -28,20 +28,20 @@ final class NativePlaybackController {
             switch self {
             case .audioSessionUnavailable(let message):
                 #if os(Android)
-                return "Aria could not prepare the audio session: \(message)"
+                return "无法初始化音频：\(message)"
                 #else
-                return "Aria could not prepare the iPad audio session: \(message)"
+                return "无法初始化平板音频：\(message)"
                 #endif
             case .soundBankUnavailable(let message):
-                return "Aria could not find the MuseScore sound bank: \(message)"
+                return "找不到 MuseScore 音色库：\(message)"
             case .sequenceLoadFailed(let message):
-                return "Aria could not prepare live playback audio: \(message)"
+                return "无法准备实时播放：\(message)"
             case .playerInitializationFailed(let message):
-                return "Aria could not prepare playback: \(message)"
+                return "无法准备播放：\(message)"
             case .playerUnavailable:
-                return "Playback is unavailable because the audio engine player is not ready yet."
+                return "音频播放器尚未就绪，暂时无法播放。"
             case .invalidLoopRange:
-                return "The selected playback loop is too short."
+                return "选中的循环播放范围过短。"
             }
         }
     }

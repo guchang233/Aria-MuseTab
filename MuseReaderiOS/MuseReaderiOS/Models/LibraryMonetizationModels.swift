@@ -31,7 +31,7 @@ enum LibraryPaywallContext: Equatable, Sendable {
     var title: String {
         switch self {
         case .createScore, .importScore:
-            return "You’ve Reached Your Free Library Limit"
+            return "免费曲库容量已满"
         case .settings:
             return "Aria Pro"
         }

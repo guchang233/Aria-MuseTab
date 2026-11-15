@@ -221,7 +221,7 @@ struct ScoreReaderNoteEntrySurface: View {
         .foregroundStyle(Color.black.opacity(0.78))
         .disabled(!hasSelection || isBusy)
         .opacity(hasSelection && !isBusy ? 1 : 0.38)
-        .accessibilityLabel("Delete Selection")
+        .accessibilityLabel("删除选区")
     }
 
     private var compactBody: some View {
@@ -283,7 +283,7 @@ struct ScoreReaderNoteEntrySurface: View {
 
     private var compactTextEntryHeader: some View {
         HStack(spacing: 10) {
-            Text(selectedToolCategory == .chord ? "Chord" : "Lyrics")
+            Text(selectedToolCategory == .chord ? "和弦" : "歌词")
                 .font(.system(size: 16, weight: .semibold))
                 .foregroundStyle(Color.black.opacity(0.88))
 
@@ -293,7 +293,7 @@ struct ScoreReaderNoteEntrySurface: View {
                 selectedToolCategory = .text
                 selectModeAction()
             } label: {
-                Text("Done")
+                Text("完成")
                     .font(.system(size: 15, weight: .semibold))
                     .foregroundStyle(Color(red: 0.0, green: 0.48, blue: 1.0))
                     .padding(.horizontal, 12)
@@ -386,7 +386,7 @@ struct ScoreReaderNoteEntrySurface: View {
     private var pitchKeyboardRow: some View {
         HStack(alignment: .bottom, spacing: 0) {
             ScoreReaderPitchNudgePair(
-                title: "Half step",
+                title: "半音",
                 isEnabled: pitchEditEnabled && !isBusy,
                 upAction: { semitoneShiftAction(1) },
                 downAction: { semitoneShiftAction(-1) }
@@ -409,7 +409,7 @@ struct ScoreReaderNoteEntrySurface: View {
             .frame(maxWidth: .infinity)
 
             ScoreReaderPitchNudgePair(
-                title: "Octave",
+                title: "八度",
                 isEnabled: pitchEditEnabled && !isBusy,
                 upAction: { octaveShiftAction(1) },
                 downAction: { octaveShiftAction(-1) }
@@ -500,7 +500,7 @@ struct ScoreReaderNoteEntrySurface: View {
     }
 
     private var percussionUnsupportedNotice: some View {
-        Text("Percussion editing is not currently supported. Viewing and playback only.")
+        Text("暂不支持打击乐编辑，可看谱和播放。")
             .font(.caption.weight(.semibold))
             .foregroundStyle(Color.black.opacity(0.72))
             .multilineTextAlignment(.center)
@@ -516,7 +516,7 @@ struct ScoreReaderNoteEntrySurface: View {
         VStack(spacing: 0) {
             compactEditingSideButton(
                 systemImage: "arrow.uturn.backward",
-                accessibilityLabel: "Undo",
+                accessibilityLabel: "撤销",
                 isEnabled: editingState.canUndo && !isBusy,
                 action: undoAction
             )
@@ -525,7 +525,7 @@ struct ScoreReaderNoteEntrySurface: View {
 
             compactEditingSideButton(
                 systemImage: "arrow.uturn.forward",
-                accessibilityLabel: "Redo",
+                accessibilityLabel: "重做",
                 isEnabled: editingState.canRedo && !isBusy,
                 action: redoAction
             )
@@ -542,7 +542,7 @@ struct ScoreReaderNoteEntrySurface: View {
         compactSideColumn {
             compactEditingSideButton(
                 systemImage: "arrow.uturn.backward",
-                accessibilityLabel: "Undo",
+                accessibilityLabel: "撤销",
                 isEnabled: editingState.canUndo && !isBusy,
                 width: 36,
                 height: 36,
@@ -554,7 +554,7 @@ struct ScoreReaderNoteEntrySurface: View {
 
             compactEditingSideButton(
                 systemImage: "arrow.uturn.forward",
-                accessibilityLabel: "Redo",
+                accessibilityLabel: "重做",
                 isEnabled: editingState.canRedo && !isBusy,
                 width: 36,
                 height: 36,
@@ -568,7 +568,7 @@ struct ScoreReaderNoteEntrySurface: View {
         VStack(spacing: 0) {
             compactEditingSideButton(
                 systemImage: "chevron.right",
-                accessibilityLabel: "Select Next",
+                accessibilityLabel: "选择下一个",
                 isEnabled: canNavigateSelection && !isBusy,
                 action: selectNextElementAction
             )
@@ -577,7 +577,7 @@ struct ScoreReaderNoteEntrySurface: View {
 
             compactEditingSideButton(
                 systemImage: "chevron.left",
-                accessibilityLabel: "Select Previous",
+                accessibilityLabel: "选择上一个",
                 isEnabled: canNavigateSelection && !isBusy,
                 action: selectPreviousElementAction
             )
@@ -594,7 +594,7 @@ struct ScoreReaderNoteEntrySurface: View {
         compactSideColumn {
             compactEditingSideButton(
                 systemImage: "chevron.right",
-                accessibilityLabel: "Select Next",
+                accessibilityLabel: "选择下一个",
                 isEnabled: canNavigateSelection && !isBusy,
                 width: 36,
                 height: 36,
@@ -606,7 +606,7 @@ struct ScoreReaderNoteEntrySurface: View {
 
             compactEditingSideButton(
                 systemImage: "chevron.left",
-                accessibilityLabel: "Select Previous",
+                accessibilityLabel: "选择上一个",
                 isEnabled: canNavigateSelection && !isBusy,
                 width: 36,
                 height: 36,
@@ -664,7 +664,7 @@ struct ScoreReaderNoteEntrySurface: View {
                 selectionID: editingState.selection?.textEditorID,
                 initialText: editingState.selection?.kind == .chordText ? (editingState.selection?.textContent ?? "") : "",
                 isInsertEnabled: hasSelection && !isBusy,
-                positionText: editingState.selection?.measureIndex.map { "Measure \($0 + 1)" } ?? "Select a note",
+                positionText: editingState.selection?.measureIndex.map { "第 \($0 + 1) 小节" } ?? "选择音符",
                 insertAction: addChordTextAction,
                 insertAndAdvanceAction: addChordTextAndSelectNextAction,
                 insertAndGoBackAction: addChordTextAndSelectPreviousAction,
@@ -695,7 +695,7 @@ struct ScoreReaderNoteEntrySurface: View {
         case .lyrics:
             ScoreReaderLyricsEntryPanel(
                 selectionID: editingState.selection?.textEditorID,
-                initialText: editingState.selection?.textKind == "Lyrics" ? (editingState.selection?.textContent ?? "") : "",
+                initialText: editingState.selection?.textKind == "歌词" ? (editingState.selection?.textContent ?? "") : "",
                 // Lyric commands queue behind the edit in flight, so typing stays enabled.
                 isInsertEnabled: lyricEntryEnabled,
                 insertAction: addLyricsTextAction,
@@ -720,15 +720,15 @@ struct ScoreReaderNoteEntrySurface: View {
                 if isMeasureSelection {
                     Menu {
                         if isFirstMeasureSelection {
-                            Button(isPickupMeasureSelection ? "Edit Pickup Measure..." : "Convert to Pickup Measure", action: openPickupMeasureAction)
+                            Button(isPickupMeasureSelection ? "编辑弱起小节…" : "转换为弱起小节", action: openPickupMeasureAction)
                         }
-                        Button("Clear", action: clearSelectedMeasureAction)
-                        Button("Add Measure", action: addMeasureAction)
-                        Button("Add Multiple Measures", action: addMultipleMeasuresAction)
-                        Button("Copy", action: copySelectedMeasureRangeAction)
-                        Button("Cut", action: cutSelectedMeasureRangeAction)
-                        Button("Paste", action: pasteMeasureRangeAction)
-                        Button("Delete Measure", role: .destructive, action: removeSelectedMeasureAction)
+                        Button("清除", action: clearSelectedMeasureAction)
+                        Button("添加小节", action: addMeasureAction)
+                        Button("添加多个小节", action: addMultipleMeasuresAction)
+                        Button("复制", action: copySelectedMeasureRangeAction)
+                        Button("剪切", action: cutSelectedMeasureRangeAction)
+                        Button("粘贴", action: pasteMeasureRangeAction)
+                        Button("删除小节", role: .destructive, action: removeSelectedMeasureAction)
                     } label: {
                         Image(systemName: "ellipsis")
                             .font(.system(size: 15, weight: .semibold))
@@ -840,7 +840,7 @@ struct ScoreReaderNoteEntrySurface: View {
                 selectionID: editingState.selection?.textEditorID,
                 initialText: editingState.selection?.kind == .chordText ? (editingState.selection?.textContent ?? "") : "",
                 isInsertEnabled: hasSelection && !isBusy,
-                positionText: editingState.selection?.measureIndex.map { "Measure \($0 + 1)" } ?? "Select a note",
+                positionText: editingState.selection?.measureIndex.map { "第 \($0 + 1) 小节" } ?? "选择音符",
                 insertAction: addChordTextAction,
                 insertAndAdvanceAction: addChordTextAndSelectNextAction,
                 insertAndGoBackAction: addChordTextAndSelectPreviousAction,
@@ -870,7 +870,7 @@ struct ScoreReaderNoteEntrySurface: View {
         case .lyrics:
             ScoreReaderLyricsEntryPanel(
                 selectionID: editingState.selection?.textEditorID,
-                initialText: editingState.selection?.textKind == "Lyrics" ? (editingState.selection?.textContent ?? "") : "",
+                initialText: editingState.selection?.textKind == "歌词" ? (editingState.selection?.textContent ?? "") : "",
                 // Lyric commands queue behind the edit in flight, so typing stays enabled.
                 isInsertEnabled: lyricEntryEnabled,
                 insertAction: addLyricsTextAction,
@@ -949,15 +949,15 @@ struct ScoreReaderNoteEntrySurface: View {
                 if isMeasureSelection {
                     Menu {
                         if isFirstMeasureSelection {
-                            Button(isPickupMeasureSelection ? "Edit Pickup Measure..." : "Convert to Pickup Measure", action: openPickupMeasureAction)
+                            Button(isPickupMeasureSelection ? "编辑弱起小节…" : "转换为弱起小节", action: openPickupMeasureAction)
                         }
-                        Button("Clear", action: clearSelectedMeasureAction)
-                        Button("Add Measure", action: addMeasureAction)
-                        Button("Add Multiple Measures", action: addMultipleMeasuresAction)
-                        Button("Copy", action: copySelectedMeasureRangeAction)
-                        Button("Cut", action: cutSelectedMeasureRangeAction)
-                        Button("Paste", action: pasteMeasureRangeAction)
-                        Button("Delete Measure", role: .destructive, action: removeSelectedMeasureAction)
+                        Button("清除", action: clearSelectedMeasureAction)
+                        Button("添加小节", action: addMeasureAction)
+                        Button("添加多个小节", action: addMultipleMeasuresAction)
+                        Button("复制", action: copySelectedMeasureRangeAction)
+                        Button("剪切", action: cutSelectedMeasureRangeAction)
+                        Button("粘贴", action: pasteMeasureRangeAction)
+                        Button("删除小节", role: .destructive, action: removeSelectedMeasureAction)
                     } label: {
                         Image(systemName: "ellipsis")
                             .font(.system(size: 15, weight: .semibold))

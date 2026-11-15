@@ -189,7 +189,7 @@ struct ScoreReaderChromeBar: View {
                     .scoreReaderChromeTapTarget(minWidth: 44)
                 }
                 .buttonStyle(.plain)
-                .accessibilityLabel("Back")
+                .accessibilityLabel("返回")
             }
             .layoutPriority(1)
 
@@ -243,7 +243,7 @@ struct ScoreReaderChromeBar: View {
                         .scoreReaderChromeTapTarget(minWidth: 44)
                     }
                     .buttonStyle(.plain)
-                    .accessibilityLabel("Back")
+                    .accessibilityLabel("返回")
                 }
                 .frame(maxWidth: isCompactHeader ? 220 : 340, alignment: .leading)
 
@@ -307,7 +307,7 @@ struct ScoreReaderChromeBar: View {
             }
             .disabled(!supportsPlayback || !playbackState.isAvailable || playbackState.isPlaying || isPlaybackBusy)
             .opacity(supportsPlayback && playbackState.isAvailable && !playbackState.isPlaying ? 1 : 0.36)
-            .accessibilityLabel("Play")
+            .accessibilityLabel("播放")
 
             Button(action: togglePlaybackAction) {
                 Image(systemName: "pause.fill")
@@ -316,7 +316,7 @@ struct ScoreReaderChromeBar: View {
             }
             .disabled(!playbackState.isAvailable || !playbackState.isPlaying || isPlaybackBusy)
             .opacity(playbackState.isAvailable && playbackState.isPlaying ? 0.92 : 0.36)
-            .accessibilityLabel("Pause playback")
+            .accessibilityLabel("暂停播放")
 
             Button(action: stopPlaybackAction) {
                 Image(systemName: "stop.fill")
@@ -325,7 +325,7 @@ struct ScoreReaderChromeBar: View {
             }
             .disabled(!playbackState.isAvailable || playbackState.status == .stopped || isPlaybackBusy)
             .opacity(playbackState.isAvailable && playbackState.status != .stopped ? 0.92 : 0.36)
-            .accessibilityLabel("Stop playback")
+            .accessibilityLabel("停止播放")
 
             metronomeButton(compact: false, iconSize: isCompactHeader ? 22 : 24)
 
@@ -362,8 +362,8 @@ struct ScoreReaderChromeBar: View {
         .buttonStyle(.plain)
         .foregroundStyle(isMixerPresented ? Color.blue : Color.black.opacity(0.84))
         .disabled(!supportsPlayback)
-        .accessibilityLabel("Mixer")
-        .accessibilityValue(isMixerPresented ? "Open" : "Closed")
+        .accessibilityLabel("混音器")
+        .accessibilityValue(isMixerPresented ? "打开" : "已合拢")
     }
 
     private var playbackTimeLabel: String {
@@ -410,7 +410,7 @@ struct ScoreReaderChromeBar: View {
             ? Color(red: 0.12, green: 0.45, blue: 0.92) : Color.black.opacity(0.84))
         .disabled(!isEnabled)
         .opacity(playbackState.isAvailable ? 1 : 0.45)
-        .accessibilityLabel("Playback and practice")
+        .accessibilityLabel("播放与练习")
         .accessibilityValue(metronomeAccessibilityValue)
 
         #if os(Android)
@@ -463,8 +463,8 @@ struct ScoreReaderChromeBar: View {
         .buttonStyle(.plain)
         .foregroundStyle(isMixerPresented ? Color.blue : Color.black.opacity(0.84))
         .disabled(!supportsPlayback)
-        .accessibilityLabel("Mixer")
-        .accessibilityValue(isMixerPresented ? "Open" : "Closed")
+        .accessibilityLabel("混音器")
+        .accessibilityValue(isMixerPresented ? "打开" : "已合拢")
     }
 
     private func partsIslandButton(iconOnly: Bool = false) -> some View {
@@ -477,7 +477,7 @@ struct ScoreReaderChromeBar: View {
                     HStack(spacing: 7) {
                         Image(systemName: "list.bullet.indent")
                             .font(.system(size: 16, weight: .semibold))
-                        Text("Parts")
+                        Text("声部")
                             .font(.system(size: 14, weight: .semibold))
                             .lineLimit(1)
                     }
@@ -489,7 +489,7 @@ struct ScoreReaderChromeBar: View {
         .buttonStyle(.plain)
         .disabled(isEditingBusy)
         .opacity(isEditingBusy ? 0.45 : 1)
-        .accessibilityLabel("Parts")
+        .accessibilityLabel("声部")
         .popover(isPresented: $isPartsPanelPresented, attachmentAnchor: .rect(.bounds), arrowEdge: .top) {
             partsPanelContent
         }
@@ -510,7 +510,7 @@ struct ScoreReaderChromeBar: View {
         }
         .buttonStyle(.plain)
         .disabled(isExportBusy)
-        .accessibilityLabel(isExportBusy ? "Preparing Share" : "Share Score")
+        .accessibilityLabel(isExportBusy ? "正在准备分享" : "分享乐谱")
         .popover(isPresented: $isExportPanelPresented, attachmentAnchor: .rect(.bounds), arrowEdge: .top) {
             exportPanelContent()
                 .presentationCompactPopoverWhenAvailable()
@@ -528,7 +528,7 @@ struct ScoreReaderChromeBar: View {
                         Image(systemName: "checkmark")
                             .font(.system(size: 17, weight: .semibold))
                     } else {
-                        Text("Edit")
+                        Text("编辑")
                             .font(.system(size: 13, weight: .semibold))
                     }
                 } else {
@@ -538,7 +538,7 @@ struct ScoreReaderChromeBar: View {
                         } else {
                             Image(systemName: "pencil")
                         }
-                        Text(interactionMode == .edit ? "Done" : "Edit")
+                        Text(interactionMode == .edit ? "完成" : "编辑")
                     }
                     .font(.system(size: 14, weight: .semibold))
                 }
@@ -553,7 +553,7 @@ struct ScoreReaderChromeBar: View {
         .buttonStyle(.plain)
         .disabled(!supportsEditing || isEditingBusy || interactionMode == .leavingEdit)
         .opacity(supportsEditing ? 1 : 0.42)
-        .accessibilityLabel(interactionMode == .edit ? "Done editing" : "Edit score")
+        .accessibilityLabel(interactionMode == .edit ? "完成编辑" : "编辑乐谱")
     }
 
     private var annotationModeIslandButton: some View {
@@ -567,7 +567,7 @@ struct ScoreReaderChromeBar: View {
         }
         .buttonStyle(.plain)
         .disabled(isEditingBusy || interactionMode != .view)
-        .accessibilityLabel(annotationModeActive ? "Exit annotation mode" : "Annotate score")
+        .accessibilityLabel(annotationModeActive ? "退出批注" : "添加批注")
         .accessibilitySelected(annotationModeActive)
     }
 
@@ -628,7 +628,7 @@ struct ScoreReaderChromeBar: View {
                         .scoreReaderChromeTapTarget(minWidth: showsTitle ? 44 : 40)
                     }
                     .buttonStyle(.plain)
-                    .accessibilityLabel("Back")
+                    .accessibilityLabel("返回")
                 }
                 .frame(maxWidth: showsTitle ? max(96, availableWidth * 0.28) : nil, alignment: .leading)
                 .fixedSize(horizontal: !showsTitle, vertical: false)
@@ -694,7 +694,7 @@ struct ScoreReaderChromeBar: View {
                         .scoreReaderChromeTapTarget(minWidth: 44)
                     }
                     .buttonStyle(.plain)
-                    .accessibilityLabel("Back")
+                    .accessibilityLabel("返回")
                 }
                 Spacer(minLength: 0)
             }
@@ -756,7 +756,7 @@ struct ScoreReaderChromeBar: View {
                 .frame(width: 24, height: 30)
             }
             .disabled(!supportsPlayback || !playbackState.isAvailable || isPlaybackBusy)
-            .accessibilityLabel(playbackState.isPlaying ? "Pause playback" : "Play playback")
+            .accessibilityLabel(playbackState.isPlaying ? "暂停播放" : "开始播放")
 
             Button(action: stopPlaybackAction) {
                 Image(systemName: "stop.fill")
@@ -893,9 +893,9 @@ struct ScoreReaderDuoPlaybackCard: View {
             }
 
             HStack(spacing: 10) {
-                toggleButton(title: "Metronome", systemImage: "metronome",
+                toggleButton(title: "节拍器", systemImage: "metronome",
                              isOn: metronomeEnabled, action: toggleMetronomeAction)
-                toggleButton(title: "Count-in", systemImage: "timer",
+                toggleButton(title: "预备拍", systemImage: "timer",
                              isOn: countInEnabled, action: toggleCountInAction)
             }
         }
@@ -926,7 +926,7 @@ struct ScoreReaderDuoPlaybackCard: View {
         .buttonStyle(.plain)
         .disabled(!supportsPlayback || !playbackState.isAvailable || isPlaybackBusy)
         .opacity(supportsPlayback && playbackState.isAvailable ? 1 : 0.45)
-        .accessibilityLabel(playbackState.isPlaying ? "Pause playback" : "Play playback")
+        .accessibilityLabel(playbackState.isPlaying ? "暂停播放" : "开始播放")
     }
 
     private var stopButton: some View {
@@ -941,7 +941,7 @@ struct ScoreReaderDuoPlaybackCard: View {
         .buttonStyle(.plain)
         .disabled(!canStop)
         .opacity(canStop ? 1 : 0.4)
-        .accessibilityLabel("Stop playback")
+        .accessibilityLabel("停止播放")
     }
 
     private var mixerButton: some View {
@@ -954,8 +954,8 @@ struct ScoreReaderDuoPlaybackCard: View {
         }
         .buttonStyle(.plain)
         .disabled(!supportsPlayback)
-        .accessibilityLabel("Mixer")
-        .accessibilityValue(isMixerPresented ? "Open" : "Closed")
+        .accessibilityLabel("混音器")
+        .accessibilityValue(isMixerPresented ? "打开" : "已合拢")
     }
 
     private func toggleButton(title: String, systemImage: String, isOn: Bool,
@@ -978,7 +978,7 @@ struct ScoreReaderDuoPlaybackCard: View {
         .disabled(!playbackState.isAvailable || isPlaybackBusy)
         .opacity(playbackState.isAvailable ? 1 : 0.45)
         .accessibilityLabel(title)
-        .accessibilityValue(isOn ? "On" : "Off")
+        .accessibilityValue(isOn ? "开启" : "关闭")
     }
 }
 
@@ -1013,11 +1013,11 @@ struct ScoreReaderDuoSideTransport: View {
                 .frame(width: 44, height: 44)
             }
             .disabled(!supportsPlayback || !playbackState.isAvailable || isPlaybackBusy)
-            .accessibilityLabel(playbackState.isPlaying ? "Pause playback" : "Play playback")
+            .accessibilityLabel(playbackState.isPlaying ? "暂停播放" : "开始播放")
 
             sideButton(systemImage: "stop.fill", isOn: false,
                        isEnabled: playbackState.isAvailable && playbackState.status != .stopped && !isPlaybackBusy,
-                       label: "Stop playback", action: stopPlaybackAction)
+                       label: "停止播放", action: stopPlaybackAction)
 
             Rectangle()
                 .fill(Color.black.opacity(0.10))
@@ -1026,13 +1026,13 @@ struct ScoreReaderDuoSideTransport: View {
 
             sideButton(systemImage: "metronome", isOn: metronomeEnabled,
                        isEnabled: playbackState.isAvailable && !isPlaybackBusy,
-                       label: "Metronome", action: toggleMetronomeAction)
+                       label: "节拍器", action: toggleMetronomeAction)
             sideButton(systemImage: "timer", isOn: countInEnabled,
                        isEnabled: playbackState.isAvailable && !isPlaybackBusy,
-                       label: "Count-in", action: toggleCountInAction)
+                       label: "预备拍", action: toggleCountInAction)
             sideButton(systemImage: "slider.vertical.3", isOn: isMixerPresented,
                        isEnabled: supportsPlayback,
-                       label: "Mixer", action: toggleMixerAction)
+                       label: "混音器", action: toggleMixerAction)
         }
         .buttonStyle(.plain)
         .foregroundStyle(Color.black.opacity(0.84))
@@ -1052,7 +1052,7 @@ struct ScoreReaderDuoSideTransport: View {
         .disabled(!isEnabled)
         .opacity(isEnabled ? 1 : 0.4)
         .accessibilityLabel(label)
-        .accessibilityValue(isOn ? "On" : "Off")
+        .accessibilityValue(isOn ? "开启" : "关闭")
     }
 }
 
@@ -1067,7 +1067,7 @@ struct ScoreReaderPlaybackPreparationHUD: View {
             VStack(alignment: .leading, spacing: 2) {
                 Text(message)
                     .font(.system(size: 14, weight: .semibold))
-                Text("Preparing live playback stream")
+                Text("正在准备实时播放")
                     .font(.caption2)
                     .foregroundStyle(Color.black.opacity(0.56))
             }
@@ -1115,7 +1115,7 @@ struct ScoreReaderPartsPanel: View {
                 .frame(width: isPhone ? 36 : 44, height: 4)
                 .padding(.top, isPhone ? 2 : 4)
 
-            Text("Parts")
+            Text("声部")
                 .font(.system(size: isPhone ? 17 : 20, weight: .semibold))
                 .foregroundStyle(Color.black.opacity(0.88))
                 .padding(.bottom, isPhone ? 0 : 4)
@@ -1127,10 +1127,10 @@ struct ScoreReaderPartsPanel: View {
                         .frame(width: 28, height: 28)
 
                     VStack(alignment: .leading, spacing: 5) {
-                        Text("Linked Parts")
+                        Text("关联分谱")
                             .font(.headline.weight(.semibold))
 
-                        Text("Changes you make to notes, text and articulations will appear in all parts.")
+                        Text("对音符、文字和演奏记号的修改将同步到所有关联分谱。")
                             .font(.caption)
                             .foregroundStyle(Color.black.opacity(0.52))
                             .fixedSize(horizontal: false, vertical: true)
@@ -1153,7 +1153,7 @@ struct ScoreReaderPartsPanel: View {
             if !isPhone {
                 VStack(spacing: 9) {
                     if allowsManagingParts {
-                        partsActionButton(title: "Manage Parts", systemImage: "gearshape", action: managePartsAction)
+                        partsActionButton(title: "管理声部", systemImage: "gearshape", action: managePartsAction)
                     }
                 }
                 .padding(.top, 4)
@@ -1166,7 +1166,7 @@ struct ScoreReaderPartsPanel: View {
         VStack(spacing: isPhone ? 6 : 9) {
             partRow(
                 id: "full-score",
-                title: "Full Score",
+                title: "总谱",
                 partIndex: nil,
                 clefSymbol: nil,
                 systemImage: "list.bullet.indent",

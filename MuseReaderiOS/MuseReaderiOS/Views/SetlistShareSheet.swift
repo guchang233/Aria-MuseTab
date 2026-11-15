@@ -37,17 +37,17 @@ struct SetlistShareSheet: View {
                     shareOptions
                 }
             }
-            .navigationTitle("Share \(setlist.name)")
+            .navigationTitle("分享 \(setlist.name)")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
+                    Button("取消") {
                         cancelPreparation()
                         dismiss()
                     }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Share") {
+                    Button("分享") {
                         prepareShareItems()
                     }
                     .fontWeight(.semibold)
@@ -64,10 +64,10 @@ struct SetlistShareSheet: View {
         .presentationDetents([.large])
         .presentationDragIndicator(.visible)
         .interactiveDismissDisabled(isPreparing)
-        .alert("Could Not Share Setlist", isPresented: errorIsPresented) {
-            Button("OK", role: .cancel) {}
+        .alert("无法分享曲目单", isPresented: errorIsPresented) {
+            Button("确定", role: .cancel) {}
         } message: {
-            Text(errorMessage ?? "Aria could not prepare this setlist for sharing.")
+            Text(errorMessage ?? "无法准备此曲目单的分享文件。")
         }
         // Staying put when scores were skipped lets the sheet report what did
         // not make it into the share.
@@ -92,14 +92,14 @@ struct SetlistShareSheet: View {
                     .buttonStyle(.plain)
                 }
             } header: {
-                Text("Format")
+                Text("格式")
             } footer: {
                 Text(formatFooter)
             }
 
             if format == .pdf {
                 Section {
-                    Toggle("Combine into one PDF", isOn: $combinesPDFPages)
+                    Toggle("合并为一个 PDF", isOn: $combinesPDFPages)
                         .tint(LibraryPalette.accent)
                 }
             }
@@ -118,9 +118,9 @@ struct SetlistShareSheet: View {
                         .accessibilityElement(children: .combine)
                     }
                 } header: {
-                    Text("Skipped")
+                    Text("已跳过")
                 } footer: {
-                    Text("These scores were left out of the share.")
+                    Text("这些乐谱未包含在本次分享中。")
                 }
             }
         }
@@ -154,7 +154,7 @@ struct SetlistShareSheet: View {
         }
         .contentShape(Rectangle())
         .accessibilityLabel(option.title)
-        .accessibilityValue(format == option ? "Selected" : "Not selected")
+        .accessibilityValue(format == option ? "已选择" : "未选择")
     }
 
     private var formatFooter: String {
@@ -171,7 +171,7 @@ struct SetlistShareSheet: View {
             Image(systemName: "square.and.arrow.up")
                 .font(.system(size: 38, weight: .light))
                 .foregroundStyle(LibraryPalette.subtle)
-            Text("Add scores to this setlist before sharing it.")
+            Text("请先向曲目单添加乐谱，再进行分享。")
                 .font(.system(size: 16, weight: .medium))
                 .foregroundStyle(LibraryPalette.mutedInk)
                 .multilineTextAlignment(.center)

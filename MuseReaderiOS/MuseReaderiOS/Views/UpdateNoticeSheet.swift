@@ -115,38 +115,38 @@ struct UpdateNoticeSheet: View {
         var fixes = [
             Item(
                 systemImage: "checkmark.circle",
-                title: "Bottom of the page",
-                detail: "The last line no longer gets stuck behind the editing keyboard, "
-                    + "and the page no longer jumps when you switch tools."
+                title: "页面底部",
+                detail: "修复最后一行被编辑键盘遮挡的问题，"
+                    + "切换工具时页面也不再跳动。"
             ),
         ]
         #if !os(Android)
         fixes.append(Item(
             systemImage: "checkmark.circle",
-            title: "Lyrics",
-            detail: "The bottom line stays in view while you type."
+            title: "歌词",
+            detail: "输入时保持底部谱行可见。"
         ))
         #endif
         fixes += [
             Item(
                 systemImage: "checkmark.circle",
-                title: "Page turns",
-                detail: "In landscape, tap beside the page to turn it."
+                title: "翻页",
+                detail: "横屏时点击页面两侧即可翻页。"
             ),
             Item(
                 systemImage: "checkmark.circle",
-                title: "Chord mode",
-                detail: "It no longer turns off when you select another note."
+                title: "和弦模式",
+                detail: "选择其他音符时不再自动关闭。"
             ),
             Item(
                 systemImage: "checkmark.circle",
-                title: "Score names",
-                detail: "Editing a score no longer renames it in your library."
+                title: "乐谱名称",
+                detail: "编辑乐谱不再改变曲库中的名称。"
             ),
             Item(
                 systemImage: "checkmark.circle",
-                title: "View mode key",
-                detail: "A key you chose is kept after you edit."
+                title: "看谱调性",
+                detail: "编辑后保留你选择的调性。"
             ),
         ]
         return fixes
@@ -156,26 +156,26 @@ struct UpdateNoticeSheet: View {
         [
             Item(
                 systemImage: "metronome",
-                title: "Playback & Practice",
-                detail: "Tapping the metronome opens a new panel where you can turn the metronome on or off, "
-                    + "set a practice speed and choose a count-in."
+                title: "播放与练习",
+                detail: "点击节拍器可打开新面板，在其中开关节拍器、"
+                    + "设置练习速度并选择预备拍。"
             ),
             Item(
                 systemImage: "speedometer",
-                title: "Practice speed",
-                detail: "Play at 25% to 150% of the written tempo. "
-                    + "Aria remembers the speed for each score."
+                title: "练习速度",
+                detail: "可使用谱面速度的 25% 至 150% 播放，"
+                    + "并分别记住每首乐谱的速度。"
             ),
             Item(
                 systemImage: "chart.line.uptrend.xyaxis",
-                title: "Tempo ramp",
-                detail: "Tap and drag to select a range of bars, then choose Tempo ramp. "
-                    + "Aria plays the loop a little faster each time until you reach your target."
+                title: "渐变速度",
+                detail: "拖动选择多个小节，然后选择“渐变速度”，"
+                    + "每次循环逐步提速，直到达到目标。"
             ),
             Item(
                 systemImage: "timer",
-                title: "Two-bar count-in",
-                detail: "Choose a one- or two-bar count-in. It follows your practice speed."
+                title: "两小节预备拍",
+                detail: "可选择一或两小节预备拍，跟随练习速度。"
             ),
         ]
     }
@@ -185,7 +185,7 @@ struct UpdateNoticeSheet: View {
             Page(
                 clip: nil,
                 systemImage: "sparkles",
-                title: "New in this update",
+                title: "本次更新",
                 message: "",
                 items: Self.items,
                 fixes: Self.fixes
@@ -233,7 +233,7 @@ struct UpdateNoticeSheet: View {
                             dismiss()
                         }
                     } label: {
-                        Text(page < pages.count - 1 ? "Next" : "Continue").frame(maxWidth: .infinity)
+                        Text(page < pages.count - 1 ? "下一项" : "继续").frame(maxWidth: .infinity)
                     }
                     .buttonStyle(.borderedProminent)
                     .tint(Self.accent)
@@ -242,12 +242,12 @@ struct UpdateNoticeSheet: View {
                 }
                 .padding()
             }
-            .navigationTitle("What's New in Aria")
+            .navigationTitle("Aria 更新内容")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 if page < pages.count - 1 {
                     ToolbarItem(placement: .confirmationAction) {
-                        Button("Skip") { dismiss() }
+                        Button("跳过") { dismiss() }
                     }
                 }
             }
@@ -300,7 +300,7 @@ struct UpdateNoticeSheet: View {
                     .accessibilityElement(children: .combine)
                 }
                 if !page.fixes.isEmpty {
-                    Text("Fixes")
+                    Text("修复")
                         .font(.title3.weight(.semibold))
                         .padding(.top, 6)
                         .accessibilityAddTraits(.isHeader)

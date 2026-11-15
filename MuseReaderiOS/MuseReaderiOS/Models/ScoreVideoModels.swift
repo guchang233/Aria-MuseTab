@@ -49,19 +49,19 @@ nonisolated enum ScoreVideoStyle: String, CaseIterable, Identifiable, Sendable {
     var title: String {
         switch self {
         case .scrolling:
-            return "Scrolling"
+            return "滚动"
         case .scrollingPhoto:
-            return "Photo"
+            return "照片"
         case .pagesLandscape:
-            return "Pages 16:9"
+            return "页面 16:9"
         case .pagesPortrait:
-            return "Pages 9:16"
+            return "页面 9:16"
         case .piano:
-            return "Piano"
+            return "钢琴"
         case .pianoLight:
-            return "Piano light"
+            return "钢琴浅色"
         case .pianoPhoto:
-            return "Piano photo"
+            return "钢琴照片"
         }
     }
 
@@ -347,15 +347,15 @@ nonisolated enum ScoreVideoExportError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .noPlayback:
-            return "This score has no playback to put in a video."
+            return "此乐谱没有可用于视频的播放内容。"
         case .noPages:
-            return "The score has no pages to put in a video."
+            return "此乐谱没有可用于视频的页面。"
         case .writerFailed(let message):
-            return "The video could not be written: \(message)"
+            return "视频保存失败：\(message)"
         case .missingBackgroundImage:
-            return "Choose a background photo for this video."
+            return "请为视频选择背景照片。"
         case .noPianoNotes:
-            return "This score has no pitched notes to show on a piano."
+            return "此乐谱没有可在钢琴上显示的有音高音符。"
         }
     }
 }

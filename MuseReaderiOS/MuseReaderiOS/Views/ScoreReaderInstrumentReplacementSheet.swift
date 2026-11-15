@@ -38,18 +38,18 @@ struct ScoreReaderInstrumentReplacementSheet: View {
             List {
                 Section {
                     if context.tick != nil, let measureIndex = context.measureIndex {
-                        Picker("Change for", selection: $scope) {
-                            Text("Entire score").tag(InstrumentReplacementScope.entireScore)
-                            Text("From measure \(measureIndex + 1)").tag(InstrumentReplacementScope.fromMeasure)
+                        Picker("修改范围", selection: $scope) {
+                            Text("整首乐谱").tag(InstrumentReplacementScope.entireScore)
+                            Text("从第 \(measureIndex + 1) 小节开始").tag(InstrumentReplacementScope.fromMeasure)
                         }
                         .pickerStyle(.segmented)
                         .labelsHidden()
                     } else {
-                        Label("Entire score", systemImage: "checkmark.circle.fill")
+                        Label("整首乐谱", systemImage: "checkmark.circle.fill")
                             .foregroundStyle(.primary)
                     }
                 } header: {
-                    Text("Change for")
+                    Text("修改范围")
                 } footer: {
                     Text(scopeDescription)
                 }
@@ -87,16 +87,16 @@ struct ScoreReaderInstrumentReplacementSheet: View {
                         .disabled(isBusy)
                     }
                 } header: {
-                    Text("Instrument")
+                    Text("乐器")
                 }
             }
             .listStyle(.insetGrouped)
-            .navigationTitle("Change \(context.currentInstrumentName)")
+            .navigationTitle("更换 \(context.currentInstrumentName)")
             .navigationBarTitleDisplayMode(.inline)
-            .searchable(text: $searchText, prompt: "Search instruments")
+            .searchable(text: $searchText, prompt: "搜索乐器")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") { dismiss() }
+                    Button("取消") { dismiss() }
                 }
             }
         }

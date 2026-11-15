@@ -1,0 +1,1036 @@
+Unlock Aria Pro to add another score.	解锁 Aria Pro 以添加更多乐谱。
+Aria could not reserve room for this score. Please try again.	无法为此乐谱预留空间，请重试。
+Importing score…	正在导入乐谱…
+Importing score \(itemNumber) of \(totalCount)…	正在导入第 \(itemNumber)/\(totalCount) 份乐谱…
+\n\nCouldn’t import:\n	\n\n以下文件导入失败：\n
+Import Failed	导入失败
+The Files picker did not return a score.	未选择乐谱文件。
+Unsupported File	不支持的文件
+Open a MuseScore or MusicXML score (.mscz, .mscx, .mxl, .musicxml, or .xml).	请打开 MuseScore 或 MusicXML 乐谱（.mscz、.mscx、.mxl、.musicxml 或 .xml）。
+Drop a MuseScore or MusicXML score (.mscz, .mscx, .mxl, .musicxml, or .xml).	请拖入 MuseScore 或 MusicXML 乐谱（.mscz、.mscx、.mxl、.musicxml 或 .xml）。
+Could Not Open Score	无法打开乐谱
+Could Not Create Score	无法创建乐谱
+Could Not Duplicate Score	无法复制乐谱
+Could Not Delete Score	无法删除乐谱
+Could Not Refresh Library	无法刷新曲库
+Could Not Save Score Info	无法保存乐谱信息
+Aria could not package this score as .mscz because live editing is unavailable.	此乐谱暂不可编辑，无法保存为 MSCZ。
+The recovery score could not be validated by the MuseScore engine.	MuseScore 核心未能验证恢复的乐谱。
+The recovered score could not be reopened safely.	恢复的乐谱无法安全地重新打开。
+This score is not editable yet.	此乐谱暂不支持编辑。
+Aria could not convert this replacement into an editable MuseScore document.	无法将替换文件转换为可编辑的 MuseScore 乐谱。
+Aria converted the replacement but could not reopen it safely.	替换文件已转换，但无法安全地重新打开。
+Aria could not restore this score. Import it again from Files.	无法恢复此乐谱，请从本地文件重新导入。
+Aria imported this score but could not convert it into an editable MuseScore document.	乐谱已导入，但无法转换为可编辑的 MuseScore 文件。
+Aria created the converted score but could not reopen it safely.	已生成转换结果，但无法安全地重新打开。
+Not a Duo	非双屏设备
+Closed	已合拢
+Open	打开
+Book	书本
+Stand	支架
+Early Supporter	早期支持者
+Purchased	已购买
+Family Access	家庭共享
+You’ve Reached Your Free Library Limit	免费曲库容量已满
+Treble Clef	高音谱号
+Treble clef	高音谱号
+Alto clef	中音谱号
+Bass clef	低音谱号
+Alto Clef	中音谱号
+Tenor Clef	次中音谱号
+Bass Clef	低音谱号
+Piano	钢琴
+Lead Sheet	旋律和弦谱
+String Quartet	弦乐四重奏
+Choir	合唱
+Blank	空白
+More	更多
+Treble Staff	高音谱表
+Violin I	第一小提琴
+Violin II	第二小提琴
+Viola	中提琴
+Cello	大提琴
+Soprano	女高音
+Alto	女低音
+Tenor	男高音
+Bass	低音
+New Treble Clef Score	新建高音谱表乐谱
+New Piano Score	新建钢琴谱
+New Lead Sheet	新建旋律和弦谱
+New String Quartet	新建弦乐四重奏
+New Choir Score	新建合唱谱
+New Blank Score	新建空白乐谱
+New Score	新建乐谱
+Pen	画笔
+Highlighter	荧光笔
+Eraser	橡皮
+Lasso	套索
+Annotations could not be read, so changes won't be saved.	无法读取批注，本次修改不会保存。
+These annotations were made by a newer version of Aria and can't be edited here.	批注由较新版本创建，当前版本无法编辑。
+Earlier annotations could not be read and were kept aside.	旧批注无法读取，已单独保留。
+MSCZ Package	MSCZ 乐谱包
+MSCX Score	MSCX 乐谱
+Compressed MusicXML	压缩 MusicXML
+MusicXML Score	MusicXML 乐谱
+Audio	音频
+Images	图片
+Video	视频
+Native MuseScore file	MuseScore 原生文件
+Best for sharing & printing	适合分享与打印
+.mid for playback / DAW	用于播放或音频工作站的 .mid 文件
+PNG pages	PNG 页面图片
+Scrolling score or piano	滚动乐谱或钢琴画面
+\(format) export is not available in the current render bridge.	当前核心暂不支持导出 \(format)。
+Choose at least one export target.	请至少选择一个导出对象。
+There are no rendered pages to export.	没有可导出的谱面。
+There is no playback audio to export.	没有可导出的播放音频。
+Aria could not encode one of the score pages.	某个乐谱页面无法编码为图片。
+Add scores to this setlist before sharing it.	请先向曲目单添加乐谱，再进行分享。
+\(format) is not available for setlist sharing.	曲目单暂不支持以 \(format) 格式分享。
+Aria could not open “\(scoreTitle)”. Open it once in the reader and try again.	无法打开“\(scoreTitle)”，请先打开此乐谱，再重试。
+Aria could not combine these scores into one PDF.	无法将这些乐谱合并为一个 PDF。
+Common Time	普通拍子（4/4）
+Cut Time	二二拍（2/2）
+From Selected	从选中位置
+From Start	从头开始
+Page Turn	翻页
+Continuous Scroll	连续滚动
+Reader Unavailable	暂时无法看谱
+Page \(selectedPageIndex + 1) of \(pageCount)	第 \(selectedPageIndex + 1)/\(pageCount) 页
+Measures per system	每行小节数
+Lock current layout	锁定当前排版
+Remove existing breaks	移除已有换行与分页
+Diatonic	自然音阶
+Interval	音程
+To Key	转至调性
+Up	向上
+Down	向下
+Octave	八度
+Minor 2nd	小二度
+Major 2nd	大二度
+Minor 3rd	小三度
+Major 3rd	大三度
+Perfect 4th	纯四度
+Aug. 4th	增四度
+Perfect 5th	纯五度
+Minor 6th	小六度
+Major 6th	大六度
+Minor 7th	小七度
+Major 7th	大七度
+Dim. Octave	减八度
+Perfect Octave	纯八度
+Cb major / Ab minor	降 C 大调 / 降 A 小调
+Gb major / Eb minor	降 G 大调 / 降 E 小调
+Db major / Bb minor	降 D 大调 / 降 B 小调
+Ab major / F minor	降 A 大调 / F 小调
+Eb major / C minor	降 E 大调 / C 小调
+Bb major / G minor	降 B 大调 / G 小调
+F major / D minor	F 大调 / D 小调
+C major / A minor	C 大调 / A 小调
+G major / E minor	G 大调 / E 小调
+D major / B minor	D 大调 / B 小调
+A major / F# minor	A 大调 / 升 F 小调
+E major / C# minor	E 大调 / 升 C 小调
+B major / G# minor	B 大调 / 升 G 小调
+F# major / D# minor	升 F 大调 / 升 D 小调
+C# major / A# minor	升 C 大调 / 升 A 小调
+Chord Text	和弦文字
+Embedded Package Preview	文件内嵌预览
+MuseScore Render Core	MuseScore 排谱核心
+Live MuseScore Renderer	MuseScore 实时排谱
+Live MuseScore Renderer Pending	等待 MuseScore 实时排谱
+This session is backed by the MuseScore engraving engine. The reader now requests pages on demand from a live score session so playback and editing can attach to the same open document later.	此乐谱由 MuseScore 排谱核心处理，按需生成页面，并在同一份乐谱上完成播放与编辑。
+Whole note	全音符
+Half note	二分音符
+Quarter note	四分音符
+Eighth note	八分音符
+Sixteenth note	十六分音符
+32nd note	三十二分音符
+64th note	六十四分音符
+Clear Bar	清空小节
+Fill with Rests	用休止符填满
+Trim to Fit	裁剪至小节长度
+Change Time Signature	更改拍号
+Scrolling	滚动
+Photo	照片
+Pages 16:9	页面 16:9
+Pages 9:16	页面 9:16
+Piano light	钢琴浅色
+Piano photo	钢琴照片
+This score has no playback to put in a video.	此乐谱没有可用于视频的播放内容。
+The score has no pages to put in a video.	此乐谱没有可用于视频的页面。
+The video could not be written: \(message)	视频保存失败：\(message)
+Choose a background photo for this video.	请为视频选择背景照片。
+This score has no pitched notes to show on a piano.	此乐谱没有可在钢琴上显示的有音高音符。
+The MuseScore render core repaired the score but did not return an editing state.	MuseScore 核心已修复乐谱，但未返回编辑状态。
+Time signature denominator \(denominator) is unsupported. Use 1, 2, 4, 8, or 16.	不支持分母为 \(denominator) 的拍号，请使用 1、2、4、8 或 16。
+Page \(renderedPage.pageIndex + 1)	第 \(renderedPage.pageIndex + 1) 页
+Aria could not access that file location.	无法访问此文件位置。
+Aria cannot import .\(pathExtension) into its score library yet.	暂不支持将 .\(pathExtension) 文件导入曲库。
+Aria could not find that score in its score library.	在本地曲库中找不到此乐谱。
+Aria could not create its internal score library.	无法创建本地曲库。
+Aria could not find the \(name) score template.	找不到 \(name) 乐谱模板。
+Aria could not safely replace the existing score.	无法安全地替换已有乐谱。
+Aria could not prepare the audio session: \(message)	无法初始化音频：\(message)
+Aria could not prepare the iPad audio session: \(message)	无法初始化平板音频：\(message)
+Aria could not find the MuseScore sound bank: \(message)	找不到 MuseScore 音色库：\(message)
+Aria could not prepare live playback audio: \(message)	无法准备实时播放：\(message)
+Aria could not prepare playback: \(message)	无法准备播放：\(message)
+Playback is unavailable because the audio engine player is not ready yet.	音频播放器尚未就绪，暂时无法播放。
+The selected playback loop is too short.	选中的循环播放范围过短。
+The file extension \(pathExtension) is not supported yet.	暂不支持 \(pathExtension) 文件。
+Create New Score	创建新乐谱
+Start from a blank score or choose a template.	从空白乐谱开始，或选择模板。
+My Scores	我的乐谱
+Score Details	乐谱信息
+Title	标题
+Subtitle	副标题
+Composer	作曲
+(Optional)	（可选）
+Template	模板
+Cancel	取消
+Choose Template	选择模板
+Use Template	使用模板
+Instrumentation	乐器编制
+Choose at least one instrument.	请至少选择一种乐器。
+Add Instrument	添加乐器
+Remove \(instrument.name)	移除 \(instrument.name)
+This removes \(instrument.name) and its music from the score.	将从乐谱中移除 \(instrument.name) 及其音乐内容。
+Search instruments	搜索乐器
+Search instruments…	搜索乐器…
+Clear All	全部清除
+Tap an instrument above to add it	点击上方乐器进行添加
+In Score (\(currentInstruments.count))	乐谱中的乐器（\(currentInstruments.count)）
+Music Settings	音乐设置
+Key Signature	调号
+Time Signature	拍号
+Tempo	速度
+Measures	小节数
+Options	选项
+Pickup Measure	弱起小节
+Simulated Duo pose: \(monitor.pose.title)	模拟双屏姿态：\(monitor.pose.title)
+Close	关闭
+Unlock Aria Pro	解锁 Aria Pro
+One purchase. No subscription.	一次购买，无需订阅。
+Unlimited score library	不限数量的乐谱库
+Every feature Aria offers today	Aria 当前提供的全部功能
+Works on your Android phones and tablets	支持 Android 手机和平板
+Restores with your Google account	通过 Google 账号恢复购买
+Works across your iPhone, iPad, and Mac	支持 iPhone、iPad 和 Mac
+Included with Family Sharing	支持家庭共享
+Restore Purchases	恢复购买
+Contacting Google Play…	正在连接 Google Play…
+Contacting App Store…	正在连接 App Store…
+Unlock Forever — \(displayPrice)	永久解锁 · \(displayPrice)
+Files with the same destination name conflict. Choose one from each matching group.	同名目标文件存在冲突，请在每组中选择一个。
+\(LibraryAccessPolicy.freeScoreLimit)-score free limit reached	已达到 \(LibraryAccessPolicy.freeScoreLimit) 份乐谱的免费上限
+Free plan	免费版
+Get Aria Pro	获取 Aria Pro
+Unlock & Import All	解锁并全部导入
+Replace a score or unlock Aria Pro.	替换已有乐谱，或解锁 Aria Pro。
+Choose up to 1 score to import.	最多选择 1 份乐谱导入。
+Choose up to \(review.availableNewSlots) scores to import.	最多选择 \(review.availableNewSlots) 份乐谱导入。
+No slots available	没有可用名额
+\(min(selectedNewCount, review.availableNewSlots)) / \(review.availableNewSlots) selected	已选择 \(min(selectedNewCount, review.availableNewSlots))/\(review.availableNewSlots) 份
+Review Replacements & New Scores	确认替换与新增乐谱
+Choose Scores	选择乐谱
+Import Selected (\(selectedCandidates.count))	导入所选（\(selectedCandidates.count)）
+Aria Pro Is Yours	已获得 Aria Pro
+Thanks for being here early! Your account has been granted Aria Pro at no cost.	感谢你的早期支持，已为你的账号免费开通 Aria Pro。
+Continue	继续
+Free library, \(min(used, limit)) of \(limit) scores used	免费曲库，已使用 \(min(used, limit))/\(limit) 份
+Your free library is full. Replace a score to make room, or upgrade to Pro for unlimited scores.	免费曲库已满，可替换已有乐谱，或升级 Pro 取消数量限制。
+Unlock	解锁
+Checking Google Play access…	正在检查 Google Play 授权…
+Checking App Store access…	正在检查 App Store 授权…
+2 scores free · Aria Pro for \(displayPrice)	免费保存 2 份 · Aria Pro \(displayPrice)
+2 scores free · One-time Aria Pro unlock available	免费保存 2 份 · 可一次购买解锁 Aria Pro
+Aria Pro · \(reason.settingsTitle)	Aria Pro · \(reason.settingsTitle)
+Drop scores to import	拖入乐谱以导入
+Delete Score?	删除乐谱？
+Delete	删除
+This removes the score from your library.	将从本地曲库中删除此乐谱。
+Delete Setlist?	删除曲目单？
+This deletes the setlist but keeps all of its scores in your library.	仅删除曲目单，其中的乐谱仍保留在曲库中。
+OK	确定
+New Setlist	新建曲目单
+Setlist name	曲目单名称
+Create	创建
+Create a setlist for organizing scores in performance order.	创建曲目单，按演奏顺序整理乐谱。
+Rename Setlist	重命名曲目单
+Rename	重命名
+This setlist is no longer available.	此曲目单已不存在。
+All Scores	全部乐谱
+Setlists	曲目单
+Setlist	曲目单
+Settings	设置
+Custom Order	自定义顺序
+Recently Opened	最近打开
+Title A–Z	标题升序
+Title Z–A	标题降序
+Custom	自定义
+Recent	最近
+List	列表
+Small Icons	小图标
+Medium Icons	中图标
+Large Icons	大图标
+Extra Large Icons	超大图标
+Setlist, \(setlist.name)	曲目单：\(setlist.name)
+Reorder Setlists	调整曲目单顺序
+Done	完成
+Share Setlist	分享曲目单
+Delete Setlist	删除曲目单
+Import Score	导入乐谱
+Back to Setlists	返回曲目单
+Add	添加
+Add Scores to Setlist	向曲目单添加乐谱
+More Setlist Actions	更多曲目单操作
+No scores in this setlist	此曲目单暂无乐谱
+Tap Add to choose scores from your library.	点击“添加”，从本地曲库中选择乐谱。
+Search library...	搜索曲库…
+Reorder	调整顺序
+No setlists yet	暂无曲目单
+Edit Info	编辑信息
+Duplicate	创建副本
+Add to Setlist	添加到曲目单
+Remove from Setlist	从曲目单移除
+Delete Score	删除乐谱
+There are no scores in your library yet.	曲库中还没有乐谱。
+Search scores	搜索乐谱
+Add to \(folderName)	添加到 \(folderName)
+Search setlists	搜索曲目单
+Add \(scoreTitle) to Setlist	将 \(scoreTitle) 添加到曲目单
+Open Source Licenses	开源许可
+Free plan · \(min(freeScoreUsage, freeScoreLimit))/\(freeScoreLimit) slots used	免费版 · 已使用 \(min(freeScoreUsage, freeScoreLimit))/\(freeScoreLimit) 份
+Sort Order	排序
+View	视图
+Edit Setlist Scores	编辑曲目单中的乐谱
+View GPLv3 and bundled third-party notices.	查看 GPLv3 及所附第三方声明。
+More Library Actions	更多曲库操作
+Format	格式
+Imported	导入时间
+Storage	存储位置
+Title Page	标题页
+Credits	署名
+Arranger	编曲
+Lyricist	作词
+Changes save back to this score in your Aria library.	修改会保存到本地曲库中的此乐谱。
+Edit Score Info	编辑乐谱信息
+Import	导入
+Opening \(retryLoadingTitle)…	正在打开 \(retryLoadingTitle)…
+Couldn’t Open Score	无法打开乐谱
+Try Again	重试
+Aria includes MuseScore Studio-derived notation, engraving, MusicXML, playback, and render-core code. MuseScore Studio is licensed under the GNU General Public License version 3.	Aria 包含源自 MuseScore Studio 的记谱、排谱、MusicXML、播放及渲染核心代码。MuseScore Studio 采用 GNU 通用公共许可证第 3 版。
+The source code for the corresponding release is available with the public source release for this app.	对应版本的源码随本应用的公开源码发布提供。
+This program is provided without warranty, to the extent permitted by law.	在法律允许的范围内，本程序不提供任何担保。
+Core Licenses	核心许可证
+Qt Framework Notice	Qt 框架声明
+Aria is built with Qt libraries and tools. The applicable Qt license terms depend on the exact Qt distribution used for the release build.	Aria 使用 Qt 库与工具构建，适用条款取决于发布版本使用的具体 Qt 发行版。
+The release source package includes the corresponding Qt notices and applicable license text.	发布源码包包含对应的 Qt 声明及适用许可证全文。
+Qt licensing information	Qt 许可信息
+Included Files	随附文件
+Full license texts and third-party notices are bundled in the app resources under Legal and included in the source release.	许可证全文及第三方声明位于应用资源的 Legal 目录中，并随源码发布提供。
+Open Source	开源信息
+Playback Export Error	播放数据导出失败
+These changes save back to Aria’s imported library copy and reopen the live score session.	这些修改会保存到本地导入副本，并重新打开乐谱。
+render path	渲染路径
+Open Reader	打开看谱
+Saving Info	正在保存信息
+Preparing MIDI	正在准备 MIDI
+Export MIDI	导出 MIDI
+Session Pages	乐谱页面
+Page \(page.index + 1)	第 \(page.index + 1) 页
+Open this page in the reader	在看谱中打开此页
+Session Capabilities	当前乐谱支持的功能
+Package Inspection	文件包检查
+Live Page Rendering	实时排谱
+Playback	播放
+Editing	编辑
+Score Summary	乐谱摘要
+Parts	声部
+Root Score File	主乐谱文件
+File Size	文件大小
+Last Modified	修改时间
+Package Entries	文件包条目
+Package Contents	文件包内容
++ \(entries.count - 30) more	另有 \(entries.count - 30) 项
+XML Excerpt	XML 摘要
+Aria saves an untouched copy in Files → Aria Backups before changing the score.	修改乐谱前，会在“文件 → Aria Backups”保存原始副本。
+Review Score Fixes	查看乐谱修复项
+Not Now	暂不
+Delete selected annotations	删除所选批注
+Thin	细
+Medium	中
+Thick	粗
+Undo annotation	撤销批注
+Redo annotation	重做批注
+Finish annotating	结束批注
+\(label) stroke	\(label) 笔画
+Previous page	上一页
+\(currentPageIndex + 1) of \(pageCount)	第 \(currentPageIndex + 1)/\(pageCount) 页
+Next page	下一页
+Red	红色
+Blue	蓝色
+Green	绿色
+Yellow	黄色
+Black	黑色
+Back to Text	返回文字
+Erase chord character	删除和弦字符
+Previous	上一个
+Previous chord position	上一个和弦位置
+Enter	输入
+Enter chord and advance	输入和弦并前进
+Chord preview	和弦预听
+Space: next note • - joins syllables • _ extends	空格：下一音符 · - 连接音节 · _ 延长音节
+Extend	延长
+Extend lyric syllable	延长歌词音节
+Back	返回
+Play	播放
+Pause playback	暂停播放
+Stop playback	停止播放
+Mixer	混音器
+Count-in	预备拍
+Playback and practice	播放与练习
+Edit	编辑
+Metronome	节拍器
+Preparing live playback stream	正在准备实时播放
+Linked Parts	关联分谱
+Changes you make to notes, text and articulations will appear in all parts.	对音符、文字和演奏记号的修改将同步到所有关联分谱。
+Manage Parts	管理声部
+Full Score	总谱
+Forte	强
+Mezzo Forte	中强
+Mezzo Piano	中弱
+Pianississimo	极弱
+Pianissimo	很弱
+Fortissimo	很强
+Fortississimo	极强
+Forte Piano	强后弱
+Piano Forte	弱后强
+Sforzando	突强
+Sforzato	特强重音
+Sforzando Fortissimo	突强至很强
+Sforzando Fortissimo Z	突强至很强（Z）
+Sforzando Piano	突强后弱
+Rinforzando	加强
+Rinforzando Forte	加强至强
+Forzando	强重音
+Accent	重音
+Marcato	强调
+Tenuto	保持音
+Staccato	跳音
+Fermata	延长记号
+String Up	上弓
+String Down	下弓
+Articulations	演奏记号
+Slur	连音线
+Crescendo	渐强
+Decrescendo	渐弱
+Pedal	踏板
+Lines	线条
+Beam	符杠
+Tremolo	震音
+Acciaccatura	短倚音
+Appoggiatura	长倚音
+32nd	三十二分
+64th	六十四分
+Double Dot	双附点
+Trill	颤音
+Mordent	波音
+Turn	回音
+Arpeggio	琶音
+Double Flat	重降
+Double Sharp	重升
+Dot	附点
+Rest	休止符
+Tie	延音线
+Flat	降号
+Natural	还原号
+Sharp	升号
+Auto	自动
+Break Beam	断开符杠
+Join Beams	连接符杠
+No Beam	无符杠
+1 Slash	一道斜杠
+2 Slashes	两道斜杠
+3 Slashes	三道斜杠
+Tuplet	连音组
+Duplet	二连音
+Triplet	三连音
+Quadruplet	四连音
+Quintuplet	五连音
+Sextuplet	六连音
+Septuplet	七连音
+Octuplet	八连音
+Nonuplet	九连音
+First ending	第一结尾
+Second ending	第二结尾
+Start repeat	反复开始
+End repeat	反复结束
+D.S. al Coda	从记号反复至尾声
+D.S. al Fine	从记号反复至结束
+D.C. al Coda	从头反复至尾声
+D.C. al Fine	从头反复至结束
+Segno	反复记号
+To Coda	跳至尾声
+Coda	尾声
+Staff Text	谱表文字
+System Text	谱系文字
+Rehearsal Mark	排练记号
+Lyrics	歌词
+Text	文字
+Select a note to add or remove fingering.	请选择一个音符以添加或移除指法。
+Laissez vibrer	任其延响
+System Break	换行
+Page Break	分页
+Keep Bars Together	保持小节同行
+Auto Breaks	自动换行与分页
+Multi Rest	多小节休止符
+Hide Empty	隐藏空谱表
+Instrument Layout	乐器与谱表
+Page Settings	页面设置
+Remove Break	移除换行或分页
+Score Setup	乐谱设置
+Add/Remove Instrument	添加或移除乐器
+Transpose Score	乐谱移调
+Concert Pitch	实音
+Change Clef	更改谱号
+Create Pickup	创建弱起小节
+Fill with Slashes	填充斜线记谱
+Rhythmic Notation	节奏记谱
+Prev Page	上一页
+Next Page	下一页
+p. \(pageIndex + 1)	第 \(pageIndex + 1) 页
+Measure \(shownMeasure + 1)	第 \(shownMeasure + 1) 小节
+Measure	小节
+Previous measure	上一小节
+m. \(currentMeasure + 1)	第 \(currentMeasure + 1) 小节
+Next measure	下一小节
+Spelling	等音拼写
+Shift	移动
+Continuous Note Input	连续音符输入
+Pitch Keyboard	音高键盘
+Tap the staff once to place the cursor, then keep entering notes from the keyboard.	点击谱表放置光标，然后使用键盘连续输入音符。
+Retune the selected note from the keyboard, or nudge it by semitone and octave.	使用键盘修改所选音符，或按半音、八度调整音高。
+Select a pitched note to activate the bottom keyboard.	选择有音高的音符以启用底部键盘。
+Choose Pitch	选择音高
+Note	音符
+Bar	小节
+Layout Break	换行与分页
+Dynamic	力度
+Marker	标记
+Instrument	乐器
+Instrument Change	乐器切换
+Expression	表情
+Selection	选区
+Export Score	导出乐谱
+Choose content and format	选择内容与格式
+Sharing: \(sharingDescription)	分享内容：\(sharingDescription)
+Rendering \(Int((exportProgress * 100).rounded()))%	正在渲染 \(Int((exportProgress * 100).rounded()))%
+Required	必选
+Select Parts	选择分谱
+(Transposed)	（移调）
+Soon	即将提供
+New	新建
+Filename	文件名
+Video settings	视频设置
+Export parts in concert	以实音导出分谱
+Export parts in Original Key	以原调导出分谱
+Fingering	指法
+Change for	修改范围
+Entire score	整首乐谱
+From measure \(measureIndex + 1)	从第 \(measureIndex + 1) 小节开始
+Change \(context.currentInstrumentName)	更换 \(context.currentInstrumentName)
+Replaces this part's main instrument while preserving its music.	更换此声部的主乐器，保留音乐内容。
+Select a measure to make an instrument change.	请选择开始切换乐器的小节。
+Creates or updates an instrument change beginning at measure \(measureIndex + 1).	从第 \(measureIndex + 1) 小节开始创建或更新乐器切换。
+Undo	撤销
+Redo	重做
+Copy	复制
+Cut	剪切
+Paste	粘贴
+Select All	全选
+Play/Pause	播放或暂停
+Clear Selection	清除选区
+Toggle Note Input	切换音符输入
+Enter A	输入 A
+Enter B	输入 B
+Enter C	输入 C
+Enter D	输入 D
+Enter E	输入 E
+Enter F	输入 F
+Enter G	输入 G
+Enter Rest	输入休止符
+Sixteenth Note	十六分音符
+Eighth Note	八分音符
+Quarter Note	四分音符
+Half Note	二分音符
+Whole Note	全音符
+Toggle Dot	切换附点
+Voice 1	声部 1
+Voice 2	声部 2
+Voice 3	声部 3
+Voice 4	声部 4
+Previous Element	上一个元素
+Move Pitch Up	升高音高
+Next Element	下一个元素
+Move Pitch Down	降低音高
+Octave Up	升高八度
+Octave Down	降低八度
+Half Step Up	升高半音
+Half Step Down	降低半音
+Previous Page	上一页
+Reset	重置
+Close mixer	关闭混音器
+Reset mix	重置混音
+\(name) pan	\(name) 声像
+Center \(name) pan	将 \(name) 声像居中
+No playable instruments in this part.	此声部中没有可播放的乐器。
+Mode	模式
+\(validatedMeasures ?? 4) measures per system	每行 \(validatedMeasures ?? 4) 小节
+Remove Existing Breaks	移除已有换行与分页
+Apply	应用
+Remove	移除
+How many measures should be added?	要添加多少个小节？
+Add Measures	添加小节
+measures	小节
+Tempo BPM	速度（BPM）
+e.g. Allegro	例如：快板
+Tempo text	速度文字
+Clear tempo text	清除速度文字
+Tempo text (optional)	速度文字（可选）
+Beat unit	每拍时值
+The note value that gets the beat.	一个拍子对应的音符时值。
+Erase tempo digit	删除速度数字
+Enter a tempo from 20 to 300 BPM.	请输入 20 至 300 BPM 的速度。
+Current:  \(currentValue.title)	当前：\(currentValue.title)
+New:  \(selected.title)	新值：\(selected.title)
+Change	更改
+Beats per measure	每小节拍数
+Note value	音符时值
+Common	普通拍子
+Current	当前
+Key type	调性类型
+Key Mode	调式
+Major	大调
+Minor	小调
+Sharps	升号
+Flats	降号
+\(major) minor	\(major) 小调
+Score	乐谱
+Initial Setup	初始设置
+Instruments and part setup use the current score structure.	乐器与声部设置采用当前乐谱结构。
+Initial key, time, and tempo are available from More.	可在“更多”中设置初始调号、拍号和速度。
+Page	页面
+Page size	页面尺寸
+Notation	记谱
+Reset to Defaults	恢复默认
+Letter	信纸
+Legal	法律用纸
+Visibility	显示
+Delete Selection	删除选区
+Half step	半音
+Percussion editing is not currently supported. Viewing and playback only.	暂不支持打击乐编辑，可看谱和播放。
+Clear	清除
+Add Measure	添加小节
+Add Multiple Measures	添加多个小节
+Delete Measure	删除小节
+Play from here	从这里播放
+Loop measure	循环此小节
+Tempo ramp	渐变速度
+Tempo ramp on the selected measures	对选中小节设置渐变速度
+Change Instrument	更换乐器
+Transpose	移调
+Respell	更改等音拼写
+Flip Stem	翻转符干
+Extend selection: tap the last bar	扩展选区：点击结束小节
+Select Similar	选择同类元素
+Whole Score	整首乐谱
+This Staff	当前谱表
+Single	单线
+Double	双线
+Final	终止线
+Reverse Final	反向终止线
+Heavy	粗线
+Heavy Double	粗双线
+Dashed	虚线
+Dotted	点线
+Extend Selection...	扩展选区…
+Add Multiple Measures...	添加多个小节…
+Clear Measure	清空小节
+Direction	方向
+Diatonic steps	自然音阶级数
+Target key	目标调性
+Page \(pageIndex + 1)	第 \(pageIndex + 1) 页
+Full-screen reader is not available for this score yet.	此乐谱暂不支持全屏看谱。
+Page 	页面
+Current:  \(currentLabel)	当前：\(currentLabel)
+New:  \(newLabel)	新值：\(newLabel)
+Beats in pickup	弱起拍数
+Pickup must be shorter than one full \(context.nominalNumerator)/\(context.nominalDenominator) measure.	弱起时长须短于一个完整的 \(context.nominalNumerator)/\(context.nominalDenominator) 小节。
+Remove Pickup Measure	移除弱起小节
+Whole	全音符
+Half	二分音符
+Quarter	四分音符
+Eighth	八分音符
+Sixteenth	十六分音符
+Playback & Practice	播放与练习
+Changes apply automatically	修改自动生效
+Clicks during playback	播放时打拍
+Practice speed	练习速度
+For this score · relative to written tempo	仅此乐谱 · 相对于谱面速度
+Clicks before playback starts	开始播放前打拍
+Count-in follows the practice speed and time signature, and plays only at the start, not on loop repeats.	预备拍跟随练习速度与拍号，仅在开始时播放，循环反复时不重复。
+Tempo Ramp	渐变速度
+Set a target above the starting tempo.	目标速度应高于起始速度。
+Start Ramp	开始渐变
+Playback keeps looping at \(Self.percent(targetSpeed)) until you stop.	之后将以 \(Self.percent(targetSpeed)) 持续循环，直到手动停止。
+Reaches \(Self.percent(ramp.targetSpeed)) in about \(time)	约 \(time) 后达到 \(Self.percent(ramp.targetSpeed))
+\(start) → \(target) BPM over about \(time)	约 \(time) 内从 \(start) 增至 \(target) BPM
+minus	减
+Lower \(accessibilityName)	降低 \(accessibilityName)
+plus	加
+Raise \(accessibilityName)	提高 \(accessibilityName)
+Note\nEntry	音符\n输入
+Select	选择
+Repeats	反复
+Layout	排版
+Expr	表情
+Select Previous	选择上一个
+Select Next	选择下一个
+Voice \(voice + 1)	声部 \(voice + 1)
+Voice \(currentVoice + 1)	声部 \(currentVoice + 1)
+\(aspect) • Scrolling	\(aspect) · 滚动
+\(aspect) • Pages	\(aspect) · 页面
+\(aspect) • Piano	\(aspect) · 钢琴
+Back to video settings	返回视频设置
+Close video export	关闭视频导出
+Full screen	全屏
+Keep Aria open while rendering.	渲染时请保持 Aria 在前台。
+Landscape · 16:9	横屏 · 16:9
+Vertical · 9:16	竖屏 · 9:16
+Reels & TikTok	短视频
+A continuous score moves smoothly past the playhead.	连续乐谱平滑经过播放线。
+The camera follows the playing measure through the pages.	画面跟随正在播放的小节翻页。
+Notes fall onto a piano keyboard and light each key as it plays.	音符落向钢琴键盘，并在播放时点亮琴键。
+Appearance	外观
+Dark	深色
+Light	浅色
+Score only	仅乐谱
+Choose a photo	选择照片
+Choose a background photo	选择背景照片
+Preview unavailable	无法预览
+Video preview, \(styleSummary)	视频预览：\(styleSummary)
+Your photo	你的照片
+Exit full screen	退出全屏
+Viewing key, \(currentKey.title)	显示调性：\(currentKey.title)
+Viewing Key	显示调性
+Original Key	原调
+Count-in beat \(beat)	预备拍第 \(beat) 拍
+Save Without Chords	不保留和弦保存
+Retry Save	重新保存
+Saving…	正在保存…
+Saved · View mode	已保存 · 看谱模式
+Resume Follow	恢复跟随
+Export Failed	导出失败
+Edit Not Applied	修改未应用
+View Key Not Changed	显示调性未改变
+Two-page view	双页视图
+Show or hide viewer controls	显示或隐藏看谱工具
+Next Score	下一首
+Next Score, \(nextTitle)	下一首：\(nextTitle)
+End of Setlist	已到曲目单末尾
+Opening score…	正在打开乐谱…
+It plays, edits and saves as it is. The original is kept in Aria Backups.	此乐谱仍可播放、编辑和保存，原文件保留在 Aria Backups 中。
+Go to First Problem	前往第一个问题
+Go to Bar	跳至小节
+Score problems	乐谱问题
+Hide	隐藏
+Share \(setlist.name)	分享 \(setlist.name)
+Share	分享
+Could Not Share Setlist	无法分享曲目单
+Combine into one PDF	合并为一个 PDF
+Skipped	已跳过
+These scores were left out of the share.	这些乐谱未包含在本次分享中。
+Each score is shared as its own \(format.title) file using the score title as its filename.	每份乐谱将单独导出为 \(format.title) 文件，使用乐谱标题作为文件名。
+Preparing score…	正在准备乐谱…
+Preparing \(min(preparedScoreCount + 1, scoreCount)) of \(scoreCount)…	正在准备第 \(min(preparedScoreCount + 1, scoreCount))/\(scoreCount) 份…
+Bottom of the page	页面底部
+Page turns	翻页
+Chord mode	和弦模式
+Score names	乐谱名称
+View mode key	看谱调性
+Two-bar count-in	两小节预备拍
+New in this update	本次更新
+What's New in Aria	Aria 更新内容
+Skip	跳过
+Fixes	修复
+System break	换行
+Locked system break	锁定换行
+Page break	分页
+Section break	分节
+Keep bars together	保持小节同行
+Check the spelling or try a new search.	请检查拼写，或尝试其他关键词。
+Play video	播放视频
+Keyboard	键盘
+Use flats	使用降号
+Note entry keyboard	音符输入键盘
+Pause	暂停
+Stop	停止
+Mount Fuji	富士山
+Grand Canyon	大峡谷
+Moonlit fjord	月下峡湾
+Spruce forest	云杉林
+Misty mountains	雾中群山
+Northern lights	极光
+Mountain sunset	山间落日
+Snowy peaks	雪峰
+Pink bay	粉色海湾
+Beach sunset	海滩落日
+Forest river	林间河流
+Beech and ferns	山毛榉与蕨类
+Blue sky	蓝天
+Aria could not prepare any of the scores in this setlist.	无法准备此曲目单中的乐谱。
+2nd	二度
+3rd	三度
+4th	四度
+5th	五度
+6th	六度
+7th	七度
+This score cannot be edited.	此乐谱无法编辑。
+Switch to editing mode to change score info.	请切换到编辑模式修改乐谱信息。
+Another edit is still being applied. Try again in a moment.	上一项修改仍在处理中，请稍后重试。
+Select a measure before changing the instrument from that point.	请先选择开始更换乐器的小节。
+Voice \(voice)	声部 \(voice)
+Corrupted measure	损坏的小节
+Broken measure repeat	异常的小节反复
+Part Name · \(location)	声部名称 · \(location)
+Repeat Sign · \(location) · Measure \(measureNumber)	反复记号 · \(location) · 第 \(measureNumber) 小节
+Tempo · \(location) · Measure \(measureNumber)	速度 · \(location) · 第 \(measureNumber) 小节
+Tempo · \(location) · Measure \(measureNumber) · Staff \(staffIndex + 1)	速度 · \(location) · 第 \(measureNumber) 小节 · 谱表 \(staffIndex + 1)
+Extra Clef · \(location) · Measure \(measureNumber) · Staff \(staffIndex + 1)	多余谱号 · \(location) · 第 \(measureNumber) 小节 · 谱表 \(staffIndex + 1)
+Empty Lyrics · \(location) · From Measure \(measureNumber)	空歌词 · \(location) · 从第 \(measureNumber) 小节起
+Lyric Hyphens · \(location) · From Measure \(measureNumber)	歌词连字符 · \(location) · 从第 \(measureNumber) 小节起
+Drum Staff · \(location) · Staff \(staffIndex + 1)	打击乐谱表 · \(location) · 谱表 \(staffIndex + 1)
+Dynamic · \(location) · Measure \(measureNumber) · Staff \(staffIndex + 1)	力度 · \(location) · 第 \(measureNumber) 小节 · 谱表 \(staffIndex + 1)
+Part \(part.index + 1)	声部 \(part.index + 1)
+Part \(index + 1)	声部 \(index + 1)
+Staff \(staffID)	谱表 \(staffID)
+This score session does not support editing yet.	当前乐谱暂不支持编辑。
+This score session does not support saving yet.	当前乐谱暂不支持保存。
+Aria received an unsupported note duration from the score engine.	排谱核心返回了不支持的音符时值。
+Untitled Score	未命名乐谱
+The original score file could not be found for backup.	找不到需要备份的原始乐谱文件。
+Aria could not verify the untouched backup copy.	无法校验原始备份副本。
+Embedded Preview	内嵌预览
+Preview \(index + 1)	预览 \(index + 1)
+Aria Score	Aria 乐谱
+Remove Instrument?	移除乐器？
+Add/Remove Instruments	添加或移除乐器
+Add Instruments	添加乐器
+Add \(selectedInstruments.count) Instrument\(selectedInstruments.count == 1 ? "" : "s")	添加 \(selectedInstruments.count) 种乐器
+Selected Instruments	所选乐器
+Selected (\(selectedInstruments.count))	已选择（\(selectedInstruments.count)）
+Start with an incomplete measure.	以不完整的小节开始。
+Creating...	正在创建…
+Create Score	创建乐谱
+Switches to the next pose	切换到下一种姿态
+Aria could not save these score details.	无法保存这些乐谱信息。
+Done Editing Setlist	完成曲目单编辑
+Edit Setlist	编辑曲目单
+Unknown Composer	作曲者不详
+Added	已添加
+Not added	未添加
+Create a setlist before adding this score.	请先创建曲目单，再添加此乐谱。
+Saving...	正在保存…
+Save	保存
+No scores in your library yet	本地曲库暂无乐谱
+Use Add Scores above to choose scores from your library.	点击上方“添加乐谱”，从曲库中选择。
+Create a new score or import a MuseScore file. It will appear here, ready to open in the reader.	新建乐谱或导入 MuseScore 文件后，即可在这里打开看谱。
+Aria could not open the selected score.	无法打开所选乐谱。
+See bundled Qt notice for release-specific license terms	此版本适用的许可条款见随附 Qt 声明
+FreeType License or GPL-compatible option	FreeType 许可证或兼容 GPL 的许可选项
+BSD-style license	BSD 类许可证
+SIL Open Font License 1.1	SIL 开放字体许可证 1.1
+MuseScore General SoundFonts	MuseScore General 音色库
+MIT according to embedded SoundFont metadata	根据音色库内嵌元数据采用 MIT 许可证
+Aria could not export MIDI for this score.	无法为此乐谱导出 MIDI。
+page	页
+pages	页
+part	声部
+parts	声部
+Live reader is ready	实时看谱已就绪
+No pages available yet	暂无可用页面
+This score does not have cached preview pages, but Aria can still open the score and render pages directly from the live session.	此乐谱没有预览缓存，仍可打开并实时生成谱面。
+Aria reads MuseScore archives and XML directly, including metadata, root score selection, package entries, and embedded previews.	Aria 直接读取 MuseScore 文件包与 XML，包括乐谱信息、主谱、文件条目和内嵌预览。
+Pages are rendered on demand from the reusable MuseScore engraving core instead of being fully materialized up front.	页面由 MuseScore 排谱核心按需生成。
+This score is currently limited to embedded preview assets until the live render session is available.	实时排谱就绪前，此乐谱仅能显示内嵌预览。
+Playback is available from this same live score session through MuseScore playback events and the native iPad audio stream.	通过 MuseScore 播放事件与原生音频输出，可以直接播放当前乐谱。
+Planned. Playback will attach to this same open score session once the engine layer is exposed.	计划功能：核心接口就绪后，将接入当前乐谱播放。
+Aria can now update core score information and save it back through the same live MuseScore session.	可在当前 MuseScore 乐谱会话中修改并保存乐谱信息。
+Planned. Edit commands and save-back will be layered onto the same score session after the reader is solid.	计划功能：在看谱稳定后，为当前乐谱接入编辑与保存。
+Available	可用
+Planned	计划中
+Selected	已选择
+Not selected	未选择
+Back Up & Fix All	备份并全部修复
+Back Up & Fix Selected	备份并修复所选项
+Hide annotations	隐藏批注
+Show annotations	显示批注
+Chord flat	和弦降号
+Chord sharp	和弦升号
+Preparing Share	正在准备分享
+Share Score	分享乐谱
+Done editing	完成编辑
+Edit score	编辑乐谱
+Exit annotation mode	退出批注
+Annotate score	添加批注
+Play playback	开始播放
+On	开启
+Off	关闭
+Hide more note options	收起更多音符选项
+More note options	更多音符选项
+Remove dot	移除附点
+Add dot	添加附点
+Remove fingering	移除指法
+Fingering \(finger)	指法 \(finger)
+Use single-page view	使用单页视图
+Use two-page view	使用双页视图
+\(shownMeasure + 1) of \(measureCount)	第 \(shownMeasure + 1)/\(measureCount) 小节
+Rest entry	输入休止符
+Next note	下一音符
+Keyboard Ready	键盘已就绪
+Pitch Locked	音高已锁定
+Selected note active	当前选中音符
+Select a pitched note	选择有音高的音符
+Video Export	视频导出
+Export	导出
+Move palette right	将工具面板移至右侧
+Move palette left	将工具面板移至左侧
+Chords	和弦
+instrument	乐器
+instruments	乐器
+Master	总输出
+Mute \(name)	静音 \(name)
+Solo \(name)	独奏 \(name)
+\(name) volume	\(name) 音量
+\(Int(value * 100)) percent	百分之 \(Int(value * 100))
+Dotted quarter note	附点四分音符
+ note	音符
+Current (\(width.formatted(.number.precision(.fractionLength(0)))) × \(height.formatted(.number.precision(.fractionLength(0)))) mm)	当前（\(width.formatted(.number.precision(.fractionLength(0)))) × \(height.formatted(.number.precision(.fractionLength(0)))) 毫米）
+Margins \(margins.formatted(.number.precision(.fractionLength(0)))) mm	页边距 \(margins.formatted(.number.precision(.fractionLength(0)))) 毫米
+Staff size \(staffSize.formatted(.number.precision(.fractionLength(2)))) mm	谱表尺寸 \(staffSize.formatted(.number.precision(.fractionLength(2)))) 毫米
+Staff spacing \(staffSpacing.formatted(.number.precision(.fractionLength(1))))	谱表间距 \(staffSpacing.formatted(.number.precision(.fractionLength(1))))
+System spacing \(systemSpacing.formatted(.number.precision(.fractionLength(1))))	谱系间距 \(systemSpacing.formatted(.number.precision(.fractionLength(1))))
+Chord	和弦
+Edit Pickup Measure...	编辑弱起小节…
+Convert to Pickup Measure	转换为弱起小节
+End ramp · \($0)	结束速度渐变 · \($0)
+End loop	结束循环
+Loop range	循环范围
+measure	小节
+Instrument options	乐器选项
+Bar line options	小节线选项
+Selection options	选区选项
+Measure options	小节选项
+Metronome off, written tempo, no count-in	节拍器关闭，采用谱面速度，无预备拍
+starting speed	起始速度
+target speed	目标速度
+ to 	至
+tempo increase	每次提速
+loops per increase	每次提速前循环次数
+Video export	视频导出
+Video ready	视频已就绪
+Share all	全部分享
+Preparing…	正在准备…
+Rendering	正在渲染
+Choose photo	选择照片
+Render video	生成视频
+\(key.title) (original)	\(key.title)（原调）
+Choose a temporary key for this score view	为看谱选择临时调性
+Chord Symbols Removed	和弦符号已移除
+Not Saved	未保存
+Treble	高音
+Aria could not export this score.	无法导出此乐谱。
+Aria could not apply that edit.	无法应用此项修改。
+Aria could not change the temporary viewing key.	无法更改看谱临时调性。
+No score fixes were selected.	未选择乐谱修复项。
+Aria could not save current edits before making a backup.	备份前无法保存当前修改。
+The score changed. Close and reopen it to review the fixes again.	乐谱已更改，请关闭后重新打开，再查看修复项。
+Aria made a repair, but could not verify every selected issue. The untouched backup is in Aria Backups.	已进行修复，但未能验证全部所选问题。原始备份保留在 Aria Backups 中。
+The fixes could not be saved. The untouched backup is in Aria Backups.	无法保存修复结果。原始备份保留在 Aria Backups 中。
+Two pages	双页
+One page	单页
+Aria could not save the latest score before sharing.	分享前无法保存乐谱的最新修改。
+This score has \(report.issues.count) problem\(report.issues.count == 1 ? "" : "s")	此乐谱有 \(report.issues.count) 个问题
+Aria could not prepare this setlist for sharing.	无法准备此曲目单的分享文件。
+The last line no longer gets stuck behind the editing keyboard, 	修复最后一行被编辑键盘遮挡的问题，
+and the page no longer jumps when you switch tools.	切换工具时页面也不再跳动。
+The bottom line stays in view while you type.	输入时保持底部谱行可见。
+In landscape, tap beside the page to turn it.	横屏时点击页面两侧即可翻页。
+It no longer turns off when you select another note.	选择其他音符时不再自动关闭。
+Editing a score no longer renames it in your library.	编辑乐谱不再改变曲库中的名称。
+A key you chose is kept after you edit.	编辑后保留你选择的调性。
+Tapping the metronome opens a new panel where you can turn the metronome on or off, 	点击节拍器可打开新面板，在其中开关节拍器、
+set a practice speed and choose a count-in.	设置练习速度并选择预备拍。
+Play at 25% to 150% of the written tempo. 	可使用谱面速度的 25% 至 150% 播放，
+Aria remembers the speed for each score.	并分别记住每首乐谱的速度。
+Tap and drag to select a range of bars, then choose Tempo ramp. 	拖动选择多个小节，然后选择“渐变速度”，
+Aria plays the loop a little faster each time until you reach your target.	每次循环逐步提速，直到达到目标。
+Choose a one- or two-bar count-in. It follows your practice speed.	可选择一或两小节预备拍，跟随练习速度。
+Next	下一项
+MuseScore_General.sf2 is unavailable.	MuseScore_General.sf2 音色库不可用。
+Tapped \(noteName($0.midiPitch)) (MIDI \($0.midiPitch))	已点击 \(noteName($0.midiPitch))（MIDI \($0.midiPitch)）
+Tap a key	点击琴键
+Semitone \(shift > 0 ? "+" : "")\(shift)	半音 \(shift > 0 ? "+" : "")\(shift)
+Octave \(shift > 0 ? "+" : "")\(shift)	八度 \(shift > 0 ? "+" : "")\(shift)
+Quick Start	快速开始
+Category	分类
+Staff	谱表
+Transposition	移调
+LIBRARY	曲库
+SETLISTS	曲目单
+Import Complete	导入完成
+Import Partially Complete	部分导入完成
+\(importedCount) scores were imported into your library.	已向本地曲库导入 \(importedCount) 份乐谱。
+None of the \(totalCount) selected scores could be imported.	所选 \(totalCount) 份乐谱均未能导入。
+\(importedCount) of \(totalCount) scores were imported into your library.	已向本地曲库导入 \(importedCount)/\(totalCount) 份乐谱。
+\n…and \(hiddenFailureCount) more.	\n另有 \(hiddenFailureCount) 项。
+This session is showing preview assets stored inside the MuseScore package. The reader shell is already session-oriented, so a live engraving renderer can replace these previews later without changing the app structure.	当前显示 MuseScore 文件包中的内嵌预览，可在实时排谱就绪后切换为实际谱面。
+The audio output could not be opened.	无法打开音频输出。
+Time signature denominator must be one of 1, 2, 4, 8, or 16.	拍号分母须为 1、2、4、8 或 16。
+Aria needs a local file URL to save this score.	保存乐谱需要本地文件地址。
+The MuseScore render core could not save this score.	MuseScore 核心无法保存此乐谱。
+This MSCX file could not be decoded as text.	无法将此 MSCX 文件读取为文本。
+This XML file is not a score-partwise or score-timewise MusicXML document.	此 XML 不是有效的 MusicXML 乐谱。
+Only MSCZ, MSCX, MusicXML, and MXL files are supported right now.	当前仅支持 MSCZ、MSCX、MusicXML 和 MXL 乐谱文件。
+The score package is invalid: \(makeString(zipError))	乐谱文件包无效：\(makeString(zipError))
+Could not read archive entry \(entryPath): \(makeString(message))	无法读取文件包条目 \(entryPath)：\(makeString(message))
+The MXL package does not contain a root MusicXML score.	MXL 文件包中缺少主 MusicXML 乐谱。
+The MSCZ package does not contain a root MSCX score.	MSCZ 文件包中缺少主 MSCX 乐谱。
+The root score file in this package could not be decoded as text.	无法将文件包中的主乐谱读取为文本。
+The root file in this MXL package is not a score-partwise or score-timewise MusicXML document.	MXL 文件包中的主文件不是有效的 MusicXML 乐谱。
+The MuseScore render core failed to open this score.	MuseScore 核心无法打开此乐谱。
+Finish the current edit before closing the score.	请先完成当前编辑，再关闭乐谱。
+MuseReader could not save this score before closing.	关闭前无法保存此乐谱。
+Sort: \(sortOrder.title)	排序：\(sortOrder.title)
+View: \(scoreLayout.title)	视图：\(scoreLayout.title)
+Score \(nextPosition) of \(sequence.scores.count)	第 \(nextPosition)/\(sequence.scores.count) 首
+Note entry	音符输入
+Delete selection	删除选区
+Single note entry	单音输入
+Build chord	构建和弦
+Selection mode	选择模式
+Note input mode	音符输入模式
+Rest mode enabled	已开启休止符输入
+Note mode enabled	已开启音符输入
+Save score	保存乐谱
+Lower pitch by semitone	降低半音
+Raise pitch by semitone	升高半音
+Lower pitch by octave	降低八度
+Raise pitch by octave	升高八度
+Measure \($0 + 1)	第 \($0 + 1) 小节
+Select a note	选择音符
+Finish the current edit before sharing the score.	请先完成当前编辑，再分享乐谱。
+No Results for “\(text)”	未找到“\(text)”的结果
+No Results	没有搜索结果

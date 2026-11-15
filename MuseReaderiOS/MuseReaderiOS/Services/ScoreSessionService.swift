@@ -144,7 +144,7 @@ struct MuseScoreSessionService: ScoreSessionService {
         previews.enumerated().map { index, preview in
             ScorePage(
                 index: index,
-                title: previews.count == 1 ? "Embedded Preview" : "Preview \(index + 1)",
+                title: previews.count == 1 ? "内嵌预览" : "预览 \(index + 1)",
                 sourcePath: preview.path,
                 source: .embeddedPackagePreview,
                 imageData: preview.imageData,

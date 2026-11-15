@@ -82,7 +82,7 @@ struct AndroidPlaybackTimeLabel: View {
     var body: some View {
         let clock = playback?.clockText ?? "\(fallback.currentTimeLabel) / \(fallback.durationLabel)"
         let speed = abs(practiceSpeed - 1) > 0.001 ? " · \(Int((practiceSpeed * 100).rounded()))%" : ""
-        Text(isCountingIn ? "Count-in" : preparationMessage ?? clock + speed)
+        Text(isCountingIn ? "预备拍" : preparationMessage ?? clock + speed)
     }
 }
 

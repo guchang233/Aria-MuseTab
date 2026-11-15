@@ -79,7 +79,7 @@ struct LibraryPaywallView: View {
                             .background(LibraryPalette.background, in: Circle())
                     }
                     .buttonStyle(.plain)
-                    .accessibilityLabel("Close")
+                    .accessibilityLabel("关闭")
                 }
                 .padding(.bottom, 30)
 
@@ -94,26 +94,26 @@ struct LibraryPaywallView: View {
                                 .foregroundStyle(LibraryPalette.accent)
                         }
 
-                        Text("Unlock Aria Pro")
+                        Text("解锁 Aria Pro")
                             .font(.system(size: 30, weight: .bold))
                             .foregroundStyle(LibraryPalette.ink)
                             .multilineTextAlignment(.center)
 
-                        Text("One purchase. No subscription.")
+                        Text("一次购买，无需订阅。")
                             .font(.system(size: 17, weight: .bold))
                             .foregroundStyle(LibraryPalette.ink)
                             .multilineTextAlignment(.center)
                     }
 
                     VStack(alignment: .leading, spacing: 16) {
-                        PaywallBenefitRow(systemImage: "music.note.list", title: "Unlimited score library")
-                        PaywallBenefitRow(systemImage: "sparkles", title: "Every feature Aria offers today")
+                        PaywallBenefitRow(systemImage: "music.note.list", title: "不限数量的乐谱库")
+                        PaywallBenefitRow(systemImage: "sparkles", title: "Aria 当前提供的全部功能")
                         #if os(Android)
-                        PaywallBenefitRow(systemImage: "laptopcomputer.and.iphone", title: "Works on your Android phones and tablets")
-                        PaywallBenefitRow(systemImage: "person.2", title: "Restores with your Google account")
+                        PaywallBenefitRow(systemImage: "laptopcomputer.and.iphone", title: "支持 Android 手机和平板")
+                        PaywallBenefitRow(systemImage: "person.2", title: "通过 Google 账号恢复购买")
                         #else
-                        PaywallBenefitRow(systemImage: "laptopcomputer.and.iphone", title: "Works across your iPhone, iPad, and Mac")
-                        PaywallBenefitRow(systemImage: "person.2", title: "Included with Family Sharing")
+                        PaywallBenefitRow(systemImage: "laptopcomputer.and.iphone", title: "支持 iPhone、iPad 和 Mac")
+                        PaywallBenefitRow(systemImage: "person.2", title: "支持家庭共享")
                         #endif
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -154,7 +154,7 @@ struct LibraryPaywallView: View {
                         .buttonStyle(.plain)
                         .disabled(accessController.isPerformingPurchase)
 
-                        Button("Restore Purchases") {
+                        Button("恢复购买") {
                             Task { await restore() }
                         }
                         .font(.system(size: 16, weight: .semibold))
@@ -324,7 +324,7 @@ struct ScoreImportReviewSheet: View {
                 if review.hasDuplicateDestinations || capacityMessage != nil {
                     VStack(alignment: .leading, spacing: 5) {
                         if review.hasDuplicateDestinations {
-                            Text("Files with the same destination name conflict. Choose one from each matching group.")
+                            Text("同名目标文件存在冲突，请在每组中选择一个。")
                                 .font(.system(size: 13, weight: .medium))
                                 .foregroundStyle(LibraryPalette.mutedInk)
                         }
@@ -342,7 +342,7 @@ struct ScoreImportReviewSheet: View {
                         Image(systemName: "info.circle")
                             .font(.system(size: 16, weight: .semibold))
                             .foregroundStyle(.orange)
-                        Text("\(LibraryAccessPolicy.freeScoreLimit)-score free limit reached")
+                        Text("已达到 \(LibraryAccessPolicy.freeScoreLimit) 份乐谱的免费上限")
                             .font(.system(size: 14, weight: .medium))
                             .foregroundStyle(LibraryPalette.mutedInk)
                     }
@@ -401,7 +401,7 @@ struct ScoreImportReviewSheet: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Button("Cancel") {
+                    Button("取消") {
                         dismiss()
                     }
                 }
@@ -464,7 +464,7 @@ struct ScoreImportReviewSheet: View {
     }
 
     private var freePlanBadge: some View {
-        Text("Free plan")
+        Text("免费版")
             .font(.system(size: 14, weight: .bold))
             .foregroundStyle(LibraryPalette.accent)
             .padding(.horizontal, 10)
@@ -647,11 +647,11 @@ struct EarlySupporterAccessView: View {
             AriaProLogoBadge()
 
             VStack(spacing: 9) {
-                Text("Aria Pro Is Yours")
+                Text("已获得 Aria Pro")
                     .font(.system(size: 28, weight: .bold))
                     .foregroundStyle(LibraryPalette.ink)
                     .multilineTextAlignment(.center)
-                Text("Thanks for being here early! Your account has been granted Aria Pro at no cost.")
+                Text("感谢你的早期支持，已为你的账号免费开通 Aria Pro。")
                     .font(.system(size: 17, weight: .medium))
                     .foregroundStyle(LibraryPalette.mutedInk)
                     .multilineTextAlignment(.center)
@@ -660,7 +660,7 @@ struct EarlySupporterAccessView: View {
             Button {
                 dismiss()
             } label: {
-                Text("Continue")
+                Text("继续")
                     .font(.system(size: 17, weight: .bold))
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
@@ -706,7 +706,7 @@ struct FreeScoreAllowancePill: View {
         .padding(.horizontal, 10)
         .frame(height: 30)
         .background(LibraryPalette.accentSoft, in: Capsule())
-        .accessibilityLabel("Free library, \(min(used, limit)) of \(limit) scores used")
+        .accessibilityLabel("免费曲库，已使用 \(min(used, limit))/\(limit) 份")
     }
 }
 
@@ -717,12 +717,12 @@ struct FreeLibraryFullNotice: View {
         HStack(spacing: 12) {
             Image(systemName: "info.circle.fill")
                 .foregroundStyle(LibraryPalette.accent)
-            Text("Your free library is full. Replace a score to make room, or upgrade to Pro for unlimited scores.")
+            Text("免费曲库已满，可替换已有乐谱，或升级 Pro 取消数量限制。")
                 .font(.system(size: 14, weight: .semibold))
                 .foregroundStyle(LibraryPalette.mutedInk)
                 .fixedSize(horizontal: false, vertical: true)
             Spacer(minLength: 8)
-            Button("Unlock", action: unlockAction)
+            Button("解锁", action: unlockAction)
                 .font(.system(size: 14, weight: .bold))
                 .foregroundStyle(LibraryPalette.accent)
         }

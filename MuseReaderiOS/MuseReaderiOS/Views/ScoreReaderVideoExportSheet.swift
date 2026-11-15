@@ -227,7 +227,7 @@ struct ScoreReaderVideoExportSheet: View {
 
     private var header: some View {
         ZStack {
-            Text(completedVideos.isEmpty ? "Video export" : "Video ready")
+            Text(completedVideos.isEmpty ? "视频导出" : "视频已就绪")
                 .font(.title2.weight(.bold))
             HStack {
                 if !completedVideos.isEmpty {
@@ -235,10 +235,10 @@ struct ScoreReaderVideoExportSheet: View {
                         player.pause()
                         resetResultsAction()
                     } label: {
-                        Label("Settings", systemImage: "chevron.left")
+                        Label("设置", systemImage: "chevron.left")
                             .font(.body.weight(.medium))
                     }
-                    .accessibilityLabel("Back to video settings")
+                    .accessibilityLabel("返回视频设置")
                 }
                 Spacer()
                 Button {
@@ -253,7 +253,7 @@ struct ScoreReaderVideoExportSheet: View {
                         .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
-                .accessibilityLabel("Close video export")
+                .accessibilityLabel("关闭视频导出")
                 .disabled(isPreparingExport)
             }
         }
@@ -273,12 +273,12 @@ struct ScoreReaderVideoExportSheet: View {
                         Button {
                             isFullScreen = true
                         } label: {
-                            Label("Full screen", systemImage: "arrow.up.left.and.arrow.down.right")
+                            Label("全屏", systemImage: "arrow.up.left.and.arrow.down.right")
                                 .frame(maxWidth: .infinity)
                         }
                         .buttonStyle(ScoreReaderVideoButtonStyle(isPrimary: false))
                         ScoreReaderVideoShareLink(items: completedVideos) {
-                            Label(completedVideos.count > 1 ? "Share all" : "Share", systemImage: "square.and.arrow.up")
+                            Label(completedVideos.count > 1 ? "全部分享" : "分享", systemImage: "square.and.arrow.up")
                                 .frame(maxWidth: .infinity)
                         }
                         .buttonStyle(ScoreReaderVideoButtonStyle(isPrimary: true))
@@ -287,7 +287,7 @@ struct ScoreReaderVideoExportSheet: View {
                     let progress = exportProgress.map { min(max($0, 0), 1) }
                     VStack(spacing: 10) {
                         HStack {
-                            Text(progress == nil ? "Preparing…" : "Rendering")
+                            Text(progress == nil ? "正在准备…" : "正在渲染")
                             Spacer()
                             if let progress {
                                 Text("\(Int((progress * 100).rounded()))%").monospacedDigit()
@@ -295,11 +295,11 @@ struct ScoreReaderVideoExportSheet: View {
                         }
                         .font(.subheadline.weight(.medium))
                         ProgressView(value: progress ?? 0)
-                        Text("Keep Aria open while rendering.")
+                        Text("渲染时请保持 Aria 在前台。")
                             .font(.footnote)
                             .foregroundStyle(.secondary)
                         Button(action: cancelAction) {
-                            Text("Cancel").frame(maxWidth: .infinity)
+                            Text("取消").frame(maxWidth: .infinity)
                         }
                         .buttonStyle(ScoreReaderVideoButtonStyle(isPrimary: false))
                     }
@@ -311,7 +311,7 @@ struct ScoreReaderVideoExportSheet: View {
                                 .foregroundStyle(.red)
                                 .multilineTextAlignment(.center)
                         }
-                        Text("Keep Aria open while rendering.")
+                        Text("渲染时请保持 Aria 在前台。")
                             .font(.footnote)
                             .foregroundStyle(.secondary)
                         Button {
@@ -322,7 +322,7 @@ struct ScoreReaderVideoExportSheet: View {
                                 exportAction()
                             }
                         } label: {
-                            Text(needsPhoto ? "Choose photo" : "Render video").frame(maxWidth: .infinity)
+                            Text(needsPhoto ? "选择照片" : "生成视频").frame(maxWidth: .infinity)
                         }
                         .buttonStyle(ScoreReaderVideoButtonStyle(isPrimary: true))
                         // The preview briefly switches the score's layout; wait for it.
@@ -346,15 +346,15 @@ struct ScoreReaderVideoExportSheet: View {
 
             VStack(alignment: .leading, spacing: compact ? 16 : 24) {
                 VStack(alignment: .leading, spacing: 10) {
-                    Text("Format").font(.headline)
+                    Text("格式").font(.headline)
                     HStack(spacing: 14) {
-                        formatCard(vertical: false, title: "Landscape · 16:9", subtitle: "YouTube", compact: compact)
-                        formatCard(vertical: true, title: "Vertical · 9:16", subtitle: "Reels & TikTok", compact: compact)
+                        formatCard(vertical: false, title: "横屏 · 16:9", subtitle: "YouTube", compact: compact)
+                        formatCard(vertical: true, title: "竖屏 · 9:16", subtitle: "短视频", compact: compact)
                     }
                 }
 
                 VStack(alignment: .leading, spacing: 10) {
-                    Text("Layout").font(.headline)
+                    Text("排版").font(.headline)
                     ScoreReaderVideoSegmentedControl(
                         options: [("Scrolling", ScoreVideoStyle.Layout.scrolling), ("Pages", .pages), ("Piano", .piano)],
                         selection: Binding(get: { draft.videoStyle.layout }, set: { layout in
@@ -374,9 +374,9 @@ struct ScoreReaderVideoExportSheet: View {
                     )
                     Group {
                         switch draft.videoStyle.layout {
-                        case .scrolling: Text("A continuous score moves smoothly past the playhead.")
-                        case .pages: Text("The camera follows the playing measure through the pages.")
-                        case .piano: Text("Notes fall onto a piano keyboard and light each key as it plays.")
+                        case .scrolling: Text("连续乐谱平滑经过播放线。")
+                        case .pages: Text("画面跟随正在播放的小节翻页。")
+                        case .piano: Text("音符落向钢琴键盘，并在播放时点亮琴键。")
                         }
                     }
                     .font(.footnote)
@@ -386,7 +386,7 @@ struct ScoreReaderVideoExportSheet: View {
                 if isScrolling || isPiano {
                     VStack(alignment: .leading, spacing: 10) {
                         HStack(alignment: .firstTextBaseline, spacing: 14) {
-                            Text("Appearance").font(.headline)
+                            Text("外观").font(.headline)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                             if isLoadingBackground {
                                 ProgressView()
@@ -394,7 +394,7 @@ struct ScoreReaderVideoExportSheet: View {
                         }
                         HStack(alignment: .top, spacing: 14) {
                             if isPiano {
-                                appearanceCard(title: "Dark", selected: draft.videoStyle == .piano,
+                                appearanceCard(title: "深色", selected: draft.videoStyle == .piano,
                                                height: compact ? 72 : nil) {
                                     draft.videoStyle = .piano
                                 } content: {
@@ -404,7 +404,7 @@ struct ScoreReaderVideoExportSheet: View {
                                         Color.black
                                     }
                                 }
-                                appearanceCard(title: "Light", selected: draft.videoStyle == .pianoLight,
+                                appearanceCard(title: "浅色", selected: draft.videoStyle == .pianoLight,
                                                height: compact ? 72 : nil) {
                                     draft.videoStyle = .pianoLight
                                 } content: {
@@ -415,7 +415,7 @@ struct ScoreReaderVideoExportSheet: View {
                                     }
                                 }
                             } else {
-                                appearanceCard(title: "Score only", selected: draft.videoStyle == .scrolling,
+                                appearanceCard(title: "仅乐谱", selected: draft.videoStyle == .scrolling,
                                                height: compact ? 72 : nil) {
                                     draft.videoStyle = .scrolling
                                 } content: {
@@ -426,7 +426,7 @@ struct ScoreReaderVideoExportSheet: View {
                                     }
                                 }
                             }
-                            appearanceCard(title: "Photo", selected: draft.videoStyle.usesPhoto,
+                            appearanceCard(title: "照片", selected: draft.videoStyle.usesPhoto,
                                            height: compact ? 72 : nil) {
                                 draft.videoStyle = isPiano ? .pianoPhoto : .scrollingPhoto
                                 // Start from the first built-in photo; the row below offers the rest.
@@ -439,7 +439,7 @@ struct ScoreReaderVideoExportSheet: View {
                                 } else {
                                     VStack(spacing: 6) {
                                         Image(systemName: "photo.on.rectangle").font(.title2)
-                                        Text("Choose a photo").font(.footnote)
+                                        Text("选择照片").font(.footnote)
                                     }
                                     .foregroundStyle(.secondary)
                                     .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -501,13 +501,13 @@ struct ScoreReaderVideoExportSheet: View {
                 } label: {
                     VStack(spacing: 8) {
                         Image(systemName: "photo.on.rectangle").font(.title2)
-                        Text("Choose a background photo").font(.subheadline)
+                        Text("选择背景照片").font(.subheadline)
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
                 .disabled(isPreparingExport || isLoadingBackground)
             } else if !isLoadingPreview {
-                Label("Preview unavailable", systemImage: "doc.richtext")
+                Label("无法预览", systemImage: "doc.richtext")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
@@ -527,7 +527,7 @@ struct ScoreReaderVideoExportSheet: View {
         .frame(maxWidth: .infinity, minHeight: 100)
         .opacity(isPreparingExport ? 0.6 : 1)
         .accessibilityElement(children: .contain)
-        .accessibilityLabel("Video preview, \(styleSummary)")
+        .accessibilityLabel("视频预览：\(styleSummary)")
     }
 
     /// A format choice: an outline of the frame's shape, its name and where it fits.
@@ -681,7 +681,7 @@ struct ScoreReaderVideoExportSheet: View {
             HStack(spacing: 10) {
                 // Tapping it again while selected chooses a different photo.
                 let customSelected = draft.videoBackgroundPhotoID == nil && draft.videoBackgroundImageData != nil
-                photoTile(selected: customSelected, size: size, label: "Your photo") {
+                photoTile(selected: customSelected, size: size, label: "你的照片") {
                     if customSelected || draft.videoCustomBackgroundData == nil {
                         isChoosingPhoto = true
                     } else if let data = draft.videoCustomBackgroundData {
@@ -697,7 +697,7 @@ struct ScoreReaderVideoExportSheet: View {
                         VStack(spacing: 2) {
                             Image(systemName: "photo.badge.plus").font(compact ? .footnote : .title3)
                             if !compact {
-                                Text("Your photo").font(.caption2.weight(.medium))
+                                Text("你的照片").font(.caption2.weight(.medium))
                             }
                         }
                         .foregroundStyle(Color.accentColor)
@@ -881,7 +881,7 @@ struct ScoreReaderFullScreenVideo: View {
                     .frame(width: 36, height: 36)
                     .background(.black.opacity(0.5), in: Circle())
             }
-            .accessibilityLabel("Exit full screen")
+            .accessibilityLabel("退出全屏")
             .padding(16)
         }
         .statusBarHidden()

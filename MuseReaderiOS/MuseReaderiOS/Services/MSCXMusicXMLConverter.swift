@@ -31,7 +31,7 @@ struct MSCXMusicXMLConverter: Sendable {
 
         let parts = makeParts(from: scoreBody, staffBlocks: staffBlocks)
         let title = cleaned(captureFirst(pattern: #"<metaTag\b[^>]*name="workTitle"[^>]*>(.*?)</metaTag>"#, in: scoreBody))
-            ?? "Untitled Score"
+            ?? "未命名乐谱"
         let composer = cleaned(captureFirst(pattern: #"<metaTag\b[^>]*name="composer"[^>]*>(.*?)</metaTag>"#, in: scoreBody))
 
         var output: [String] = [
@@ -103,12 +103,12 @@ struct MSCXMusicXMLConverter: Sendable {
             claimedStaffIDs.formUnion(staffIDs)
             let name = cleaned(captureFirst(pattern: #"<trackName>\s*(.*?)\s*</trackName>"#, in: block))
                 ?? cleaned(captureFirst(pattern: #"<longName>\s*(.*?)\s*</longName>"#, in: block))
-                ?? "Part \(index + 1)"
+                ?? "声部 \(index + 1)"
             parts.append(MusicXMLPart(id: "P\(parts.count + 1)", name: name, staffIDs: staffIDs))
         }
 
         for staffID in staffBlocks.keys.sorted(by: numericSort) where !claimedStaffIDs.contains(staffID) {
-            parts.append(MusicXMLPart(id: "P\(parts.count + 1)", name: "Staff \(staffID)", staffIDs: [staffID]))
+            parts.append(MusicXMLPart(id: "P\(parts.count + 1)", name: "谱表 \(staffID)", staffIDs: [staffID]))
         }
 
         return parts
@@ -196,7 +196,7 @@ struct MSCXMusicXMLConverter: Sendable {
     private func measureXML(from measureBody: String, staffNumber: Int?) -> [String] {
         var events = tokenBlocks(in: measureBody)
         if events.isEmpty {
-            events = [MSCXToken(name: "Rest", body: "<durationType>measure</durationType>", offset: measureBody.startIndex)]
+            events = [MSCXToken(name: "休止符", body: "<durationType>measure</durationType>", offset: measureBody.startIndex)]
         }
 
         var lines: [String] = []

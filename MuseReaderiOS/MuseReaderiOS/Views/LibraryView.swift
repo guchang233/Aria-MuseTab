@@ -14,6 +14,10 @@ struct LibraryView: View {
     private let accessController: LibraryAccessController
 
     @State var searchText = ""
+    @State private var cloudLibrary = CloudLibraryModel()
+    @State private var showsCloudLibrary = false
+    @State private var showsConversion = false
+    @State private var conversionSource: URL?
     @State var selectedCategory: LibraryCategory = .allScores
     @State var readerPresentation: LibraryReaderPresentation?
     @State var pendingCreatedReaderPresentation: LibraryReaderPresentation?
@@ -156,7 +160,7 @@ struct LibraryView: View {
                         Color.black.opacity(0.05)
                             .ignoresSafeArea()
 
-                        ProgressView(model.importProgress?.message ?? "Importing score…")
+                        ProgressView(model.importProgress?.message ?? "正在导入乐谱…")
                             .padding(.horizontal, 22)
                             .padding(.vertical, 16)
                             .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
@@ -169,7 +173,7 @@ struct LibraryView: View {
                     folders: model.setlistFolders,
                     importAction: model.startImport,
                     isLoading: model.isLoading,
-                    loadingMessage: model.importProgress?.message ?? "Importing score…",
+                    loadingMessage: model.importProgress?.message ?? "正在导入乐谱…",
                     createFolderAction: {
                         newSetlistName = ""
                         isNewSetlistPresented = true
@@ -234,6 +238,23 @@ struct LibraryView: View {
                 .background(LibraryPalette.mainBackground.ignoresSafeArea())
             }
         }
+        .safeAreaInset(edge: .top) {
+            HStack(spacing: 20) {
+                Button { showsCloudLibrary = true } label: { Label("云端曲库", systemImage: "icloud") }
+                Button { conversionSource = nil; showsConversion = true } label: { Label("PDF 识别", systemImage: "doc.viewfinder") }
+                Spacer(minLength: 0)
+            }.font(.subheadline).padding(.horizontal, 20).padding(.vertical, 10)
+                .background(LibraryPalette.mainBackground)
+        }
+        .sheet(isPresented: $showsCloudLibrary) {
+            CloudLibraryView(cloud: cloudLibrary, addToLibrary: model.addDownloadedScore) { url in
+                if ["pdf", "mid", "midi"].contains(url.pathExtension.lowercased()) {
+                    conversionSource = url
+                    Task { try? await Task.sleep(for: .milliseconds(350)); showsConversion = true }
+                } else { model.handleImport(result: .success(url)) }
+            }
+        }
+        .sheet(isPresented: $showsConversion) { PlayableConversionView(model: model, initialSource: conversionSource) }
         .fileImporter(
             isPresented: $model.isImportingPresented,
             allowedContentTypes: model.supportedContentTypes,
@@ -269,7 +290,7 @@ struct LibraryView: View {
                             VStack(spacing: 12) {
                                 Image(systemName: "doc.badge.plus")
                                     .font(.system(size: 38, weight: .semibold))
-                                Text("Drop scores to import")
+                                Text("拖入乐谱以导入")
                                     .font(.headline)
                             }
                             .foregroundStyle(LibraryPalette.accent)
@@ -322,53 +343,53 @@ struct LibraryView: View {
         }
         // Capture alert data: Android dismisses (and clears the pending target)
         // before invoking the button action.
-        .alert("Delete Score?", isPresented: deleteConfirmationIsPresented, presenting: scorePendingDeletion) { score in
-            Button("Cancel", role: .cancel) {
+        .alert("删除乐谱？", isPresented: deleteConfirmationIsPresented, presenting: scorePendingDeletion) { score in
+            Button("取消", role: .cancel) {
                 scorePendingDeletion = nil
             }
-            Button("Delete", role: .destructive) {
+            Button("删除", role: .destructive) {
                 model.deleteScore(score)
                 scorePendingDeletion = nil
             }
         } message: { _ in
-            Text("This removes the score from your library.")
+            Text("将从本地曲库中删除此乐谱。")
         }
-        .alert("Delete Setlist?", isPresented: setlistDeleteConfirmationIsPresented, presenting: folderPendingDeletion) { folder in
-            Button("Cancel", role: .cancel) {
+        .alert("删除曲目单？", isPresented: setlistDeleteConfirmationIsPresented, presenting: folderPendingDeletion) { folder in
+            Button("取消", role: .cancel) {
                 folderPendingDeletion = nil
             }
-            Button("Delete", role: .destructive) {
+            Button("删除", role: .destructive) {
                 deleteSetlist(folder)
                 folderPendingDeletion = nil
             }
         } message: { _ in
-            Text("This deletes the setlist but keeps all of its scores in your library.")
+            Text("仅删除曲目单，其中的乐谱仍保留在曲库中。")
         }
-        .alert("Could Not Save Score Info", isPresented: scoreInfoSaveErrorIsPresented) {
-            Button("OK", role: .cancel) {}
+        .alert("无法保存乐谱信息", isPresented: scoreInfoSaveErrorIsPresented) {
+            Button("确定", role: .cancel) {}
         } message: {
-            Text(scoreInfoSaveErrorMessage ?? "Aria could not save these score details.")
+            Text(scoreInfoSaveErrorMessage ?? "无法保存这些乐谱信息。")
         }
-        .alert("New Setlist", isPresented: $isNewSetlistPresented) {
-            TextField("Setlist name", text: $newSetlistName)
-            Button("Cancel", role: .cancel) {
+        .alert("新建曲目单", isPresented: $isNewSetlistPresented) {
+            TextField("曲目单名称", text: $newSetlistName)
+            Button("取消", role: .cancel) {
                 newSetlistName = ""
             }
-            Button("Create") {
+            Button("创建") {
                 model.createSetlistFolder(named: newSetlistName)
                 newSetlistName = ""
             }
         } message: {
-            Text("Create a setlist for organizing scores in performance order.")
+            Text("创建曲目单，按演奏顺序整理乐谱。")
         }
-        .alert("Rename Setlist", isPresented: renameConfirmationIsPresented, presenting: folderPendingRename) { folder in
+        .alert("重命名曲目单", isPresented: renameConfirmationIsPresented, presenting: folderPendingRename) { folder in
             let proposedName = renameSetlistName
-            TextField("Setlist name", text: $renameSetlistName)
-            Button("Cancel", role: .cancel) {
+            TextField("曲目单名称", text: $renameSetlistName)
+            Button("取消", role: .cancel) {
                 folderPendingRename = nil
                 renameSetlistName = ""
             }
-            Button("Rename") {
+            Button("重命名") {
                 model.renameSetlistFolder(folder, to: proposedName)
                 if selectedCategory == .setlist(folder.id) {
                     selectedCategory = .setlist(folder.id)
@@ -483,7 +504,7 @@ struct LibraryView: View {
                     }
                 )
             } else {
-                Text("This setlist is no longer available.")
+                Text("此曲目单已不存在。")
                     .padding()
             }
         }
@@ -843,13 +864,13 @@ enum LibraryCategory: Equatable {
     var title: String {
         switch self {
         case .allScores:
-            return "All Scores"
+            return "全部乐谱"
         case .setlists:
-            return "Setlists"
+            return "曲目单"
         case .setlist(_):
-            return "Setlist"
+            return "曲目单"
         case .settings:
-            return "Settings"
+            return "设置"
         }
     }
 }
@@ -865,22 +886,22 @@ enum LibraryScoreSortOrder: String, CaseIterable, Identifiable {
     var title: String {
         switch self {
         case .setlistOrder:
-            return "Custom Order"
+            return "自定义顺序"
         case .recentlyOpened:
-            return "Recently Opened"
+            return "最近打开"
         case .titleAscending:
-            return "Title A–Z"
+            return "标题升序"
         case .titleDescending:
-            return "Title Z–A"
+            return "标题降序"
         }
     }
 
     var compactTitle: String {
         switch self {
         case .setlistOrder:
-            return "Custom"
+            return "自定义"
         case .recentlyOpened:
-            return "Recent"
+            return "最近"
         case .titleAscending:
             return "A–Z"
         case .titleDescending:
@@ -970,17 +991,17 @@ enum LibraryScoreLayout: String, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .list: return "List"
-        case .small: return "Small Icons"
-        case .medium: return "Medium Icons"
-        case .large: return "Large Icons"
-        case .extraLarge: return "Extra Large Icons"
+        case .list: return "列表"
+        case .small: return "小图标"
+        case .medium: return "中图标"
+        case .large: return "大图标"
+        case .extraLarge: return "超大图标"
         }
     }
 
     var compactTitle: String {
         switch self {
-        case .list: return "List"
+        case .list: return "列表"
         case .small: return "S"
         case .medium: return "M"
         case .large: return "L"
@@ -1095,7 +1116,7 @@ struct ReorderSetlistsSheet: View {
                 ForEach(setlists) { setlist in
                     Label(setlist.name, systemImage: "music.note.list")
                         .font(.system(size: 16, weight: .medium))
-                        .accessibilityLabel("Setlist, \(setlist.name)")
+                        .accessibilityLabel("曲目单：\(setlist.name)")
                 }
                 .onMove { source, destination in
                     setlists.move(fromOffsets: source, toOffset: destination)
@@ -1103,14 +1124,14 @@ struct ReorderSetlistsSheet: View {
             }
             .listStyle(.insetGrouped)
             .environment(\.editMode, .constant(.active))
-            .navigationTitle("Reorder Setlists")
+            .navigationTitle("调整曲目单顺序")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") { dismiss() }
+                    Button("取消") { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Done") {
+                    Button("完成") {
                         saveAction(setlists.map(\.id))
                         dismiss()
                     }
@@ -1172,10 +1193,10 @@ struct LibrarySidebar: View {
 
                 VStack(alignment: .leading, spacing: 28) {
                     VStack(alignment: .leading, spacing: 10) {
-                        SidebarSectionTitle("LIBRARY")
+                        SidebarSectionTitle("曲库")
 
                         SidebarNavButton(
-                            title: "All Scores",
+                            title: "全部乐谱",
                             systemImage: "square.grid.2x2",
                             isSelected: selectedCategory == .allScores
                         ) {
@@ -1185,7 +1206,7 @@ struct LibrarySidebar: View {
 
                     VStack(alignment: .leading, spacing: 10) {
                         HStack {
-                            SidebarSectionTitle("SETLISTS")
+                            SidebarSectionTitle("曲目单")
                             Spacer()
                             HStack(spacing: 12) {
                                 Button(action: reorderSetlistsAction) {
@@ -1195,7 +1216,7 @@ struct LibrarySidebar: View {
                                 }
                                 .buttonStyle(.plain)
                                 .disabled(folders.count < 2)
-                                .accessibilityLabel("Reorder Setlists")
+                                .accessibilityLabel("调整曲目单顺序")
 
                                 Button(action: createFolderAction) {
                                     Image(systemName: "plus")
@@ -1203,7 +1224,7 @@ struct LibrarySidebar: View {
                                         .foregroundStyle(LibraryPalette.subtle)
                                 }
                                 .buttonStyle(.plain)
-                                .accessibilityLabel("New Setlist")
+                                .accessibilityLabel("新建曲目单")
                             }
                         }
 
@@ -1243,7 +1264,7 @@ struct LibrarySidebar: View {
                         HStack(spacing: 12) {
                             Image(systemName: "gearshape")
                                 .font(.system(size: 20, weight: .regular))
-                            Text("Settings")
+                            Text("设置")
                                 .font(.system(size: 17, weight: .medium))
                         }
                         .foregroundStyle(LibraryPalette.mutedInk)
@@ -1367,14 +1388,14 @@ struct SidebarSetlistButton: View {
         .buttonStyle(.plain)
         .contextMenu {
             Button(action: shareAction) {
-                Label("Share Setlist", systemImage: "square.and.arrow.up")
+                Label("分享曲目单", systemImage: "square.and.arrow.up")
             }
             .disabled(folder.scoreKeys.isEmpty)
             Button(action: renameAction) {
-                Label("Rename Setlist", systemImage: "pencil")
+                Label("重命名曲目单", systemImage: "pencil")
             }
             Button(role: .destructive, action: deleteAction) {
-                Label("Delete Setlist", systemImage: "trash")
+                Label("删除曲目单", systemImage: "trash")
             }
         }
         .onDrop(of: [UTType.plainText], isTargeted: $isDropTargeted) { providers in
@@ -1405,9 +1426,9 @@ enum PhoneTab: Int, CaseIterable {
 
     var title: String {
         switch self {
-        case .all: return "All Scores"
-        case .setlists: return "Setlists"
-        case .settings: return "Settings"
+        case .all: return "全部乐谱"
+        case .setlists: return "曲目单"
+        case .settings: return "设置"
         }
     }
 
@@ -1499,7 +1520,7 @@ struct PhoneLibraryView: View {
                                 .background(LibraryPalette.accent, in: RoundedRectangle(cornerRadius: 10, style: .continuous))
                         }
                         .buttonStyle(.plain)
-                        .accessibilityLabel("Import Score")
+                        .accessibilityLabel("导入乐谱")
 
                         Button(action: createAction) {
                             Image(systemName: "plus")
@@ -1513,7 +1534,7 @@ struct PhoneLibraryView: View {
                                 }
                         }
                         .buttonStyle(.plain)
-                        .accessibilityLabel("New Score")
+                        .accessibilityLabel("新建乐谱")
                     }
                 }
 
@@ -1559,7 +1580,7 @@ struct PhoneLibraryView: View {
                                     .frame(width: 32, height: 32)
                             }
                             .buttonStyle(.plain)
-                            .accessibilityLabel("Back to Setlists")
+                            .accessibilityLabel("返回曲目单")
 
                             Text(title)
                                 .font(.system(size: 28, weight: .bold))
@@ -1573,7 +1594,7 @@ struct PhoneLibraryView: View {
                             } label: {
                                 HStack(spacing: 5) {
                                     Image(systemName: "plus")
-                                    Text("Add")
+                                    Text("添加")
                                 }
                                 .font(.system(size: 14, weight: .semibold))
                                 .foregroundStyle(LibraryPalette.accent)
@@ -1587,7 +1608,7 @@ struct PhoneLibraryView: View {
                             }
                             .buttonStyle(.plain)
                             .disabled(isEditingSetlist)
-                            .accessibilityLabel("Add Scores to Setlist")
+                            .accessibilityLabel("向曲目单添加乐谱")
 
                             Button {
                                 if !isEditingSetlist {
@@ -1595,7 +1616,7 @@ struct PhoneLibraryView: View {
                                 }
                                 isEditingSetlist.toggle()
                             } label: {
-                                Text(isEditingSetlist ? "Done" : "Edit")
+                                Text(isEditingSetlist ? "完成" : "编辑")
                                     .font(.system(size: 14, weight: .semibold))
                                     .foregroundStyle(LibraryPalette.accent)
                                     .padding(.horizontal, 11)
@@ -1608,7 +1629,7 @@ struct PhoneLibraryView: View {
                             }
                             .buttonStyle(.plain)
                             .disabled(activeSetlistOrderedScores.isEmpty)
-                            .accessibilityLabel(isEditingSetlist ? "Done Editing Setlist" : "Edit Setlist")
+                            .accessibilityLabel(isEditingSetlist ? "完成曲目单编辑" : "编辑曲目单")
 
                             Button {
                                 shareFolderAction(activeFolder)
@@ -1625,18 +1646,18 @@ struct PhoneLibraryView: View {
                             }
                             .buttonStyle(.plain)
                             .disabled(activeSetlistOrderedScores.isEmpty || isEditingSetlist)
-                            .accessibilityLabel("Share Setlist")
+                            .accessibilityLabel("分享曲目单")
 
                             Menu {
                                 Button {
                                     renameFolderAction(activeFolder)
                                 } label: {
-                                    Label("Rename Setlist", systemImage: "pencil")
+                                    Label("重命名曲目单", systemImage: "pencil")
                                 }
                                 Button(role: .destructive) {
                                     deleteFolderAction(activeFolder)
                                 } label: {
-                                    Label("Delete Setlist", systemImage: "trash")
+                                    Label("删除曲目单", systemImage: "trash")
                                 }
                             } label: {
                                 Image(systemName: "ellipsis")
@@ -1650,7 +1671,7 @@ struct PhoneLibraryView: View {
                                     }
                             }
                             .disabled(isEditingSetlist)
-                            .accessibilityLabel("More Setlist Actions")
+                            .accessibilityLabel("更多曲目单操作")
                         }
                     }
                     if !isEditingSetlist {
@@ -1688,10 +1709,10 @@ struct PhoneLibraryView: View {
                             Image(systemName: "text.badge.plus")
                                 .font(.system(size: 34, weight: .light))
                                 .foregroundStyle(LibraryPalette.subtle)
-                            Text("No scores in this setlist")
+                            Text("此曲目单暂无乐谱")
                                 .font(.system(size: 16, weight: .semibold))
                                 .foregroundStyle(LibraryPalette.mutedInk)
-                            Text("Tap Add to choose scores from your library.")
+                            Text("点击“添加”，从本地曲库中选择乐谱。")
                                 .font(.system(size: 14, weight: .regular))
                                 .foregroundStyle(LibraryPalette.subtle)
                                 .multilineTextAlignment(.center)
@@ -1755,7 +1776,7 @@ struct PhoneSearchField: View {
                 .font(.system(size: 17, weight: .medium))
                 .foregroundStyle(LibraryPalette.subtle)
 
-            TextField("Search library...", text: $text)
+            TextField("搜索曲库…", text: $text)
                 .textFieldStyle(.plain)
                 .font(.system(size: 16, weight: .medium))
                 .foregroundStyle(LibraryPalette.ink)
@@ -1832,7 +1853,7 @@ struct PhoneSetlistContent: View {
         VStack(spacing: 0) {
             // Header row with New Folder button
             HStack {
-                Text("Setlists")
+                Text("曲目单")
                     .font(.system(size: 13, weight: .semibold))
                     .foregroundStyle(LibraryPalette.subtle)
                     .tracking(0.5)
@@ -1841,7 +1862,7 @@ struct PhoneSetlistContent: View {
                     Button(action: reorderSetlistsAction) {
                         HStack(spacing: 4) {
                             Image(systemName: "arrow.up.arrow.down")
-                            Text("Reorder")
+                            Text("调整顺序")
                         }
                         .font(.system(size: 13, weight: .semibold))
                         .foregroundStyle(LibraryPalette.accent)
@@ -1852,7 +1873,7 @@ struct PhoneSetlistContent: View {
                     Button(action: createFolderAction) {
                         HStack(spacing: 4) {
                             Image(systemName: "plus")
-                            Text("New Setlist")
+                            Text("新建曲目单")
                         }
                         .font(.system(size: 13, weight: .semibold))
                         .foregroundStyle(LibraryPalette.accent)
@@ -1868,7 +1889,7 @@ struct PhoneSetlistContent: View {
                     Image(systemName: "text.badge.plus")
                         .font(.system(size: 36, weight: .light))
                         .foregroundStyle(LibraryPalette.subtle)
-                    Text("No setlists yet")
+                    Text("暂无曲目单")
                         .font(.system(size: 15, weight: .medium))
                         .foregroundStyle(LibraryPalette.subtle)
                 }
@@ -1902,16 +1923,16 @@ struct PhoneSetlistContent: View {
                         .buttonStyle(.plain)
                         .contextMenu {
                             Button { shareFolderAction(folder) } label: {
-                                Label("Share Setlist", systemImage: "square.and.arrow.up")
+                                Label("分享曲目单", systemImage: "square.and.arrow.up")
                             }
                             .disabled(folder.scoreKeys.isEmpty)
                             Button { renameFolderAction(folder) } label: {
-                                Label("Rename Setlist", systemImage: "pencil")
+                                Label("重命名曲目单", systemImage: "pencil")
                             }
                             Button(role: .destructive) {
                                 deleteFolderAction(folder)
                             } label: {
-                                Label("Delete Setlist", systemImage: "trash")
+                                Label("删除曲目单", systemImage: "trash")
                             }
                         }
 
@@ -2031,7 +2052,7 @@ struct PhoneScoreListRow: View {
                         .foregroundStyle(LibraryPalette.ink)
                         .lineLimit(1)
 
-                    Text(score.secondaryLine ?? "Unknown Composer")
+                    Text(score.secondaryLine ?? "作曲者不详")
                         .font(.system(size: 13, weight: .regular))
                         .foregroundStyle(LibraryPalette.mutedInk)
                         .lineLimit(1)
@@ -2058,23 +2079,23 @@ struct PhoneScoreListRow: View {
         .buttonStyle(.plain)
         .contextMenu {
             Button(action: editInfoAction) {
-                Label("Edit Info", systemImage: "square.and.pencil")
+                Label("编辑信息", systemImage: "square.and.pencil")
             }
             Button(action: duplicateAction) {
-                Label("Duplicate", systemImage: "doc.on.doc")
+                Label("创建副本", systemImage: "doc.on.doc")
             }
             Button(action: addToFolderAction) {
-                Label("Add to Setlist", systemImage: "text.badge.plus")
+                Label("添加到曲目单", systemImage: "text.badge.plus")
             }
             if let activeFolder {
                 Button {
                     removeFromFolderAction(activeFolder)
                 } label: {
-                    Label("Remove from Setlist", systemImage: "text.badge.minus")
+                    Label("从曲目单移除", systemImage: "text.badge.minus")
                 }
             }
             Button(role: .destructive, action: deleteAction) {
-                Label("Delete Score", systemImage: "trash")
+                Label("删除乐谱", systemImage: "trash")
             }
         }
     }
@@ -2101,7 +2122,7 @@ struct FolderScorePickerSheet: View {
                         Image(systemName: "music.note")
                             .font(.system(size: 38, weight: .light))
                             .foregroundStyle(LibraryPalette.subtle)
-                        Text("There are no scores in your library yet.")
+                        Text("曲库中还没有乐谱。")
                             .font(.system(size: 16, weight: .medium))
                             .foregroundStyle(LibraryPalette.mutedInk)
                             .multilineTextAlignment(.center)
@@ -2124,7 +2145,7 @@ struct FolderScorePickerSheet: View {
                                         .foregroundStyle(LibraryPalette.ink)
                                         .lineLimit(1)
 
-                                    Text(score.secondaryLine ?? "Unknown Composer")
+                                    Text(score.secondaryLine ?? "作曲者不详")
                                         .font(.system(size: 13, weight: .regular))
                                         .foregroundStyle(LibraryPalette.mutedInk)
                                         .lineLimit(1)
@@ -2142,7 +2163,7 @@ struct FolderScorePickerSheet: View {
                         .buttonStyle(.plain)
                         .disabled(isAdded)
                         .accessibilityLabel(score.primaryTitle)
-                        .accessibilityValue(isAdded ? "Added" : "Not added")
+                        .accessibilityValue(isAdded ? "已添加" : "未添加")
                     }
                     .listStyle(.insetGrouped)
                 }
@@ -2150,13 +2171,13 @@ struct FolderScorePickerSheet: View {
             .searchable(
                 text: $searchText,
                 placement: .navigationBarDrawer(displayMode: .always),
-                prompt: "Search scores"
+                prompt: "搜索乐谱"
             )
-            .navigationTitle("Add to \(folderName)")
+            .navigationTitle("添加到 \(folderName)")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Done") {
+                    Button("完成") {
                         dismiss()
                     }
                 }
@@ -2187,7 +2208,7 @@ struct ScoreSetlistPickerSheet: View {
                             .font(.system(size: 38, weight: .light))
                             .foregroundStyle(LibraryPalette.subtle)
                         Text(
-                            "Create a setlist before adding this score."
+                            "请先创建曲目单，再添加此乐谱。"
                         )
                             .font(.system(size: 16, weight: .medium))
                             .foregroundStyle(LibraryPalette.mutedInk)
@@ -2227,7 +2248,7 @@ struct ScoreSetlistPickerSheet: View {
                         .buttonStyle(.plain)
                         .disabled(isAdded)
                         .accessibilityLabel(setlist.name)
-                        .accessibilityValue(isAdded ? "Added" : "Not added")
+                        .accessibilityValue(isAdded ? "已添加" : "未添加")
                     }
                     .listStyle(.insetGrouped)
                 }
@@ -2235,13 +2256,13 @@ struct ScoreSetlistPickerSheet: View {
             .searchable(
                 text: $searchText,
                 placement: .navigationBarDrawer(displayMode: .always),
-                prompt: "Search setlists"
+                prompt: "搜索曲目单"
             )
-            .navigationTitle("Add \(scoreTitle) to Setlist")
+            .navigationTitle("将 \(scoreTitle) 添加到曲目单")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Done") {
+                    Button("完成") {
                         dismiss()
                     }
                 }
@@ -2260,7 +2281,7 @@ struct PhoneSettingsContent: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
-            Text("Settings")
+            Text("设置")
                 .font(.system(size: 28, weight: .bold))
                 .foregroundStyle(LibraryPalette.ink)
 
@@ -2278,7 +2299,7 @@ struct PhoneSettingsContent: View {
                         .font(.system(size: 20, weight: .regular))
                         .frame(width: 28)
 
-                    Text("Open Source Licenses")
+                    Text("开源许可")
                         .font(.system(size: 17, weight: .medium))
 
                     Spacer(minLength: 0)
@@ -2486,7 +2507,7 @@ struct LibraryScoreDisplayBar: View {
                     }
                 }
                 #else
-                Picker("Sort Order", selection: $sortOrder) {
+                Picker("排序", selection: $sortOrder) {
                     ForEach(LibraryScoreSortOrder.allCases.filter { includesSetlistOrder || $0 != .setlistOrder }) { option in
                         Label(option.title, systemImage: option.systemImage)
                             .tag(option)
@@ -2497,7 +2518,7 @@ struct LibraryScoreDisplayBar: View {
                 LibraryDisplayMenuLabel(
                     systemImage: "arrow.up.arrow.down",
                     title: isCompact ? sortOrder.compactTitle : sortOrder.title,
-                    accessibilityLabel: "Sort: \(sortOrder.title)",
+                    accessibilityLabel: "排序：\(sortOrder.title)",
                     isCompact: isCompact
                 )
             }
@@ -2512,7 +2533,7 @@ struct LibraryScoreDisplayBar: View {
                     }
                 }
                 #else
-                Picker("View", selection: $scoreLayout) {
+                Picker("视图", selection: $scoreLayout) {
                     ForEach(LibraryScoreLayout.allCases) { option in
                         Label(option.title, systemImage: option.systemImage)
                             .tag(option)
@@ -2523,7 +2544,7 @@ struct LibraryScoreDisplayBar: View {
                 LibraryDisplayMenuLabel(
                     systemImage: scoreLayout.systemImage,
                     title: isCompact ? scoreLayout.compactTitle : scoreLayout.title,
-                    accessibilityLabel: "View: \(scoreLayout.title)",
+                    accessibilityLabel: "视图：\(scoreLayout.title)",
                     isCompact: isCompact
                 )
             }
@@ -2612,7 +2633,7 @@ struct SetlistScoreEditingList: View {
         .scrollContentBackground(.hidden)
         .background(LibraryPalette.mainBackground)
         .environment(\.editMode, .constant(.active))
-        .accessibilityLabel("Edit Setlist Scores")
+        .accessibilityLabel("编辑曲目单中的乐谱")
     }
 }
 
@@ -2696,18 +2717,18 @@ struct LibraryScoreListRow: View {
         .buttonStyle(.plain)
         .contextMenu {
             Button(action: editInfoAction) {
-                Label("Edit Info", systemImage: "square.and.pencil")
+                Label("编辑信息", systemImage: "square.and.pencil")
             }
             Button(action: duplicateAction) {
-                Label("Duplicate", systemImage: "doc.on.doc")
+                Label("创建副本", systemImage: "doc.on.doc")
             }
             if let removeFromSetlistAction {
                 Button(action: removeFromSetlistAction) {
-                    Label("Remove from Setlist", systemImage: "text.badge.minus")
+                    Label("从曲目单移除", systemImage: "text.badge.minus")
                 }
             }
             Button(role: .destructive, action: deleteAction) {
-                Label("Delete Score", systemImage: "trash")
+                Label("删除乐谱", systemImage: "trash")
             }
         }
         .onDrag {
@@ -2741,10 +2762,10 @@ struct LibrarySettingsContent: View {
                         .frame(width: 30)
 
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("Open Source Licenses")
+                        Text("开源许可")
                             .font(.system(size: 18, weight: .semibold))
                             .foregroundStyle(LibraryPalette.ink)
-                        Text("View GPLv3 and bundled third-party notices.")
+                        Text("查看 GPLv3 及所附第三方声明。")
                             .font(.system(size: 14.5, weight: .medium))
                             .foregroundStyle(LibraryPalette.mutedInk)
                     }
@@ -2850,7 +2871,7 @@ struct LibraryDashboardHeader: View {
             Button {
                 showAddScoresAction(activeSetlist)
             } label: {
-                Label("Add", systemImage: "plus")
+                Label("添加", systemImage: "plus")
                     .font(.system(size: 15, weight: .semibold))
                     .foregroundStyle(LibraryPalette.accent)
                     .frame(width: 76, height: 48)
@@ -2862,12 +2883,12 @@ struct LibraryDashboardHeader: View {
             }
             .buttonStyle(.plain)
             .disabled(isEditingSetlist)
-            .accessibilityLabel("Add Scores to Setlist")
+            .accessibilityLabel("向曲目单添加乐谱")
 
             Button {
                 isEditingSetlist.toggle()
             } label: {
-                Text(isEditingSetlist ? "Done" : "Edit")
+                Text(isEditingSetlist ? "完成" : "编辑")
                     .font(.system(size: 15, weight: .semibold))
                     .foregroundStyle(LibraryPalette.accent)
                     .frame(width: 68, height: 48)
@@ -2879,7 +2900,7 @@ struct LibraryDashboardHeader: View {
             }
             .buttonStyle(.plain)
             .disabled(!canEditSetlist)
-            .accessibilityLabel(isEditingSetlist ? "Done Editing Setlist" : "Edit Setlist")
+            .accessibilityLabel(isEditingSetlist ? "完成曲目单编辑" : "编辑曲目单")
 
             Button {
                 shareSetlistAction(activeSetlist)
@@ -2896,19 +2917,19 @@ struct LibraryDashboardHeader: View {
             }
             .buttonStyle(.plain)
             .disabled(!canEditSetlist || isEditingSetlist)
-            .accessibilityLabel("Share Setlist")
+            .accessibilityLabel("分享曲目单")
 
             Menu {
                 Button(action: importAction) {
-                    Label("Import Score", systemImage: "doc.badge.plus")
+                    Label("导入乐谱", systemImage: "doc.badge.plus")
                 }
                 Button(action: createAction) {
-                    Label("New Score", systemImage: "plus")
+                    Label("新建乐谱", systemImage: "plus")
                 }
                 Button(role: .destructive) {
                     deleteSetlistAction(activeSetlist)
                 } label: {
-                    Label("Delete Setlist", systemImage: "trash")
+                    Label("删除曲目单", systemImage: "trash")
                 }
             } label: {
                 Image(systemName: "ellipsis")
@@ -2921,7 +2942,7 @@ struct LibraryDashboardHeader: View {
                             .stroke(LibraryPalette.cardBorder, lineWidth: 1)
                     }
             }
-            .accessibilityLabel("More Library Actions")
+            .accessibilityLabel("更多曲库操作")
         } else {
             Button(action: importAction) {
                 Image(systemName: "doc.badge.plus")
@@ -2966,7 +2987,7 @@ struct SearchField: View {
                 .font(.system(size: 17, weight: .medium))
                 .foregroundStyle(LibraryPalette.subtle)
 
-            TextField("Search library...", text: $text)
+            TextField("搜索曲库…", text: $text)
                 .textFieldStyle(.plain)
                 .font(.system(size: 17, weight: .medium))
                 .foregroundStyle(LibraryPalette.ink)
@@ -3054,7 +3075,7 @@ struct LibraryScoreCard: View {
                                 .foregroundStyle(LibraryPalette.ink)
                                 .lineLimit(1)
 
-                            Text(score.secondaryLine ?? "Unknown Composer")
+                            Text(score.secondaryLine ?? "作曲者不详")
                                 .font(.system(size: 14.5, weight: .medium))
                                 .foregroundStyle(LibraryPalette.mutedInk)
                                 .lineLimit(1)
@@ -3068,23 +3089,23 @@ struct LibraryScoreCard: View {
             .buttonStyle(.plain)
             .contextMenu {
                 Button(action: editInfoAction) {
-                    Label("Edit Info", systemImage: "square.and.pencil")
+                    Label("编辑信息", systemImage: "square.and.pencil")
                 }
                 Button(action: duplicateAction) {
-                    Label("Duplicate", systemImage: "doc.on.doc")
+                    Label("创建副本", systemImage: "doc.on.doc")
                 }
                 if let addToFolderAction {
                     Button(action: addToFolderAction) {
-                        Label("Add to Setlist", systemImage: "text.badge.plus")
+                        Label("添加到曲目单", systemImage: "text.badge.plus")
                     }
                 }
                 if let removeFromFolderAction {
                     Button(action: removeFromFolderAction) {
-                        Label("Remove from Setlist", systemImage: "text.badge.minus")
+                        Label("从曲目单移除", systemImage: "text.badge.minus")
                     }
                 }
                 Button(role: .destructive, action: deleteAction) {
-                    Label("Delete Score", systemImage: "trash")
+                    Label("删除乐谱", systemImage: "trash")
                 }
             }
             .onDrag {
@@ -3228,15 +3249,15 @@ struct ScoreCardInfoPopover: View {
             }
 
             VStack(alignment: .leading, spacing: 12) {
-                ScoreInfoRow(label: "Composer", value: score.composer ?? "Unknown")
+                ScoreInfoRow(label: "作曲", value: score.composer ?? "Unknown")
 
                 if let subtitle = score.subtitle?.trimmedToNil {
-                    ScoreInfoRow(label: "Subtitle", value: subtitle)
+                    ScoreInfoRow(label: "副标题", value: subtitle)
                 }
 
-                ScoreInfoRow(label: "Format", value: score.format.displayName)
-                ScoreInfoRow(label: "Imported", value: score.importedAt.formatted(date: .abbreviated, time: .omitted))
-                ScoreInfoRow(label: "Storage", value: score.isStoredInLibrary ? "Aria Library" : "External File")
+                ScoreInfoRow(label: "格式", value: score.format.displayName)
+                ScoreInfoRow(label: "导入时间", value: score.importedAt.formatted(date: .abbreviated, time: .omitted))
+                ScoreInfoRow(label: "存储位置", value: score.isStoredInLibrary ? "Aria Library" : "External File")
 
                 if let version = score.museScoreVersion?.trimmedToNil {
                     ScoreInfoRow(label: "MuseScore", value: version)
@@ -3282,33 +3303,33 @@ struct LibraryScoreInfoEditorSheet: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section("Title Page") {
-                    TextField("Title", text: $metadata.title)
-                    TextField("Subtitle", text: $metadata.subtitle)
+                Section("标题页") {
+                    TextField("标题", text: $metadata.title)
+                    TextField("副标题", text: $metadata.subtitle)
                 }
 
-                Section("Credits") {
-                    TextField("Composer", text: $metadata.composer)
-                    TextField("Arranger", text: $metadata.arranger)
-                    TextField("Lyricist", text: $metadata.lyricist)
+                Section("署名") {
+                    TextField("作曲", text: $metadata.composer)
+                    TextField("编曲", text: $metadata.arranger)
+                    TextField("作词", text: $metadata.lyricist)
                 }
 
                 Section {
-                    Text("Changes save back to this score in your Aria library.")
+                    Text("修改会保存到本地曲库中的此乐谱。")
                         .font(.footnote)
                         .foregroundStyle(.secondary)
                 }
             }
-            .navigationTitle("Edit Score Info")
+            .navigationTitle("编辑乐谱信息")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel", action: cancelAction)
+                    Button("取消", action: cancelAction)
                         .disabled(isSaving)
                 }
 
                 ToolbarItem(placement: .confirmationAction) {
-                    Button(isSaving ? "Saving..." : "Save", action: saveAction)
+                    Button(isSaving ? "正在保存…" : "保存", action: saveAction)
                         .disabled(isSaving)
                 }
             }
@@ -3327,14 +3348,14 @@ struct LibraryEmptyState: View {
                 .font(.system(size: 40, weight: .medium))
                 .foregroundStyle(LibraryPalette.accent)
 
-            Text(isSetlist ? "No scores in this setlist" : "No scores in your library yet")
+            Text(isSetlist ? "此曲目单暂无乐谱" : "本地曲库暂无乐谱")
                 .font(.system(size: 26, weight: .bold))
                 .foregroundStyle(LibraryPalette.ink)
 
             Text(
                 isSetlist
-                    ? "Use Add Scores above to choose scores from your library."
-                    : "Create a new score or import a MuseScore file. It will appear here, ready to open in the reader."
+                    ? "点击上方“添加乐谱”，从曲库中选择。"
+                    : "新建乐谱或导入 MuseScore 文件后，即可在这里打开看谱。"
             )
                 .font(.system(size: 17, weight: .medium))
                 .foregroundStyle(LibraryPalette.mutedInk)
@@ -3346,7 +3367,7 @@ struct LibraryEmptyState: View {
                 Button(action: createAction) {
                     HStack(spacing: 10) {
                         Image(systemName: "plus")
-                        Text("New Score")
+                        Text("新建乐谱")
                     }
                     .font(.system(size: 18, weight: .semibold))
                     .foregroundStyle(.white)
@@ -3362,7 +3383,7 @@ struct LibraryEmptyState: View {
                 Button(action: importAction) {
                     HStack(spacing: 10) {
                         Image(systemName: "doc.badge.plus")
-                        Text("Import")
+                        Text("导入")
                     }
                     .font(.system(size: 18, weight: .semibold))
                     .foregroundStyle(LibraryPalette.accent)
@@ -3491,7 +3512,7 @@ struct SetlistScoreReaderHost: View {
                 HStack(spacing: 10) {
                     ProgressView()
                         .controlSize(.small)
-                    Text("Opening \(retryLoadingTitle)…")
+                    Text("正在打开 \(retryLoadingTitle)…")
                         .font(.system(size: 14, weight: .semibold))
                 }
                 .foregroundStyle(Color.black.opacity(0.82))
@@ -3500,13 +3521,13 @@ struct SetlistScoreReaderHost: View {
                 .background(.ultraThinMaterial, in: Capsule())
             }
         }
-        .alert("Couldn’t Open Score", isPresented: transitionErrorIsPresented) {
-            Button("Cancel", role: .cancel) {}
-            Button("Try Again") {
+        .alert("无法打开乐谱", isPresented: transitionErrorIsPresented) {
+            Button("取消", role: .cancel) {}
+            Button("重试") {
                 retryFailedTransition()
             }
         } message: {
-            Text(transitionErrorMessage ?? "Aria could not open the selected score.")
+            Text(transitionErrorMessage ?? "无法打开所选乐谱。")
         }
         .onDisappear {
             cancelNextScorePreload()
@@ -3529,7 +3550,7 @@ struct SetlistScoreReaderHost: View {
         return ScoreReaderSetlistNavigation(
             previousScoreTitle: previousTitle,
             nextScoreTitle: nextTitle,
-            positionLabel: "Score \(nextPosition) of \(sequence.scores.count)",
+            positionLabel: "第 \(nextPosition)/\(sequence.scores.count) 首",
             transition: { direction, readingStyle in
                 await transition(direction: direction, readingStyle: readingStyle)
             }

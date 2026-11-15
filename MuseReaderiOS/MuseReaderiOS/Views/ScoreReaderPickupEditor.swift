@@ -97,7 +97,7 @@ struct ScoreReaderPickupEditorSheet: View {
                     cancelAction?()
                     dismiss()
                 } label: {
-                    Text("Cancel")
+                    Text("取消")
                         .font(.system(size: 16, weight: .semibold))
                         .frame(maxWidth: .infinity, minHeight: isPhoneLandscape ? 46 : 52)
                         .background(Color(.systemBackground), in: RoundedRectangle(cornerRadius: 8, style: .continuous))
@@ -112,7 +112,7 @@ struct ScoreReaderPickupEditorSheet: View {
                     applyAction(count, denominator)
                     dismiss()
                 } label: {
-                    Text(context.isExistingPickup ? "Change" : "Add")
+                    Text(context.isExistingPickup ? "更改" : "添加")
                         .font(.system(size: 16, weight: .semibold))
                         .foregroundStyle(.white)
                         .frame(maxWidth: .infinity, minHeight: isPhoneLandscape ? 46 : 52)
@@ -147,14 +147,14 @@ struct ScoreReaderPickupEditorSheet: View {
                         .frame(width: 36, height: 36)
                 }
                 .buttonStyle(.plain)
-                .accessibilityLabel("Close")
+                .accessibilityLabel("关闭")
             }
         }
     }
 
     private var summaryCard: some View {
         HStack(spacing: 0) {
-            Text("Current:  \(currentLabel)")
+            Text("当前：\(currentLabel)")
                 .font(.system(size: 16, weight: .semibold))
                 .frame(maxWidth: .infinity)
 
@@ -162,7 +162,7 @@ struct ScoreReaderPickupEditorSheet: View {
                 .fill(Color(.separator))
                 .frame(width: 1, height: 34)
 
-            Text("New:  \(newLabel)")
+            Text("新值：\(newLabel)")
                 .font(.system(size: 16, weight: .semibold))
                 .frame(maxWidth: .infinity)
         }
@@ -176,7 +176,7 @@ struct ScoreReaderPickupEditorSheet: View {
 
     private var customControlsRow: some View {
         HStack(alignment: .top, spacing: 14) {
-            customControlGroup(title: "Beats in pickup") {
+            customControlGroup(title: "弱起拍数") {
                 pickupStepper(value: $count, range: 1...max(1, maxCount(for: denominator)))
             }
 
@@ -187,7 +187,7 @@ struct ScoreReaderPickupEditorSheet: View {
                     .padding(.top, 28)
             }
 
-            customControlGroup(title: "Note value") {
+            customControlGroup(title: "音符时值") {
                 pickupDenominatorPicker
             }
         }
@@ -195,7 +195,7 @@ struct ScoreReaderPickupEditorSheet: View {
 
     private var commonPickupSection: some View {
         VStack(alignment: .leading, spacing: isPhoneLandscape ? 10 : 14) {
-            Text("Common")
+            Text("普通拍子")
                 .font(.system(size: 16, weight: .bold))
 
             AriaGrid(columns: commonGridColumns, spacing: isPhoneLandscape ? 10 : 12, items: presets) { preset in
@@ -210,7 +210,7 @@ struct ScoreReaderPickupEditorSheet: View {
 
     private func customPickupSection(showDescription: Bool, showRemoveAction: Bool) -> some View {
         VStack(alignment: .leading, spacing: isPhoneLandscape ? 10 : 14) {
-            Text("Custom")
+            Text("自定义")
                 .font(.system(size: 16, weight: .bold))
 
             customControlsRow
@@ -230,7 +230,7 @@ struct ScoreReaderPickupEditorSheet: View {
     private var validationMessage: some View {
         Group {
             if !isValid {
-                Text("Pickup must be shorter than one full \(context.nominalNumerator)/\(context.nominalDenominator) measure.")
+                Text("弱起时长须短于一个完整的 \(context.nominalNumerator)/\(context.nominalDenominator) 小节。")
                     .font(.system(size: 13, weight: .medium))
                     .foregroundStyle(.orange)
             } else {
@@ -246,7 +246,7 @@ struct ScoreReaderPickupEditorSheet: View {
             removeAction()
             dismiss()
         } label: {
-            Text("Remove Pickup Measure")
+            Text("移除弱起小节")
                 .font(.system(size: 15, weight: .semibold))
                 .frame(maxWidth: .infinity)
                 .frame(height: isPhoneLandscape ? 40 : 44)

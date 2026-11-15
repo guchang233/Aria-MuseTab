@@ -12,28 +12,28 @@ struct ScoreReaderAutoSystemBreaksSheet: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section("Auto Breaks") {
-                    Picker("Mode", selection: $mode) {
+                Section("自动换行与分页") {
+                    Picker("模式", selection: $mode) {
                         ForEach(ScoreAutoSystemBreaksMode.allCases) { option in
                             Text(option.title).tag(option)
                         }
                     }
 
                     if mode == .measuresPerSystem {
-                        TextField("Measures per system", text: $measuresText)
+                        TextField("每行小节数", text: $measuresText)
                             .keyboardType(.numberPad)
 
                         Stepper(value: measuresBinding, in: 1...32) {
-                            Text("\(validatedMeasures ?? 4) measures per system")
+                            Text("每行 \(validatedMeasures ?? 4) 小节")
                         }
                     }
                 }
             }
-            .navigationTitle("Auto Breaks")
+            .navigationTitle("自动换行与分页")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
+                    Button("取消") {
                         dismiss()
                     }
                 }
@@ -53,7 +53,7 @@ struct ScoreReaderAutoSystemBreaksSheet: View {
             Button(role: .destructive) {
                 commitAndDismiss(removeExistingRequest)
             } label: {
-                Text("Remove Existing Breaks")
+                Text("移除已有换行与分页")
                     .font(.system(size: 16, weight: .semibold))
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 13)
@@ -120,7 +120,7 @@ struct ScoreReaderAddMeasuresSheet: View {
     var body: some View {
         NavigationStack {
             VStack(alignment: .leading, spacing: 22) {
-                Text("How many measures should be added?")
+                Text("要添加多少个小节？")
                     .font(.system(size: 15, weight: .medium))
                     .foregroundStyle(.secondary)
 
@@ -131,16 +131,16 @@ struct ScoreReaderAddMeasuresSheet: View {
             .padding(.horizontal, 24)
             .padding(.top, 18)
             .background(Color(.systemGroupedBackground))
-            .navigationTitle("Add Measures")
+            .navigationTitle("添加小节")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
+                    Button("取消") {
                         dismiss()
                     }
                 }
 
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Add") {
+                    Button("添加") {
                         if let validatedCount {
                             commitAction(validatedCount)
                         }
@@ -175,7 +175,7 @@ struct ScoreReaderAddMeasuresSheet: View {
                 .font(.system(size: 44, weight: .bold, design: .rounded))
                 .frame(width: 88)
 
-            Text("measures")
+            Text("小节")
                 .font(.system(size: 15, weight: .medium))
                 .foregroundStyle(.secondary)
         }
@@ -249,14 +249,14 @@ struct ScoreReaderTempoEditorSheet: View {
                 .padding(24)
             }
             .background(.regularMaterial)
-            .navigationTitle("Tempo")
+            .navigationTitle("速度")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") { dismiss() }
+                    Button("取消") { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Done") {
+                    Button("完成") {
                         guard let value else { return }
                         textIsFocused = false
                         commitAction(value)
@@ -295,7 +295,7 @@ struct ScoreReaderTempoEditorSheet: View {
                 .monospacedDigit()
                 .frame(width: 116, height: 68)
                 .background(Color.white.opacity(0.8), in: RoundedRectangle(cornerRadius: 16))
-                .accessibilityLabel("Tempo BPM")
+                .accessibilityLabel("速度（BPM）")
                 .accessibilityValue(bpmText)
         }
         .foregroundStyle(Color.black.opacity(0.9))
@@ -306,13 +306,13 @@ struct ScoreReaderTempoEditorSheet: View {
     private var textEntry: some View {
         VStack(alignment: .leading, spacing: 6) {
             HStack(spacing: 8) {
-                TextField("e.g. Allegro", text: $tempoText)
+                TextField("例如：快板", text: $tempoText)
                     .textFieldStyle(.plain)
                     .font(.system(size: 20))
                     .focused($textIsFocused)
                     .submitLabel(.done)
                     .onSubmit { textIsFocused = false }
-                    .accessibilityLabel("Tempo text")
+                    .accessibilityLabel("速度文字")
                 if !tempoText.isEmpty {
                     Button { tempoText = "" } label: {
                         Image(systemName: "xmark.circle.fill")
@@ -320,7 +320,7 @@ struct ScoreReaderTempoEditorSheet: View {
                             .frame(width: 32, height: 44)
                     }
                     .buttonStyle(.plain)
-                    .accessibilityLabel("Clear tempo text")
+                    .accessibilityLabel("清除速度文字")
                 }
             }
             .padding(.horizontal, 14)
@@ -329,7 +329,7 @@ struct ScoreReaderTempoEditorSheet: View {
             .overlay {
                 RoundedRectangle(cornerRadius: 12).stroke(Color.black.opacity(0.08), lineWidth: 1)
             }
-            Text("Tempo text (optional)")
+            Text("速度文字（可选）")
                 .font(.system(size: 13))
                 .foregroundStyle(Color.secondary)
                 .padding(.horizontal, 2)
@@ -339,10 +339,10 @@ struct ScoreReaderTempoEditorSheet: View {
     private var beatUnitPicker: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack(alignment: .firstTextBaseline) {
-                Text("Beat unit")
+                Text("每拍时值")
                     .font(.system(size: 17, weight: .semibold))
                 Spacer(minLength: 8)
-                Text("The note value that gets the beat.")
+                Text("一个拍子对应的音符时值。")
                     .font(.system(size: 11))
                     .foregroundStyle(Color.secondary)
                     .multilineTextAlignment(.trailing)
@@ -363,8 +363,8 @@ struct ScoreReaderTempoEditorSheet: View {
                             }
                     }
                     .buttonStyle(.plain)
-                    .accessibilityLabel(unit == .dottedQuarter ? "Dotted quarter note" : unit.rawValue.capitalized + " note")
-                    .accessibilityValue(beatUnit == unit ? "Selected" : "")
+                    .accessibilityLabel(unit == .dottedQuarter ? "附点四分音符" : unit.rawValue.capitalized + "音符")
+                    .accessibilityValue(beatUnit == unit ? "已选择" : "")
                 }
             }
         }
@@ -397,10 +397,10 @@ struct ScoreReaderTempoEditorSheet: View {
                         .background(Color.white.opacity(0.8), in: RoundedRectangle(cornerRadius: 12))
                 }
                 .buttonStyle(.plain)
-                .accessibilityLabel("Erase tempo digit")
+                .accessibilityLabel("删除速度数字")
             }
             if hasStartedNumberEntry && value == nil {
-                Text("Enter a tempo from 20 to 300 BPM.")
+                Text("请输入 20 至 300 BPM 的速度。")
                     .font(.caption)
                     .foregroundStyle(Color.secondary)
             }
@@ -490,7 +490,7 @@ struct ScoreReaderTimeSignatureSheet: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: contentSpacing) {
                     ZStack {
-                        Text("Change Time Signature")
+                        Text("更改拍号")
                             .font(.system(size: isPhoneLandscape ? 18 : 20, weight: .bold))
                             .frame(maxWidth: .infinity)
 
@@ -505,12 +505,12 @@ struct ScoreReaderTimeSignatureSheet: View {
                                     .frame(width: 36, height: 36)
                             }
                             .buttonStyle(.plain)
-                            .accessibilityLabel("Close")
+                            .accessibilityLabel("关闭")
                         }
                     }
 
                     HStack(spacing: 0) {
-                        Text("Current:  \(currentValue.title)")
+                        Text("当前：\(currentValue.title)")
                             .font(.system(size: 16, weight: .semibold))
                             .frame(maxWidth: .infinity)
 
@@ -518,7 +518,7 @@ struct ScoreReaderTimeSignatureSheet: View {
                             .fill(Color(.separator))
                             .frame(width: 1, height: 34)
 
-                        Text("New:  \(selected.title)")
+                        Text("新值：\(selected.title)")
                             .font(.system(size: 16, weight: .semibold))
                             .frame(maxWidth: .infinity)
                     }
@@ -556,7 +556,7 @@ struct ScoreReaderTimeSignatureSheet: View {
                 Button {
                     dismiss()
                 } label: {
-                    Text("Cancel")
+                    Text("取消")
                         .font(.system(size: 16, weight: .semibold))
                         .frame(maxWidth: .infinity, minHeight: isPhoneLandscape ? 46 : 52)
                         .background(Color(.systemBackground), in: RoundedRectangle(cornerRadius: 8, style: .continuous))
@@ -571,7 +571,7 @@ struct ScoreReaderTimeSignatureSheet: View {
                     commitAction(selected, .fromSelectedMeasure)
                     dismiss()
                 } label: {
-                    Text("Change")
+                    Text("更改")
                         .font(.system(size: 16, weight: .semibold))
                         .foregroundStyle(.white)
                         .frame(maxWidth: .infinity, minHeight: isPhoneLandscape ? 46 : 52)
@@ -590,7 +590,7 @@ struct ScoreReaderTimeSignatureSheet: View {
 
     private var customControlsRow: some View {
         HStack(alignment: .top, spacing: isPhoneLandscape ? 14 : 14) {
-            customControlGroup(title: "Beats per measure") {
+            customControlGroup(title: "每小节拍数") {
                 stepperSegment(value: $customNumerator, range: 1...32)
             }
 
@@ -601,7 +601,7 @@ struct ScoreReaderTimeSignatureSheet: View {
                     .padding(.top, 28)
             }
 
-            customControlGroup(title: "Note value") {
+            customControlGroup(title: "音符时值") {
                 denominatorSegment(value: $customDenominator)
             }
         }
@@ -624,7 +624,7 @@ struct ScoreReaderTimeSignatureSheet: View {
 
     private var commonSignatureSection: some View {
         VStack(alignment: .leading, spacing: isPhoneLandscape ? 10 : 14) {
-            Text("Common")
+            Text("普通拍子")
                 .font(.system(size: 16, weight: .bold))
 
             AriaGrid(columns: commonGridColumns, spacing: isPhoneLandscape ? 10 : 12, items: presets) { preset in
@@ -640,7 +640,7 @@ struct ScoreReaderTimeSignatureSheet: View {
 
     private func customSignatureSection(showDescription: Bool) -> some View {
         VStack(alignment: .leading, spacing: isPhoneLandscape ? 10 : 14) {
-            Text("Custom")
+            Text("自定义")
                 .font(.system(size: 16, weight: .bold))
 
             customControlsRow
@@ -902,7 +902,7 @@ struct ScoreReaderKeySignatureSheet: View {
                 Button {
                     dismiss()
                 } label: {
-                    Text("Cancel")
+                    Text("取消")
                         .font(.system(size: 16, weight: .semibold))
                         .frame(maxWidth: .infinity, minHeight: isPhoneLandscape ? 46 : 56)
                         .background(Color(.systemBackground), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
@@ -917,7 +917,7 @@ struct ScoreReaderKeySignatureSheet: View {
                     commitAction(selected, .fromSelectedMeasure)
                     dismiss()
                 } label: {
-                    Text("Change")
+                    Text("更改")
                         .font(.system(size: 16, weight: .semibold))
                         .foregroundStyle(.white)
                         .frame(maxWidth: .infinity, minHeight: isPhoneLandscape ? 46 : 56)
@@ -935,13 +935,13 @@ struct ScoreReaderKeySignatureSheet: View {
 
     private var currentNewKeyCard: some View {
         HStack(spacing: 0) {
-            keySummaryColumn(title: "Current", value: currentDisplayTitle)
+            keySummaryColumn(title: "当前", value: currentDisplayTitle)
 
             Rectangle()
                 .fill(Color(.separator))
                 .frame(width: 1, height: 48)
 
-            keySummaryColumn(title: "New", value: selectedDisplayTitle)
+            keySummaryColumn(title: "新建", value: selectedDisplayTitle)
         }
         .padding(.vertical, isPhoneLandscape ? 10 : 18)
         .background(Color(.systemBackground), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
@@ -965,13 +965,13 @@ struct ScoreReaderKeySignatureSheet: View {
 
     private var keyTypeControl: some View {
         HStack(spacing: isPhoneLandscape ? 12 : 18) {
-            Text("Key type")
+            Text("调性类型")
                 .font(.system(size: 15, weight: .semibold))
                 .frame(width: isPhoneLandscape ? 76 : 94, alignment: .leading)
 
-            Picker("Key Mode", selection: $showingMinor) {
-                Text("Major").tag(false)
-                Text("Minor").tag(true)
+            Picker("调式", selection: $showingMinor) {
+                Text("大调").tag(false)
+                Text("小调").tag(true)
             }
             .pickerStyle(.segmented)
             .onChangeCompatible(of: showingMinor) { _ in syncSelectedKeyMode() }
@@ -985,7 +985,7 @@ struct ScoreReaderKeySignatureSheet: View {
             }
 
             VStack(alignment: .leading, spacing: isPhoneLandscape ? 6 : 10) {
-                Text("Sharps")
+                Text("升号")
                     .font(.system(size: 15, weight: .medium))
                     .foregroundStyle(.secondary)
                 keyGrid(sharpKeys)
@@ -994,7 +994,7 @@ struct ScoreReaderKeySignatureSheet: View {
             Divider()
 
             VStack(alignment: .leading, spacing: isPhoneLandscape ? 6 : 10) {
-                Text("Flats")
+                Text("降号")
                     .font(.system(size: 15, weight: .medium))
                     .foregroundStyle(.secondary)
                 keyGrid(flatKeys)
@@ -1227,12 +1227,12 @@ struct ScoreReaderSetupSheet: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section("Score") {
-                    TextField("Title", text: $metadata.title)
-                    TextField("Composer", text: $metadata.composer)
-                    TextField("Subtitle", text: $metadata.subtitle)
-                    TextField("Lyricist", text: $metadata.lyricist)
-                    TextField("Arranger", text: $metadata.arranger)
+                Section("乐谱") {
+                    TextField("标题", text: $metadata.title)
+                    TextField("作曲", text: $metadata.composer)
+                    TextField("副标题", text: $metadata.subtitle)
+                    TextField("作词", text: $metadata.lyricist)
+                    TextField("编曲", text: $metadata.arranger)
                 }
                 // Plain rows, as iOS draws Form fields; Android otherwise boxes each one.
                 .textFieldStyle(.plain)
@@ -1245,20 +1245,20 @@ struct ScoreReaderSetupSheet: View {
                     }
                 }
 
-                Section("Initial Setup") {
-                    Label("Instruments and part setup use the current score structure.", systemImage: "music.note.list")
-                    Label("Initial key, time, and tempo are available from More.", systemImage: "slider.horizontal.3")
+                Section("初始设置") {
+                    Label("乐器与声部设置采用当前乐谱结构。", systemImage: "music.note.list")
+                    Label("可在“更多”中设置初始调号、拍号和速度。", systemImage: "slider.horizontal.3")
                 }
             }
-            .navigationTitle("Score Setup")
+            .navigationTitle("乐谱设置")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") { dismiss() }
+                    Button("取消") { dismiss() }
                         .disabled(isSaving)
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button(isSaving ? "Saving…" : "Save", action: save)
+                    Button(isSaving ? "正在保存…" : "保存", action: save)
                         .disabled(isBusy || isSaving)
                 }
             }
@@ -1325,7 +1325,7 @@ struct ScoreReaderPageSettingsSheet: View {
         } else {
             let width = initialValue.pageWidthMillimeters
             let height = initialValue.pageHeightMillimeters
-            let name = "Current (\(width.formatted(.number.precision(.fractionLength(0)))) × \(height.formatted(.number.precision(.fractionLength(0)))) mm)"
+            let name = "当前（\(width.formatted(.number.precision(.fractionLength(0)))) × \(height.formatted(.number.precision(.fractionLength(0)))) 毫米）"
             currentPageSize = (width, height)
             currentPageSizeName = name
             _pageSize = State(initialValue: name)
@@ -1341,33 +1341,33 @@ struct ScoreReaderPageSettingsSheet: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section("Page") {
-                    Picker("Page size", selection: $pageSize) {
+                Section("页面") {
+                    Picker("页面尺寸", selection: $pageSize) {
                         ForEach(pageSizes, id: \.self) { size in
                             Text(size).tag(size)
                         }
                     }
-                    Stepper("Margins \(margins.formatted(.number.precision(.fractionLength(0)))) mm", value: $margins, in: 5...35, step: 1)
+                    Stepper("页边距 \(margins.formatted(.number.precision(.fractionLength(0)))) 毫米", value: $margins, in: 5...35, step: 1)
                 }
 
-                Section("Notation") {
-                    Stepper("Staff size \(staffSize.formatted(.number.precision(.fractionLength(2)))) mm", value: $staffSize, in: 1.2...2.4, step: 0.05)
-                    Stepper("Staff spacing \(staffSpacing.formatted(.number.precision(.fractionLength(1))))", value: $staffSpacing, in: 3...16, step: 0.5)
-                    Stepper("System spacing \(systemSpacing.formatted(.number.precision(.fractionLength(1))))", value: $systemSpacing, in: 4...24, step: 0.5)
+                Section("记谱") {
+                    Stepper("谱表尺寸 \(staffSize.formatted(.number.precision(.fractionLength(2)))) 毫米", value: $staffSize, in: 1.2...2.4, step: 0.05)
+                    Stepper("谱表间距 \(staffSpacing.formatted(.number.precision(.fractionLength(1))))", value: $staffSpacing, in: 3...16, step: 0.5)
+                    Stepper("谱系间距 \(systemSpacing.formatted(.number.precision(.fractionLength(1))))", value: $systemSpacing, in: 4...24, step: 0.5)
                 }
             }
-            .navigationTitle("Page Settings")
+            .navigationTitle("页面设置")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .cancellationAction) { Button("Cancel") { dismiss() } }
+                ToolbarItem(placement: .cancellationAction) { Button("取消") { dismiss() } }
                 ToolbarItem(placement: .bottomBar) {
-                    Button("Reset to Defaults") {
+                    Button("恢复默认") {
                         applySettingsValue(.a4)
                     }
                     .disabled(isBusy)
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Apply") {
+                    Button("应用") {
                         commitAction(settingsValue)
                         dismiss()
                     }
@@ -1481,11 +1481,11 @@ struct ScoreReaderInstrumentLayoutSheet: View {
                 .background(Color(.systemGroupedBackground).ignoresSafeArea())
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             }
-            .navigationTitle("Instrument Layout")
+            .navigationTitle("乐器与谱表")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Done") { dismiss() }
+                    Button("完成") { dismiss() }
                 }
             }
         }
@@ -1496,14 +1496,14 @@ struct ScoreReaderInstrumentLayoutSheet: View {
             Color.clear
                 .frame(width: metrics.dragHandleWidth)
 
-            Text("Instrument")
+            Text("乐器")
                 .font(metrics.headerFont)
                 .foregroundStyle(.secondary)
                 .lineLimit(1)
 
             Spacer(minLength: 8)
 
-            Text("Visibility")
+            Text("显示")
                 .font(metrics.headerFont)
                 .foregroundStyle(.secondary)
                 .lineLimit(1)

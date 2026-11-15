@@ -33,30 +33,30 @@ enum ScoreReaderExportFormat: String, CaseIterable, Identifiable {
         case .midi:
             return "MIDI"
         case .audio:
-            return "Audio"
+            return "音频"
         case .images:
-            return "Images"
+            return "图片"
         case .video:
-            return "Video"
+            return "视频"
         }
     }
 
     var subtitle: String {
         switch self {
         case .museScore:
-            return "Native MuseScore file"
+            return "MuseScore 原生文件"
         case .pdf:
-            return "Best for sharing & printing"
+            return "适合分享与打印"
         case .musicXML:
             return ".musicxml or .xml"
         case .midi:
-            return ".mid for playback / DAW"
+            return "用于播放或音频工作站的 .mid 文件"
         case .audio:
             return ".wav"
         case .images:
-            return "PNG pages"
+            return "PNG 页面图片"
         case .video:
-            return "Scrolling score or piano"
+            return "滚动乐谱或钢琴画面"
         }
     }
 
@@ -157,15 +157,15 @@ enum ScoreReaderExportError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .unsupportedFormat(let format):
-            return "\(format) export is not available in the current render bridge."
+            return "当前核心暂不支持导出 \(format)。"
         case .noContentSelected:
-            return "Choose at least one export target."
+            return "请至少选择一个导出对象。"
         case .noPages:
-            return "There are no rendered pages to export."
+            return "没有可导出的谱面。"
         case .noAudio:
-            return "There is no playback audio to export."
+            return "没有可导出的播放音频。"
         case .imageEncodingFailed:
-            return "Aria could not encode one of the score pages."
+            return "某个乐谱页面无法编码为图片。"
         }
     }
 }
@@ -188,19 +188,19 @@ struct ScoreVideoBackgroundPhoto: Identifiable, Sendable {
     let name: String
 
     static let all: [ScoreVideoBackgroundPhoto] = [
-        ScoreVideoBackgroundPhoto(id: "mount-fuji", name: "Mount Fuji"),
-        ScoreVideoBackgroundPhoto(id: "grand-canyon", name: "Grand Canyon"),
-        ScoreVideoBackgroundPhoto(id: "moonlit-fjord", name: "Moonlit fjord"),
-        ScoreVideoBackgroundPhoto(id: "spruce-forest", name: "Spruce forest"),
-        ScoreVideoBackgroundPhoto(id: "misty-mountains", name: "Misty mountains"),
-        ScoreVideoBackgroundPhoto(id: "northern-lights", name: "Northern lights"),
-        ScoreVideoBackgroundPhoto(id: "mountain-sunset", name: "Mountain sunset"),
-        ScoreVideoBackgroundPhoto(id: "snowy-peaks", name: "Snowy peaks"),
-        ScoreVideoBackgroundPhoto(id: "pink-bay", name: "Pink bay"),
-        ScoreVideoBackgroundPhoto(id: "beach-sunset", name: "Beach sunset"),
-        ScoreVideoBackgroundPhoto(id: "forest-river", name: "Forest river"),
-        ScoreVideoBackgroundPhoto(id: "beech-ferns", name: "Beech and ferns"),
-        ScoreVideoBackgroundPhoto(id: "blue-sky", name: "Blue sky")
+        ScoreVideoBackgroundPhoto(id: "mount-fuji", name: "富士山"),
+        ScoreVideoBackgroundPhoto(id: "grand-canyon", name: "大峡谷"),
+        ScoreVideoBackgroundPhoto(id: "moonlit-fjord", name: "月下峡湾"),
+        ScoreVideoBackgroundPhoto(id: "spruce-forest", name: "云杉林"),
+        ScoreVideoBackgroundPhoto(id: "misty-mountains", name: "雾中群山"),
+        ScoreVideoBackgroundPhoto(id: "northern-lights", name: "极光"),
+        ScoreVideoBackgroundPhoto(id: "mountain-sunset", name: "山间落日"),
+        ScoreVideoBackgroundPhoto(id: "snowy-peaks", name: "雪峰"),
+        ScoreVideoBackgroundPhoto(id: "pink-bay", name: "粉色海湾"),
+        ScoreVideoBackgroundPhoto(id: "beach-sunset", name: "海滩落日"),
+        ScoreVideoBackgroundPhoto(id: "forest-river", name: "林间河流"),
+        ScoreVideoBackgroundPhoto(id: "beech-ferns", name: "山毛榉与蕨类"),
+        ScoreVideoBackgroundPhoto(id: "blue-sky", name: "蓝天")
     ]
 
     var url: URL? {
@@ -256,15 +256,15 @@ enum SetlistShareError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .emptySetlist:
-            return "Add scores to this setlist before sharing it."
+            return "请先向曲目单添加乐谱，再进行分享。"
         case .unsupportedFormat(let format):
-            return "\(format) is not available for setlist sharing."
+            return "曲目单暂不支持以 \(format) 格式分享。"
         case .unavailableScore(let scoreTitle):
-            return "Aria could not open “\(scoreTitle)”. Open it once in the reader and try again."
+            return "无法打开“\(scoreTitle)”，请先打开此乐谱，再重试。"
         case .pdfMergeFailed:
-            return "Aria could not combine these scores into one PDF."
+            return "无法将这些乐谱合并为一个 PDF。"
         case .noSharableScores(let reason):
-            let summary = "Aria could not prepare any of the scores in this setlist."
+            let summary = "无法准备此曲目单中的乐谱。"
             guard let reason else {
                 return summary
             }

@@ -22,7 +22,7 @@ enum ScoreDocumentServiceError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .invalidFormat(let pathExtension):
-            return "The file extension \(pathExtension) is not supported yet."
+            return "暂不支持 \(pathExtension) 文件。"
         case .bridgeFailure(let message):
             return message
         }
@@ -152,7 +152,7 @@ struct ScoreMetadataParser {
                 ?? cleaned(captureFirstGroup(pattern: #"<trackName>\s*(.*?)\s*</trackName>"#, in: block))
                 ?? cleaned(captureFirstGroup(pattern: #"<longName>\s*(.*?)\s*</longName>"#, in: block))
                 ?? cleaned(captureFirstGroup(pattern: #"<shortName>\s*(.*?)\s*</shortName>"#, in: block))
-                ?? "Part \(index + 1)"
+                ?? "声部 \(index + 1)"
 
             return ScorePart(
                 id: "part-\(index)",
@@ -191,7 +191,7 @@ struct ScoreMetadataParser {
         return blocks.enumerated().map { index, block in
             let name = cleaned(captureFirstGroup(pattern: #"<part-name\b[^>]*>\s*(.*?)\s*</part-name>"#, in: block))
                 ?? cleaned(captureFirstGroup(pattern: #"<part-abbreviation\b[^>]*>\s*(.*?)\s*</part-abbreviation>"#, in: block))
-                ?? "Part \(index + 1)"
+                ?? "声部 \(index + 1)"
 
             return ScorePart(
                 id: "part-\(index)",

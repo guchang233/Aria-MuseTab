@@ -553,7 +553,7 @@ open class MSRRenderSession: NSObject, @unchecked Sendable {
 
     open func updateTimeSignature(numerator: Int, denominator: Int, commonTime: Bool, cutTime: Bool, fromStart: Bool) throws -> MSREditState {
         guard [1, 2, 4, 8, 16].contains(denominator) else {
-            throw bridgeError(.renderCoreFailure, "Time signature denominator must be one of 1, 2, 4, 8, or 16.")
+            throw bridgeError(.renderCoreFailure, "拍号分母须为 1、2、4、8 或 16。")
         }
         return try edit("The MuseScore render core could not update the time signature.") {
             $0.pointee.updateTimeSignature(Int32(numerator), Int32(denominator), commonTime, cutTime, fromStart, &$1, &$2)
@@ -871,12 +871,12 @@ open class MSRRenderSession: NSObject, @unchecked Sendable {
     open func save(to url: URL) throws {
         let session = try requireSession()
         guard url.isFileURL, !url.path.isEmpty else {
-            throw bridgeError(.renderCoreFailure, "Aria needs a local file URL to save this score.")
+            throw bridgeError(.renderCoreFailure, "保存乐谱需要本地文件地址。")
         }
         var message = std.string()
         guard session.pointee.saveToPath(std.string(url.path), &message) else {
             let text = makeString(message)
-            let description = text.isEmpty ? "The MuseScore render core could not save this score." : text
+            let description = text.isEmpty ? "MuseScore 核心无法保存此乐谱。" : text
             throw session.pointee.chordSymbolRemovalNeedsApproval()
                 ? bridgeError(.chordSymbolRemovalNeedsApproval, description)
                 : bridgeError(.renderCoreFailure, description)

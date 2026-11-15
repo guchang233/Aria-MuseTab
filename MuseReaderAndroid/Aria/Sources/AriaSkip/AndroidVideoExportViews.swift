@@ -86,7 +86,7 @@ struct ScoreReaderVideoPlayerView: View {
                     .background(Color.black.opacity(0.55), in: Circle())
             }
             .buttonStyle(.plain)
-            .accessibilityLabel("Play video")
+            .accessibilityLabel("播放视频")
             .disabled(currentURL == nil)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)

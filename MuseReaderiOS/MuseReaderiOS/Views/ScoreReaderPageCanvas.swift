@@ -918,7 +918,7 @@ struct ScoreReaderSelectedSignatureActions: View {
     var body: some View {
         GeometryReader { geometry in
             Button(action: editAction) {
-                Label("Edit", systemImage: "pencil")
+                Label("编辑", systemImage: "pencil")
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(.white)
                     .padding(.horizontal, 10)
@@ -972,11 +972,11 @@ struct ScoreReaderSelectedTextActions: View {
             HStack(spacing: 8) {
                 HStack(spacing: 6) {
                     Button(action: editAction) {
-                        Label("Edit", systemImage: "pencil")
+                        Label("编辑", systemImage: "pencil")
                     }
 
                     Button(action: deleteAction) {
-                        Label("Remove", systemImage: "trash")
+                        Label("移除", systemImage: "trash")
                     }
                 }
                 .font(.caption.weight(.semibold))
@@ -1063,9 +1063,9 @@ struct ScoreReaderSelectedDynamicActions: View {
     @ViewBuilder
     private var actionLabel: some View {
         if selectedElement.kind == .layoutBreak {
-            Text("Remove")
+            Text("移除")
         } else {
-            Label("Remove", systemImage: "trash")
+            Label("移除", systemImage: "trash")
         }
     }
 
@@ -1124,7 +1124,7 @@ struct ScoreReaderPlayFromHereOverlay: View {
 
                 HStack(spacing: 6) {
                     Button(action: playAction) {
-                        Label("Play from here", systemImage: "play.fill")
+                        Label("从这里播放", systemImage: "play.fill")
                             .font(.caption.weight(.semibold))
                             .foregroundStyle(.white)
                             .padding(.horizontal, 11)
@@ -1134,7 +1134,7 @@ struct ScoreReaderPlayFromHereOverlay: View {
                     .buttonStyle(.plain)
 
                     Button(action: loopAction) {
-                        Label("Loop measure", systemImage: "repeat")
+                        Label("循环此小节", systemImage: "repeat")
                             .font(.caption.weight(.semibold))
                             .foregroundStyle(Self.accent)
                             .padding(.horizontal, 11)
@@ -1220,7 +1220,7 @@ struct ScoreReaderPlaybackLoopOverlay: View {
                     HStack(spacing: 6) {
                         Button(action: toggleAction) {
                             Label(
-                                isActive ? (tempoRampStatus.map { "End ramp · \($0)" } ?? "End loop") : "Loop range",
+                                isActive ? (tempoRampStatus.map { "结束速度渐变 · \($0)" } ?? "结束循环") : "循环范围",
                                 systemImage: isActive ? "repeat.circle.fill" : "repeat"
                             )
                             .font(.caption.weight(.semibold))
@@ -1230,11 +1230,11 @@ struct ScoreReaderPlaybackLoopOverlay: View {
                             .background(Self.accent, in: Capsule())
                         }
                         .buttonStyle(.plain)
-                        .accessibilityValue("\(range.measureCount) \(range.measureCount == 1 ? "measure" : "measures")")
+                        .accessibilityValue("\(range.measureCount) \(range.measureCount == 1 ? "小节" : "小节")")
 
                         if !isActive {
                             Button(action: tempoRampAction) {
-                                Label("Tempo ramp", systemImage: Self.tempoRampSymbol)
+                                Label("渐变速度", systemImage: Self.tempoRampSymbol)
                                     .font(.caption.weight(.semibold))
                                     .foregroundStyle(Self.accent)
                                     .padding(.horizontal, 12)
@@ -1242,7 +1242,7 @@ struct ScoreReaderPlaybackLoopOverlay: View {
                                     .background(.regularMaterial, in: Capsule())
                             }
                             .buttonStyle(.plain)
-                            .accessibilityLabel("Tempo ramp on the selected measures")
+                            .accessibilityLabel("对选中小节设置渐变速度")
                         }
                     }
                     .shadow(color: Color.black.opacity(0.18), radius: 8, y: 3)
@@ -1571,7 +1571,7 @@ struct ScoreReaderSelectionCommandOverlay: View {
                         .frame(width: 34, height: 34)
                         .background(Color(red: 0.12, green: 0.36, blue: 0.88), in: Circle())
                         .shadow(color: Color.black.opacity(0.16), radius: 8, y: 3)
-                        .accessibilityLabel(isInstrumentSelection ? "Instrument options" : (isBarLineSelection ? "Bar line options" : (isNoteRestSelection || isTextSelection ? "Selection options" : "Measure options")))
+                        .accessibilityLabel(isInstrumentSelection ? "乐器选项" : (isBarLineSelection ? "小节线选项" : (isNoteRestSelection || isTextSelection ? "选区选项" : "小节选项")))
                 }
                 .buttonStyle(.plain)
                 #if os(Android)
@@ -1591,7 +1591,7 @@ struct ScoreReaderSelectionCommandOverlay: View {
         if isInstrumentSelection {
             VStack(spacing: 0) {
                 ScoreReaderMeasureCommandRow(
-                    title: "Change Instrument",
+                    title: "更换乐器",
                     systemImage: "music.note.list",
                     action: perform(changeInstrumentAction)
                 )
@@ -1850,28 +1850,28 @@ struct ScoreReaderNoteRestCommandMenu: View {
     var body: some View {
         VStack(spacing: 0) {
             ScoreReaderMeasureCommandRow(
-                title: "Copy",
+                title: "复制",
                 systemImage: "doc.on.doc",
                 shortcut: "⌘C",
                 action: copyAction
             )
 
             ScoreReaderMeasureCommandRow(
-                title: "Cut",
+                title: "剪切",
                 systemImage: "scissors",
                 shortcut: "⌘X",
                 action: cutAction
             )
 
             ScoreReaderMeasureCommandRow(
-                title: "Paste",
+                title: "粘贴",
                 systemImage: "doc.on.clipboard",
                 shortcut: "⌘V",
                 action: pasteAction
             )
 
             ScoreReaderMeasureCommandRow(
-                title: "Transpose",
+                title: "移调",
                 systemImage: "arrow.up.arrow.down",
                 action: transposeAction
             )
@@ -1883,7 +1883,7 @@ struct ScoreReaderNoteRestCommandMenu: View {
 
             if showsEnharmonicAction {
                 ScoreReaderMeasureCommandRow(
-                    title: "Respell",
+                    title: "更改等音拼写",
                     symbolText: "#♭",
                     action: changeEnharmonicAction
                 )
@@ -1893,7 +1893,7 @@ struct ScoreReaderNoteRestCommandMenu: View {
             // command and only appears for notes and chords.
             if isNoteSelection {
                 ScoreReaderMeasureCommandRow(
-                    title: "Flip Stem",
+                    title: "翻转符干",
                     systemImage: "music.note",
                     action: flipStemAction
                 )
@@ -1917,7 +1917,7 @@ struct ScoreReaderNoteRestCommandMenu: View {
             }
 
             ScoreReaderMeasureCommandRow(
-                title: "Delete",
+                title: "删除",
                 systemImage: "trash",
                 role: .destructive,
                 action: deleteAction
@@ -1940,11 +1940,11 @@ struct ScoreReaderExtendSelectionBanner: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            Text("Extend selection: tap the last bar")
+            Text("扩展选区：点击结束小节")
                 .font(.system(size: 14, weight: .semibold))
                 .foregroundStyle(.white)
 
-            Button("Cancel", action: cancelAction)
+            Button("取消", action: cancelAction)
                 .font(.system(size: 14, weight: .semibold))
                 .foregroundStyle(.white.opacity(0.85))
                 .buttonStyle(.plain)
@@ -1964,7 +1964,7 @@ struct ScoreReaderSelectSimilarRows: View {
     var body: some View {
         VStack(spacing: 0) {
             ScoreReaderMeasureCommandRow(
-                title: "Select Similar",
+                title: "选择同类元素",
                 systemImage: "lasso",
                 trailingSystemImage: isExpanded ? "chevron.up" : "chevron.down",
                 action: {
@@ -1977,13 +1977,13 @@ struct ScoreReaderSelectSimilarRows: View {
             if isExpanded {
                 VStack(spacing: 0) {
                     ScoreReaderMeasureCommandRow(
-                        title: "Whole Score",
+                        title: "整首乐谱",
                         leadingIndent: 30,
                         action: { selectSimilarAction(false) }
                     )
 
                     ScoreReaderMeasureCommandRow(
-                        title: "This Staff",
+                        title: "当前谱表",
                         leadingIndent: 30,
                         action: { selectSimilarAction(true) }
                     )
@@ -2009,7 +2009,7 @@ struct ScoreReaderTextCommandMenu: View {
             )
 
             ScoreReaderMeasureCommandRow(
-                title: "Copy",
+                title: "复制",
                 systemImage: "doc.on.doc",
                 shortcut: "⌘C",
                 action: copyAction
@@ -2018,7 +2018,7 @@ struct ScoreReaderTextCommandMenu: View {
             ScoreReaderMeasureCommandDivider()
 
             ScoreReaderMeasureCommandRow(
-                title: "Delete",
+                title: "删除",
                 systemImage: "trash",
                 role: .destructive,
                 action: deleteAction
@@ -2047,14 +2047,14 @@ struct ScoreReaderBarLineCommandMenu: View {
     }
 
     static let barLineTypes = [
-        BarLineType(kind: "Normal barline", title: "Single", musicGlyph: "\u{E030}"),
-        BarLineType(kind: "Double barline", title: "Double", musicGlyph: "\u{E031}"),
-        BarLineType(kind: "Final barline", title: "Final", musicGlyph: "\u{E032}"),
-        BarLineType(kind: "Reverse final barline", title: "Reverse Final", musicGlyph: "\u{E033}"),
-        BarLineType(kind: "Heavy barline", title: "Heavy", musicGlyph: "\u{E034}"),
-        BarLineType(kind: "Heavy double barline", title: "Heavy Double", musicGlyph: "\u{E035}"),
-        BarLineType(kind: "Dashed barline", title: "Dashed", musicGlyph: "\u{E036}"),
-        BarLineType(kind: "Dotted barline", title: "Dotted", musicGlyph: "\u{E037}")
+        BarLineType(kind: "Normal barline", title: "单线", musicGlyph: "\u{E030}"),
+        BarLineType(kind: "Double barline", title: "双线", musicGlyph: "\u{E031}"),
+        BarLineType(kind: "Final barline", title: "终止线", musicGlyph: "\u{E032}"),
+        BarLineType(kind: "Reverse final barline", title: "反向终止线", musicGlyph: "\u{E033}"),
+        BarLineType(kind: "Heavy barline", title: "粗线", musicGlyph: "\u{E034}"),
+        BarLineType(kind: "Heavy double barline", title: "粗双线", musicGlyph: "\u{E035}"),
+        BarLineType(kind: "Dashed barline", title: "虚线", musicGlyph: "\u{E036}"),
+        BarLineType(kind: "Dotted barline", title: "点线", musicGlyph: "\u{E037}")
     ]
 
     let barLineAction: (String) -> Void
@@ -2174,28 +2174,28 @@ struct ScoreReaderMeasureCommandMenu: View {
     var body: some View {
         VStack(spacing: 0) {
             ScoreReaderMeasureCommandRow(
-                title: "Copy",
+                title: "复制",
                 systemImage: "doc.on.doc",
                 shortcut: "⌘C",
                 action: copyAction
             )
 
             ScoreReaderMeasureCommandRow(
-                title: "Cut",
+                title: "剪切",
                 systemImage: "scissors",
                 shortcut: "⌘X",
                 action: cutAction
             )
 
             ScoreReaderMeasureCommandRow(
-                title: "Paste",
+                title: "粘贴",
                 systemImage: "doc.on.clipboard",
                 shortcut: "⌘V",
                 action: pasteAction
             )
 
             ScoreReaderMeasureCommandRow(
-                title: "Extend Selection...",
+                title: "扩展选区…",
                 systemImage: "arrow.right",
                 action: extendSelectionAction
             )
@@ -2203,20 +2203,20 @@ struct ScoreReaderMeasureCommandMenu: View {
             ScoreReaderMeasureCommandDivider()
 
             ScoreReaderMeasureCommandRow(
-                title: "Add Measure",
+                title: "添加小节",
                 systemImage: "pause",
                 action: addMeasureAction
             )
 
             ScoreReaderMeasureCommandRow(
-                title: "Add Multiple Measures...",
+                title: "添加多个小节…",
                 systemImage: "rectangle.grid.1x2",
                 action: addMultipleMeasuresAction
             )
 
             if isFirstMeasure {
                 ScoreReaderMeasureCommandRow(
-                    title: isPickupMeasure ? "Edit Pickup Measure..." : "Convert to Pickup Measure",
+                    title: isPickupMeasure ? "编辑弱起小节…" : "转换为弱起小节",
                     systemImage: "forward.end",
                     action: pickupMeasureAction
                 )
@@ -2225,26 +2225,26 @@ struct ScoreReaderMeasureCommandMenu: View {
             ScoreReaderMeasureCommandDivider()
 
             ScoreReaderMeasureCommandRow(
-                title: "Transpose",
+                title: "移调",
                 systemImage: "arrow.up.arrow.down",
                 action: transposeAction
             )
 
             if showsSingleMeasureCommands {
                 ScoreReaderMeasureCommandRow(
-                    title: "Key Signature",
+                    title: "调号",
                     symbolText: "#♭",
                     action: keySignatureAction
                 )
 
                 ScoreReaderMeasureCommandRow(
-                    title: "Time Signature",
+                    title: "拍号",
                     symbolText: "4\n4",
                     action: timeSignatureAction
                 )
 
                 ScoreReaderMeasureCommandRow(
-                    title: "Change Instrument",
+                    title: "更换乐器",
                     systemImage: "music.note.list",
                     action: changeInstrumentAction
                 )
@@ -2252,7 +2252,7 @@ struct ScoreReaderMeasureCommandMenu: View {
             }
 
             ScoreReaderMeasureCommandRow(
-                title: "Tempo",
+                title: "速度",
                 systemImage: "music.note",
                 action: tempoAction
             )
@@ -2260,14 +2260,14 @@ struct ScoreReaderMeasureCommandMenu: View {
             ScoreReaderMeasureCommandDivider()
 
             ScoreReaderMeasureCommandRow(
-                title: "Delete Measure",
+                title: "删除小节",
                 systemImage: "trash",
                 role: .destructive,
                 action: removeAction
             )
 
             ScoreReaderMeasureCommandRow(
-                title: "Clear Measure",
+                title: "清空小节",
                 systemImage: "eraser",
                 action: clearAction
             )
@@ -2413,7 +2413,7 @@ struct ScoreReaderTransposePanel: View {
             }
 
             VStack(alignment: .leading, spacing: 9) {
-                Text("Direction")
+                Text("方向")
                     .font(.system(size: 12, weight: .medium))
                     .foregroundStyle(Color.black.opacity(0.48))
 
@@ -2422,7 +2422,7 @@ struct ScoreReaderTransposePanel: View {
 
             HStack(spacing: 16) {
                 Button(action: cancelAction) {
-                    Text("Cancel")
+                    Text("取消")
                         .frame(maxWidth: .infinity)
                 }
                 .buttonStyle(ScoreReaderTransposePanelButtonStyle(kind: .secondary))
@@ -2430,7 +2430,7 @@ struct ScoreReaderTransposePanel: View {
                 Button {
                     applyAction(request)
                 } label: {
-                    Text("Apply")
+                    Text("应用")
                         .frame(maxWidth: .infinity)
                 }
                 .buttonStyle(ScoreReaderTransposePanelButtonStyle(kind: .primary))
@@ -2653,7 +2653,7 @@ struct ScoreReaderPagePlaceholder: View {
                 .font(.system(size: 42, weight: .light))
                 .foregroundStyle(Color.black.opacity(0.65))
 
-            Text("Page \(pageIndex + 1)")
+            Text("第 \(pageIndex + 1) 页")
                 .font(.title3.weight(.bold))
                 .foregroundStyle(.black)
 
@@ -2790,7 +2790,7 @@ struct ScoreReaderUnavailableView: View {
                 .font(.system(size: 44, weight: .light))
                 .foregroundStyle(.white.opacity(0.82))
 
-            Text("Full-screen reader is not available for this score yet.")
+            Text("此乐谱暂不支持全屏看谱。")
                 .font(.title3.weight(.bold))
                 .foregroundStyle(.white)
 

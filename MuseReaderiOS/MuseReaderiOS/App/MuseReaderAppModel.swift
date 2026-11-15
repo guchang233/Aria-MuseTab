@@ -31,9 +31,9 @@ private enum LibraryAdmissionError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .unlockPresentationHandled:
-            return "Unlock Aria Pro to add another score."
+            return "解锁 Aria Pro 以添加更多乐谱。"
         case .missingReservation:
-            return "Aria could not reserve room for this score. Please try again."
+            return "无法为此乐谱预留空间，请重试。"
         }
     }
 }
@@ -44,9 +44,9 @@ struct ScoreImportProgress: Equatable {
 
     var message: String {
         guard totalCount > 1 else {
-            return "Importing score…"
+            return "正在导入乐谱…"
         }
-        return "Importing score \(itemNumber) of \(totalCount)…"
+        return "正在导入第 \(itemNumber)/\(totalCount) 份乐谱…"
     }
 }
 
@@ -64,14 +64,14 @@ struct ScoreImportBatchOutcome {
         let title: String
         let summary: String
         if failures.isEmpty {
-            title = "Import Complete"
-            summary = "\(importedCount) scores were imported into your library."
+            title = "导入完成"
+            summary = "已向本地曲库导入 \(importedCount) 份乐谱。"
         } else if importedCount == 0 {
-            title = "Import Failed"
-            summary = "None of the \(totalCount) selected scores could be imported."
+            title = "导入失败"
+            summary = "所选 \(totalCount) 份乐谱均未能导入。"
         } else {
-            title = "Import Partially Complete"
-            summary = "\(importedCount) of \(totalCount) scores were imported into your library."
+            title = "部分导入完成"
+            summary = "已向本地曲库导入 \(importedCount)/\(totalCount) 份乐谱。"
         }
 
         guard !failures.isEmpty else {
@@ -83,7 +83,7 @@ struct ScoreImportBatchOutcome {
         let hiddenFailureMessage = hiddenFailureCount > 0 ? "\n…and \(hiddenFailureCount) more." : ""
         return ReaderAlert(
             title: title,
-            message: summary + "\n\nCouldn’t import:\n" + visibleFailures.joined(separator: "\n") + hiddenFailureMessage
+            message: summary + "\n\n以下文件导入失败：\n" + visibleFailures.joined(separator: "\n") + hiddenFailureMessage
         )
     }
 }
@@ -212,6 +212,29 @@ final class MuseReaderAppModel {
 
     func startImport() {
         isImportingPresented = true
+    }
+
+    func addDownloadedScore(_ url: URL) async throws {
+        _ = try await importDocument(at: url, setsCurrentSession: false)
+        await refreshVisibleLibrary()
+    }
+
+    /// Recognition never modifies the original PDF. Save real 4.70 MSCZ through Aria's core.
+    func addConvertedScores(_ urls: [URL]) async throws -> [URL] {
+        var stored: [URL] = []
+        for url in urls {
+            try Task.checkCancellation()
+            let source = try await sessionService.openSession(at: url)
+            guard let live = source.liveRenderSession else {
+                throw CloudScoreError.message("MuseScore 未能打开转换结果，请检查 MusicXML")
+            }
+            let mscz = url.deletingPathExtension().appendingPathExtension("mscz")
+            try await live.save(to: mscz)
+            let session = try await importDocument(at: mscz, setsCurrentSession: false)
+            stored.append(session.document.url)
+        }
+        await refreshVisibleLibrary()
+        return stored
     }
 
     func startCreateScore() {
@@ -372,7 +395,7 @@ final class MuseReaderAppModel {
                 await prepareImportCandidates(for: [url])
             }
         case .failure(let error):
-            presentError(title: "Import Failed", error: error)
+            presentError(title: "导入失败", error: error)
         }
     }
 
@@ -380,7 +403,7 @@ final class MuseReaderAppModel {
         switch result {
         case .success(let urls):
             guard !urls.isEmpty else {
-                presentError(title: "Import Failed", message: "The Files picker did not return a score.")
+                presentError(title: "导入失败", message: "未选择乐谱文件。")
                 return
             }
 
@@ -396,8 +419,8 @@ final class MuseReaderAppModel {
         // Android offers Aria for zip and octet-stream files, which need not be scores.
         guard Self.isSupportedScoreURL(url) else {
             presentError(
-                title: "Unsupported File",
-                message: "Open a MuseScore or MusicXML score (.mscz, .mscx, .mxl, .musicxml, or .xml)."
+                title: "不支持的文件",
+                message: "请打开 MuseScore 或 MusicXML 乐谱（.mscz、.mscx、.mxl、.musicxml 或 .xml）。"
             )
             return
         }
@@ -426,8 +449,8 @@ final class MuseReaderAppModel {
         let compatibleURLs = urls.filter(Self.isSupportedScoreURL)
         guard !compatibleURLs.isEmpty else {
             presentError(
-                title: "Unsupported File",
-                message: "Drop a MuseScore or MusicXML score (.mscz, .mscx, .mxl, .musicxml, or .xml)."
+                title: "不支持的文件",
+                message: "请拖入 MuseScore 或 MusicXML 乐谱（.mscz、.mscx、.mxl、.musicxml 或 .xml）。"
             )
             return false
         }
@@ -467,7 +490,7 @@ final class MuseReaderAppModel {
         } catch LibraryAdmissionError.unlockPresentationHandled {
             return nil
         } catch {
-            presentError(title: "Could Not Open Score", error: error)
+            presentError(title: "无法打开乐谱", error: error)
             return nil
         }
     }
@@ -567,7 +590,7 @@ final class MuseReaderAppModel {
                 createdLibraryRelativePaths.removeAll { $0 == managedDocument.relativeMainFilePath }
                 session = try await sessionService.openSession(at: packagedDocument.canonicalURL)
             } else {
-                throw ScoreDocumentServiceError.bridgeFailure("Aria could not package this score as .mscz because live editing is unavailable.")
+                throw ScoreDocumentServiceError.bridgeFailure("此乐谱暂不可编辑，无法保存为 MSCZ。")
             }
 
             currentSession = session
@@ -589,7 +612,7 @@ final class MuseReaderAppModel {
             synchronizeManagedScoreCount()
             releaseCreateScoreReservation()
             errorAlert = nil
-            presentError(title: "Could Not Create Score", error: error)
+            presentError(title: "无法创建乐谱", error: error)
             return nil
         }
     }
@@ -637,7 +660,7 @@ final class MuseReaderAppModel {
             synchronizeManagedScoreCount()
             Task { await refreshVisibleLibrary() }
         } catch {
-            presentError(title: "Could Not Duplicate Score", error: error)
+            presentError(title: "无法复制乐谱", error: error)
         }
     }
 
@@ -652,7 +675,7 @@ final class MuseReaderAppModel {
             removeRecentRecord(for: recent)
             synchronizeManagedScoreCount()
         } catch {
-            presentError(title: "Could Not Delete Score", error: error)
+            presentError(title: "无法删除乐谱", error: error)
         }
     }
 
@@ -735,7 +758,7 @@ final class MuseReaderAppModel {
                 self.currentSession = nil
             }
         } catch {
-            presentError(title: "Could Not Refresh Library", error: error)
+            presentError(title: "无法刷新曲库", error: error)
         }
     }
 
@@ -793,7 +816,7 @@ final class MuseReaderAppModel {
                     recoverySession.capabilities.supportsEditing,
                     let liveRenderSession = recoverySession.liveRenderSession
                 else {
-                    throw ScoreDocumentServiceError.bridgeFailure("The recovery score could not be validated by the MuseScore engine.")
+                    throw ScoreDocumentServiceError.bridgeFailure("MuseScore 核心未能验证恢复的乐谱。")
                 }
 
                 try await saveSession(liveRenderSession, to: sourceURL, clearsRecoverySnapshot: false)
@@ -803,7 +826,7 @@ final class MuseReaderAppModel {
                     validatedSession.capabilities.supportsEditing,
                     validatedSession.liveRenderSession != nil
                 else {
-                    throw ScoreDocumentServiceError.bridgeFailure("The recovered score could not be reopened safely.")
+                    throw ScoreDocumentServiceError.bridgeFailure("恢复的乐谱无法安全地重新打开。")
                 }
 
                 try recoveryStore.removeSnapshot(pendingSnapshot)
@@ -816,7 +839,7 @@ final class MuseReaderAppModel {
 
     func saveMetadata(_ metadata: ScoreEditableMetadata, for session: ScoreSession) async throws {
         guard let liveRenderSession = session.liveRenderSession, session.capabilities.supportsEditing else {
-            throw ScoreDocumentServiceError.bridgeFailure("This score is not editable yet.")
+            throw ScoreDocumentServiceError.bridgeFailure("此乐谱暂不支持编辑。")
         }
 
         isLoading = true
@@ -986,7 +1009,7 @@ final class MuseReaderAppModel {
                 await beginImportingCandidates(candidates)
             }
         } catch {
-            presentError(title: "Import Failed", error: error)
+            presentError(title: "导入失败", error: error)
         }
     }
 
@@ -1066,7 +1089,7 @@ final class MuseReaderAppModel {
         if let singleImportedSession, failures.isEmpty {
             pendingImportedSession = singleImportedSession
         } else if candidates.count == 1, let failure = failures.first {
-            presentError(title: "Import Failed", message: failure.message)
+            presentError(title: "导入失败", message: failure.message)
         } else {
             errorAlert = ScoreImportBatchOutcome(
                 totalCount: candidates.count,
@@ -1160,7 +1183,7 @@ final class MuseReaderAppModel {
         guard sourceSession.capabilities.supportsEditing,
               let liveRenderSession = sourceSession.liveRenderSession
         else {
-            throw ScoreDocumentServiceError.bridgeFailure("Aria could not convert this replacement into an editable MuseScore document.")
+            throw ScoreDocumentServiceError.bridgeFailure("无法将替换文件转换为可编辑的 MuseScore 乐谱。")
         }
 
         let preferredName = stagedDocument.canonicalURL.deletingPathExtension().lastPathComponent
@@ -1174,7 +1197,7 @@ final class MuseReaderAppModel {
               packagedSession.capabilities.supportsEditing,
               packagedSession.liveRenderSession != nil
         else {
-            throw ScoreDocumentServiceError.bridgeFailure("Aria converted the replacement but could not reopen it safely.")
+            throw ScoreDocumentServiceError.bridgeFailure("替换文件已转换，但无法安全地重新打开。")
         }
         return packagedDocument
     }
@@ -1373,7 +1396,7 @@ final class MuseReaderAppModel {
             throw NSError(
                 domain: "Aria",
                 code: 404,
-                userInfo: [NSLocalizedDescriptionKey: "Aria could not restore this score. Import it again from Files."]
+                userInfo: [NSLocalizedDescriptionKey: "无法恢复此乐谱，请从本地文件重新导入。"]
             )
         }
 
@@ -1474,7 +1497,7 @@ final class MuseReaderAppModel {
             sourceSession.capabilities.supportsEditing,
             let liveRenderSession = sourceSession.liveRenderSession
         else {
-            throw ScoreDocumentServiceError.bridgeFailure("Aria imported this score but could not convert it into an editable MuseScore document.")
+            throw ScoreDocumentServiceError.bridgeFailure("乐谱已导入，但无法转换为可编辑的 MuseScore 文件。")
         }
 
         let preferredName = sourceDocument.canonicalURL.deletingPathExtension().lastPathComponent
@@ -1489,7 +1512,7 @@ final class MuseReaderAppModel {
                 packagedSession.capabilities.supportsEditing,
                 packagedSession.liveRenderSession != nil
             else {
-                throw ScoreDocumentServiceError.bridgeFailure("Aria created the converted score but could not reopen it safely.")
+                throw ScoreDocumentServiceError.bridgeFailure("已生成转换结果，但无法安全地重新打开。")
             }
             // An import with problems (irregular bars from another program) opens anyway, like
             // desktop; the imported file is kept in Aria Backups so it can be imported again.

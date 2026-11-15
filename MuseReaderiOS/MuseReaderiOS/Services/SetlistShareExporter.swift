@@ -301,7 +301,7 @@ enum SetlistShareExporter {
         for score: ReaderRecentDocument,
         usedBaseNames: inout Set<String>
     ) -> String {
-        let title = sanitizedName(score.primaryTitle, fallback: "Aria Score")
+        let title = sanitizedName(score.primaryTitle, fallback: "Aria 乐谱")
         var candidate = title
         var duplicateNumber = 2
 

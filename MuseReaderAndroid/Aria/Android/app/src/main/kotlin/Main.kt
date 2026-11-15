@@ -39,6 +39,8 @@ open class AndroidAppMain: Application {
 
     override fun onCreate() {
         super.onCreate()
+        // The offline recognizer owns a separate heap and must not initialize Swift/Qt/audio.
+        if (Application.getProcessName().endsWith(":omr")) return
         // Aria: Android 13 and later point TMPDIR at the app's cache folder; 12 and earlier
         // leave it unset, and FileManager.temporaryDirectory then falls back to /tmp, which
         // apps can't write, so every export failed (hdi200/aria#7). Set it the way 13 does,

@@ -33,9 +33,9 @@ enum ScoreReaderReadingStyle: String, CaseIterable, Codable {
     var title: String {
         switch self {
         case .pageTurn:
-            return "Page Turn"
+            return "翻页"
         case .continuousScroll:
-            return "Continuous Scroll"
+            return "连续滚动"
         }
     }
 
