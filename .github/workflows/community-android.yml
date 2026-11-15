@@ -45,6 +45,14 @@ jobs:
           sdkmanager "platforms;android-36" "build-tools;36.0.0" "ndk;27.2.12479018"
           skip android sdk install --version 6.4.1
           echo "ARIA_BUILD_PYTHON=$(command -v python)" >> "$GITHUB_ENV"
+      - name: Select Swift for Xcode and Skip
+        run: |
+          aria_toolchain="$(swiftly use --print-location)"
+          aria_toolchain_id="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$aria_toolchain/Info.plist")"
+          export TOOLCHAINS="$aria_toolchain_id"
+          echo "TOOLCHAINS=$TOOLCHAINS" >> "$GITHUB_ENV"
+          xcrun swift --version | tee .local/swift-version.txt
+          grep -q '6.4.1' .local/swift-version.txt
       - name: Qt host tools
         id: qt-host
         uses: jurplel/install-qt-action@v4

@@ -89,7 +89,9 @@ def center_image_on_canvas(
 ) -> NDArray:
     is_grayscale = image.ndim == 2 or (image.ndim == 3 and image.shape[2] == 1)
 
-    resized = cv2.resize(image, canvas_size)  # type: ignore
+    # Android's OpenCV 4.5 binding requires a tuple of Python ints here.
+    # Passing the NumPy size array raises SystemError during argument parsing.
+    resized = cv2.resize(image, tuple(int(value) for value in canvas_size))
 
     if is_grayscale:
         new_image = np.full(

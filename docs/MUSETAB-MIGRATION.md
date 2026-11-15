@@ -20,6 +20,7 @@
   包含 Python 3.10、OpenCV、NumPy、Java/Kotlin 推理类和三个离线模型。
   这项检查不包含 Swift/Skip 主界面，AAR 也不是可安装的 APK。
 - Swift 源码语法树与上游基线比较，没有新增解析错误。这不等同于 Swift 类型检查或整包编译。
+- MuseScore 原生核心与 Android 引擎已在 macOS runner 完成编译并缓存；整包构建还需验证 Skip 的 Swift 工具链选择及共享界面。
 
 ## 尚未完成的验收
 

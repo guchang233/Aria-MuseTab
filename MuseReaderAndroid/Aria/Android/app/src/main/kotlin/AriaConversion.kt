@@ -107,6 +107,7 @@ class AriaConversionService : Service() {
         executor.execute {
             try { convert(File(source), pages, job) }
             catch (error: Throwable) {
+                android.util.Log.e("AriaOMR", "Offline conversion failed", error)
                 status(job, if (File(job, "cancel").exists()) "cancelled" else "error",
                     if (File(job, "cancel").exists()) "识别已取消" else "转换失败：${error.message ?: "内存不足或识别核心异常"}")
             } finally {
