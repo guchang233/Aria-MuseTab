@@ -8,13 +8,13 @@ import PDFKit
 #endif
 
 struct OriginalPDFView: View {
-    @Environment(\.dismiss) private var dismiss
+    @Environment(\.dismiss) var dismiss
     let url: URL
-    @State private var page = 0
-    @State private var count = 0
-    @State private var image: UIImage?
-    @State private var error = ""
-    @State private var loading = false
+    @State var page = 0
+    @State var count = 0
+    @State var image: UIImage?
+    @State var error = ""
+    @State var loading = false
     var body: some View {
         NavigationStack {
             VStack(spacing: 12) {

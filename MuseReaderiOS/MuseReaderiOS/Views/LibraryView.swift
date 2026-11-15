@@ -14,10 +14,10 @@ struct LibraryView: View {
     private let accessController: LibraryAccessController
 
     @State var searchText = ""
-    @State private var cloudLibrary = CloudLibraryModel()
-    @State private var showsCloudLibrary = false
-    @State private var showsConversion = false
-    @State private var conversionSource: URL?
+    @State var cloudLibrary = CloudLibraryModel()
+    @State var showsCloudLibrary = false
+    @State var showsConversion = false
+    @State var conversionSource: URL?
     @State var selectedCategory: LibraryCategory = .allScores
     @State var readerPresentation: LibraryReaderPresentation?
     @State var pendingCreatedReaderPresentation: LibraryReaderPresentation?

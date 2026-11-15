@@ -2,11 +2,11 @@
 import SwiftUI
 
 struct CloudLibraryView: View {
-    @Environment(\.dismiss) private var dismiss
+    @Environment(\.dismiss) var dismiss
     @Bindable var cloud: CloudLibraryModel
     let addToLibrary: (URL) async throws -> Void
     let openLocal: (URL) -> Void
-    @State private var detail: CloudScore?
+    @State var detail: CloudScore?
     private var scrollPosition: Binding<AnyHashable?> {
         Binding(get: { cloud.scrollID.map(AnyHashable.init) }, set: { cloud.scrollID = $0?.base as? String })
     }

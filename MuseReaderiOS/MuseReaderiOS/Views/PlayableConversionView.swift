@@ -4,19 +4,19 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 struct PlayableConversionView: View {
-    @Environment(\.dismiss) private var dismiss
+    @Environment(\.dismiss) var dismiss
     let model: MuseReaderAppModel
     let initialSource: URL?
-    @State private var source: URL?
-    @State private var pageRange = "1"
-    @State private var picking = false
-    @State private var running = false
-    @State private var phase = ""
-    @State private var progress = 0.0
-    @State private var results: [URL] = []
-    @State private var task: Task<Void, Never>?
-    @State private var savedPDFs: [URL] = []
-    @State private var showsOriginal = false
+    @State var source: URL?
+    @State var pageRange = "1"
+    @State var picking = false
+    @State var running = false
+    @State var phase = ""
+    @State var progress = 0.0
+    @State var results: [URL] = []
+    @State var task: Task<Void, Never>?
+    @State var savedPDFs: [URL] = []
+    @State var showsOriginal = false
 
     var body: some View {
         NavigationStack {
