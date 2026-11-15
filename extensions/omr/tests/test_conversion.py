@@ -74,3 +74,29 @@ def test_ambiguous_pdf_parts_are_kept_separate(tmp_path):
     result = merge_pages(pages, output)
     assert result["outputs"] == [str(p) for p in pages]
     assert not output.exists()
+
+
+def test_recognition_progress_does_not_move_backwards_between_phases(tmp_path, monkeypatch):
+    import aria_omr_runtime as runtime
+    target = tmp_path / "status.json"
+    monkeypatch.setenv("ARIA_OMR_STATUS", str(target))
+    monkeypatch.setenv("ARIA_OMR_PAGE", "1")
+    monkeypatch.setenv("ARIA_OMR_TOTAL", "2")
+    monkeypatch.delenv("ARIA_OMR_CANCEL", raising=False)
+    state = runtime.State()
+    values = []
+    for progress in [1, 90, 1, 60, 100]:
+        state.homr_progress = progress
+        values.append(json.loads(target.read_text(encoding="utf-8"))["progress"])
+    assert values == sorted(values)
+    monkeypatch.setenv("ARIA_OMR_PAGE", "2")
+    state.homr_progress = 1
+    assert json.loads(target.read_text(encoding="utf-8"))["progress"] > values[-1]
+
+
+def test_cancelled_recognition_stops_before_processing_next_stage(tmp_path, monkeypatch):
+    import aria_omr_runtime as runtime
+    flag = tmp_path / "cancel"; flag.touch()
+    monkeypatch.setenv("ARIA_OMR_CANCEL", str(flag))
+    with pytest.raises(InterruptedError, match="取消"):
+        runtime.State().homr_state = "Transforming"

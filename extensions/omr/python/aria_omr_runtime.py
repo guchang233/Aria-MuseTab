@@ -31,16 +31,24 @@ class State:
     homr_state = "Preparing"
     homr_progress = 0
     threads = min(4, os.cpu_count() or 1)
+    _job = ""
+    _last_progress = 0
 
     def __setattr__(self, name, value):
         check_cancelled()
         object.__setattr__(self, name, value)
         if name in ("homr_state", "homr_progress"):
+            job = os.environ.get("ARIA_OMR_STATUS", "")
+            if self._job != job:
+                object.__setattr__(self, "_job", job)
+                object.__setattr__(self, "_last_progress", 0)
             page = int(os.environ.get("ARIA_OMR_PAGE", "1"))
             total = int(os.environ.get("ARIA_OMR_TOTAL", "1"))
             local = min(100, max(0, float(self.homr_progress))) / 100
+            overall = max(self._last_progress, min(0.98, (page - 1 + local * 0.95) / total))
+            object.__setattr__(self, "_last_progress", overall)
             status({"state": "running", "message": f"第 {page}/{total} 页 · {PHASES.get(self.homr_state, '正在识别曲谱')}",
-                    "progress": min(0.98, (page - 1 + local * 0.95) / total)})
+                    "progress": overall})
 
 
 appdata = State()

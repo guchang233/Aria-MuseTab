@@ -18,6 +18,7 @@ import skip.ui.UIApplication
 import java.io.File
 import java.util.UUID
 import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 
 /** JNI facade. Only paths and small JSON status cross the Swift boundary. */
 class AriaConversion {
@@ -51,6 +52,7 @@ class AriaConversion {
         val job = File(context.filesDir, "conversion-jobs/${UUID.randomUUID()}").apply { mkdirs() }
         File(job, "status.json").writeText(JSONObject().put("state", "running")
             .put("message", "正在准备离线转换").put("progress", 0).toString())
+        File(job, "heartbeat").writeText("")
         val intent = Intent(context, AriaConversionService::class.java)
             .putExtra("source", source).putExtra("pages", pages).putExtra("job", job.path)
         context.startForegroundService(intent)
@@ -68,12 +70,21 @@ class AriaConversion {
 /** Separate process: recognition cannot block Aria's render/audio threads or retain its heap. */
 class AriaConversionService : Service() {
     private val executor = Executors.newSingleThreadExecutor()
+    private val heartbeat = Executors.newSingleThreadScheduledExecutor()
     @Volatile private var activeJob: File? = null
     override fun onBind(intent: Intent?): IBinder? = null
     override fun onCreate() {
         super.onCreate()
         val manager = getSystemService(NotificationManager::class.java)
         manager.createNotificationChannel(NotificationChannel("offline-omr", "离线曲谱识别", NotificationManager.IMPORTANCE_LOW))
+        heartbeat.scheduleAtFixedRate({
+            activeJob?.let { job -> runCatching { File(job, "heartbeat").writeText("") } }
+        }, 0, 5, TimeUnit.SECONDS)
+    }
+    override fun onDestroy() {
+        heartbeat.shutdownNow()
+        executor.shutdownNow()
+        super.onDestroy()
     }
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val jobPath = intent?.getStringExtra("job") ?: run { stopSelf(startId); return START_NOT_STICKY }

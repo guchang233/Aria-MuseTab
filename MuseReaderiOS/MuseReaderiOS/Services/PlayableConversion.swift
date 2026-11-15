@@ -18,6 +18,7 @@ enum PlayableConversion {
         let worker = try AnyDynamicObject(className: "aria.skip.AriaConversion")
         let job: String = try worker.start(source.path, pages)
         let statusURL = URL(fileURLWithPath: job).appendingPathComponent("status.json")
+        let heartbeatURL = URL(fileURLWithPath: job).appendingPathComponent("heartbeat")
         do {
             while true {
                 try Task.checkCancellation()
@@ -30,6 +31,10 @@ enum PlayableConversion {
                         return outputs
                     }
                     if state.state == "error" || state.state == "cancelled" { throw CloudScoreError.message(state.message) }
+                }
+                if let lastBeat = try? heartbeatURL.resourceValues(forKeys: [.contentModificationDateKey]).contentModificationDate,
+                   Date().timeIntervalSince(lastBeat) > 60 {
+                    throw CloudScoreError.message("识别进程已停止响应，请重试。原始文件已保留。")
                 }
                 try await Task.sleep(for: .milliseconds(250))
             }

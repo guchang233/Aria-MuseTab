@@ -32,6 +32,8 @@ def recognize_page(image, output, models, status, cancel, page=1, total=1):
     import aria_omr_runtime as runtime
     runtime.MODEL_STORAGE = str(models)
     runtime.check_cancelled()
+    runtime.appdata.homr_progress = 0
+    runtime.appdata.homr_state = "Preparing"
     from homr.main import process_image, ProcessingConfig
     from homr.music_xml_generator import XmlGeneratorArguments
     from homr.segmentation.inference_segnet import cleanup_segnet
