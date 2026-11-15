@@ -31,5 +31,6 @@ trap 'gradle --stop >/dev/null 2>&1 || true' EXIT
 gradle :app:assembleDebug --no-daemon --max-workers=2
 aria_apk="$aria_root/MuseReaderAndroid/Aria/.build/Android/app/outputs/apk/debug/app-debug.apk"
 test -s "$aria_apk"
+"$ARIA_BUILD_PYTHON" "$aria_root/checks/inspect_android_apk.py" "$aria_apk"
 cp "$aria_apk" "$aria_root/release/Aria-MuseTab-android-debug.apk"
 shasum -a 256 "$aria_root/release/Aria-MuseTab-android-debug.apk" > "$aria_root/release/SHA256SUMS.txt"

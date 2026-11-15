@@ -71,7 +71,8 @@ swiftc MuseReaderiOS/MuseReaderiOS/Services/CloudScoreLibrary.swift checks/Cloud
 
 详细的已验证项目、待验收项目和限制见 [迁移记录](docs/MUSETAB-MIGRATION.md)。
 没有本地 Mac 时，可在新仓库中手动运行 Aria MuseTab Android (manual) 工作流。
-工作流仅构建 Android 调试 APK 并输出 artifact，不自动发布、不需要签名密码；目前尚未执行验证。
+工作流仅构建 Android 调试 APK 并输出 artifact，不自动发布、不需要签名密码；首次整包构建正在验证。
+打包后会检查离线模型、Python 模块、音色库、中文词库和 ARM64 引擎是否齐全；这不替代实机验收。
 
 ## 来源和许可
 
