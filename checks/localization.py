@@ -68,6 +68,7 @@ def inventory():
         for node in walk(PARSER.parse(data).root_node):
             if node.type != "line_string_literal" or not visible(node, data): continue
             text = data[node.start_byte+1:node.end_byte-1].decode()
+            if text.startswith(("https://", "http://")): continue
             if not re.search("[A-Za-z]", text) or re.search("[\u3400-\u9fff]", text): continue
             # Exclude notation/format/brand names and strings made only of interpolations.
             plain = re.sub(r"\\\(.*?\)", "", text)
