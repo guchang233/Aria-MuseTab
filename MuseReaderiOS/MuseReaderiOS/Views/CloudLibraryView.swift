@@ -48,7 +48,7 @@ struct CloudLibraryView: View {
                 ToolbarItem(placement: .cancellationAction) { Button("关闭") { dismiss() } }
                 ToolbarItem(placement: .primaryAction) { Button { Task { await cloud.refresh() } } label: { Image(systemName: "arrow.clockwise") }.disabled(cloud.refreshing) }
             }
-            .task { cloud.updateLocalFiles(); if cloud.catalog == nil { await cloud.refresh() } }
+            .task { cloud.updateLocalFiles(); await cloud.refresh() }
             .sheet(item: $detail) { score in
                 NavigationStack {
                     Form {

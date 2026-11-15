@@ -46,14 +46,15 @@ jobs:
           sdkmanager "platforms;android-36" "build-tools;36.0.0" "ndk;27.2.12479018"
           skip android sdk install --version 6.4.1
           echo "ARIA_BUILD_PYTHON=$(command -v python)" >> "$GITHUB_ENV"
-      - name: Select Swift for Xcode and Skip
+      - name: Check host and Android Swift toolchains
         run: |
-          aria_toolchain="$(swiftly use --print-location)"
-          aria_toolchain_id="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$aria_toolchain/Info.plist")"
-          export TOOLCHAINS="$aria_toolchain_id"
-          echo "TOOLCHAINS=$TOOLCHAINS" >> "$GITHUB_ENV"
-          xcrun swift --version | tee .local/swift-version.txt
-          grep -q '6.4.1' .local/swift-version.txt
+          # Skip's Darwin verification build needs stable Xcode Swift; 6.4's
+          # stricter static-product validation rejects the pinned bridge graph.
+          # The Android SDK uses the separately installed 6.4.1 toolchain.
+          xcrun swift --version | tee .local/host-swift-version.txt
+          grep -q '6.2' .local/host-swift-version.txt
+          swift --version | tee .local/android-swift-version.txt
+          grep -q '6.4.1' .local/android-swift-version.txt
       - name: Qt host tools
         id: qt-host
         uses: jurplel/install-qt-action@v4
@@ -82,11 +83,32 @@ jobs:
         with:
           path: build-aria-android-arm64
           key: aria-native-macos-x64-qt6111-ndk27-${{ hashFiles('sandbox/engraving/**', 'MuseReaderAndroid/engine/**', 'src/**', 'thirdparty/**') }}
+      - name: Restore build dependencies
+        id: dependencies-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            MuseReaderAndroid/Aria/.build/artifacts
+            MuseReaderAndroid/Aria/.build/checkouts
+            MuseReaderAndroid/Aria/.build/repositories
+            .local/gradle-home/caches
+          key: aria-deps-host624-android641-${{ hashFiles('MuseReaderAndroid/Aria/Package.resolved', 'MuseReaderAndroid/Aria/Android/app/build.gradle.kts') }}
+          restore-keys: aria-deps-host624-android641-
       - name: Build Android APK
         env:
           QT_ANDROID: ${{ steps.qt-android.outputs.qt-root-dir }}
           QT_HOST: ${{ steps.qt-host.outputs.qt-root-dir }}
         run: bash MuseReaderAndroid/scripts/build-community-android.sh
+      - name: Save build dependencies
+        if: always() && steps.dependencies-cache.outcome == 'success' && steps.dependencies-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            MuseReaderAndroid/Aria/.build/artifacts
+            MuseReaderAndroid/Aria/.build/checkouts
+            MuseReaderAndroid/Aria/.build/repositories
+            .local/gradle-home/caches
+          key: ${{ steps.dependencies-cache.outputs.cache-primary-key }}
       - name: Save completed native engine
         if: always() && steps.native-cache.outputs.cache-hit != 'true' && hashFiles('build-aria-android-arm64/libMuseScoreRenderCore.a') != '' && hashFiles('build-aria-android-arm64/jniLibs/arm64-v8a/libaria_engine.so') != ''
         uses: actions/cache/save@v4
