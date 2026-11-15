@@ -11,6 +11,9 @@
   Swift 云端协议和 Git blob SHA-1 检查已在 macOS runner 编译运行通过；Swift UI 和 URLSession 调用尚未在 App 内验证。
 - 离线 PDF → MusicXML：本项目内的 Python、模型与适配源码完成一页识别；与参考谱比较，
   32 个音符的音高、时值、谱表及小节位置全部一致。不能据此推断复杂乐谱的识别准确率。
+- Android 识别模块已在 MuMu Android 15 实际运行（独立临时测试外壳，不含 Swift 主界面）。
+  相同 PDF 样本约 88 秒完成，32/32 音符的音高、时值、谱表和小节位置全部匹配，MusicXML 通过格式校验。
+  已修正桌面检查未覆盖到的 OpenCV 4.5 尺寸参数兼容问题；Animenz MIDI 也已在 Android 完成转换。
 - MIDI：云端 MIDI 及用户此前提供的 Animenz MIDI 均完成 MusicXML 转换。
   已用额外谱表处理超过四个重叠声部的情况，没有通过截断音符来适应声部数量。
 - Python 测试验证 MIDI 的速度/拍号/重叠/跨小节延音、截断输入、多页拼接和结构不一致时保留页面结果。

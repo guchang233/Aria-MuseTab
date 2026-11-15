@@ -25,7 +25,7 @@ OUT_DIR = os.path.join(os.path.dirname(__file__), "..", "Aria", "Android", "app"
 # the outlined style, like SF Symbols' outline/fill pairs.
 SYMBOLS = {
     "icloud": "cloud",
-    "doc.viewfinder": "document_scanner",
+    "doc.viewfinder": "find_in_page",
     "arrow.clockwise": "refresh",
     # Returned from code (instrument families, sort orders, annotation tools, ...).
     "accordion": "piano",
