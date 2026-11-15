@@ -27,9 +27,14 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.10'
-      - uses: swift-actions/setup-swift@v2
+      - uses: swift-actions/setup-swift@v3
         with:
           swift-version: '6.4.1'
+      - name: Check cloud protocol
+        run: |
+          mkdir -p .local
+          swiftc MuseReaderiOS/MuseReaderiOS/Services/CloudScoreLibrary.swift checks/CloudScoreChecks.swift -o .local/cloud-check
+          .local/cloud-check
       - uses: android-actions/setup-android@v3
       - name: Install build tools
         run: |

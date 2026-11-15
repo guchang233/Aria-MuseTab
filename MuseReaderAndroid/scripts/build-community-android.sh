@@ -16,8 +16,6 @@ export GRADLE_USER_HOME="${GRADLE_USER_HOME:-$aria_root/.local/gradle-home}"
 export ANDROID_NDK_ROOT="${ANDROID_NDK_ROOT:-$ANDROID_SDK_ROOT/ndk/27.2.12479018}"
 export ANDROID_NDK_HOME="$ANDROID_NDK_ROOT"
 export CMAKE_BUILD_PARALLEL_LEVEL="${CMAKE_BUILD_PARALLEL_LEVEL:-2}"
-swiftc MuseReaderiOS/MuseReaderiOS/Services/CloudScoreLibrary.swift checks/CloudScoreChecks.swift -o .local/cloud-check
-.local/cloud-check
 python3 extensions/omr/prepare_models.py .local/staged-assets
 git lfs pull --include=MuseReaderiOS/MuseReaderiOS/Resources/MuseScore_General.sf2
 bash MuseReaderAndroid/scripts/link-ios-sources.sh

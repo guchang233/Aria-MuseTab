@@ -20,10 +20,10 @@ if (ariaPhoneAudit) {
 }
 
 plugins {
-    id("com.chaquo.python")
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.android.application)
     id("skip-build-plugin")
+    id("com.chaquo.python")
 }
 
 skip {
