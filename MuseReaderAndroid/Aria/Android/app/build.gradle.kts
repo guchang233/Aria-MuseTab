@@ -97,7 +97,9 @@ android {
     }
 
     sourceSets["main"].jniLibs.srcDir(ariaJniLibsDir)
-    sourceSets["main"].assets.srcDir(omrAssets)
+    // preBuild already depends on prepareOfflineOmrModels; pass a concrete
+    // directory because current AGP rejects Providers in the SourceSet API.
+    sourceSets["main"].assets.srcDir(omrAssets.get().asFile)
     // Local optimized profiling only. The normal release/upload manifest has no
     // profileable element; do not supply this property when building an upload AAB.
     if (providers.gradleProperty("ariaProfileableRelease").isPresent) {

@@ -94,11 +94,29 @@ jobs:
             .local/gradle-home/caches
           key: aria-deps-host624-android641-${{ hashFiles('MuseReaderAndroid/Aria/Package.resolved', 'MuseReaderAndroid/Aria/Android/app/build.gradle.kts') }}
           restore-keys: aria-deps-host624-android641-
+      - name: Restore compiled host modules
+        id: host-modules-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            MuseReaderAndroid/Aria/.build/arm64-apple-ios
+            MuseReaderAndroid/Aria/.build/build.db
+            MuseReaderAndroid/Aria/.build/workspace-state.json
+          key: aria-host-xcode263-${{ hashFiles('MuseReaderAndroid/Aria/Package.swift', 'MuseReaderAndroid/Aria/Package.resolved', 'MuseReaderAndroid/Aria/Vendor/**/*.swift') }}
       - name: Build Android APK
         env:
           QT_ANDROID: ${{ steps.qt-android.outputs.qt-root-dir }}
           QT_HOST: ${{ steps.qt-host.outputs.qt-root-dir }}
         run: bash MuseReaderAndroid/scripts/build-community-android.sh
+      - name: Save compiled host modules
+        if: always() && steps.host-modules-cache.outputs.cache-hit != 'true' && hashFiles('MuseReaderAndroid/Aria/.build/arm64-apple-ios/debug/libAriaSkip.dylib') != ''
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            MuseReaderAndroid/Aria/.build/arm64-apple-ios
+            MuseReaderAndroid/Aria/.build/build.db
+            MuseReaderAndroid/Aria/.build/workspace-state.json
+          key: ${{ steps.host-modules-cache.outputs.cache-primary-key }}
       - name: Save build dependencies
         if: always() && steps.dependencies-cache.outcome == 'success' && steps.dependencies-cache.outputs.cache-hit != 'true'
         uses: actions/cache/save@v4
