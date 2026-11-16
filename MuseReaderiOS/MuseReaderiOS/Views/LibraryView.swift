@@ -107,6 +107,27 @@ struct LibraryView: View {
     }
 
     var body: some View {
+        libraryPresentedContent
+        .safeAreaInset(edge: .top) {
+            HStack(spacing: 20) {
+                Button { showsCloudLibrary = true } label: { Label("云端曲库", systemImage: "icloud") }
+                Button { conversionSource = nil; showsConversion = true } label: { Label("PDF 识别", systemImage: "doc.viewfinder") }
+                Spacer(minLength: 0)
+            }.font(.subheadline).padding(.horizontal, 20).padding(.vertical, 10)
+                .background(LibraryPalette.mainBackground)
+        }
+        .sheet(isPresented: $showsCloudLibrary) {
+            CloudLibraryView(cloud: cloudLibrary, addToLibrary: model.addDownloadedScore) { url in
+                if ["pdf", "mid", "midi"].contains(url.pathExtension.lowercased()) {
+                    conversionSource = url
+                    Task { try? await Task.sleep(for: .milliseconds(350)); showsConversion = true }
+                } else { model.handleImport(result: .success(url)) }
+            }
+        }
+        .sheet(isPresented: $showsConversion) { PlayableConversionView(model: model, initialSource: conversionSource) }
+    }
+
+    private var libraryLayout: some View {
         GeometryReader { geometry in
             if isPhoneInterface {
                 PhoneLibraryView(
@@ -238,23 +259,10 @@ struct LibraryView: View {
                 .background(LibraryPalette.mainBackground.ignoresSafeArea())
             }
         }
-        .safeAreaInset(edge: .top) {
-            HStack(spacing: 20) {
-                Button { showsCloudLibrary = true } label: { Label("云端曲库", systemImage: "icloud") }
-                Button { conversionSource = nil; showsConversion = true } label: { Label("PDF 识别", systemImage: "doc.viewfinder") }
-                Spacer(minLength: 0)
-            }.font(.subheadline).padding(.horizontal, 20).padding(.vertical, 10)
-                .background(LibraryPalette.mainBackground)
-        }
-        .sheet(isPresented: $showsCloudLibrary) {
-            CloudLibraryView(cloud: cloudLibrary, addToLibrary: model.addDownloadedScore) { url in
-                if ["pdf", "mid", "midi"].contains(url.pathExtension.lowercased()) {
-                    conversionSource = url
-                    Task { try? await Task.sleep(for: .milliseconds(350)); showsConversion = true }
-                } else { model.handleImport(result: .success(url)) }
-            }
-        }
-        .sheet(isPresented: $showsConversion) { PlayableConversionView(model: model, initialSource: conversionSource) }
+    }
+
+    private var libraryImportContent: some View {
+        libraryLayout
         .fileImporter(
             isPresented: $model.isImportingPresented,
             allowedContentTypes: model.supportedContentTypes,
@@ -302,6 +310,10 @@ struct LibraryView: View {
                 .accessibilityHidden(true)
             }
         }
+    }
+
+    private var libraryEventContent: some View {
+        libraryImportContent
         .task {
             await model.refreshVisibleLibrary()
             model.presentEarlySupporterMessageIfNeeded()
@@ -338,6 +350,10 @@ struct LibraryView: View {
                 model.importHeldOpenURL()
             }
         }
+    }
+
+    private var libraryAlertContent: some View {
+        libraryEventContent
         .alert(item: visibleErrorAlert) { alert in
             Alert(title: Text(alert.title), message: Text(alert.message))
         }
@@ -398,6 +414,10 @@ struct LibraryView: View {
                 renameSetlistName = ""
             }
         }
+    }
+
+    private var libraryPresentedContent: some View {
+        libraryAlertContent
         .fullScreenCover(isPresented: $model.isCreateScorePresented) {
             CreateNewScoreView { draft in
                 guard let session = await model.createScore(from: draft) else {

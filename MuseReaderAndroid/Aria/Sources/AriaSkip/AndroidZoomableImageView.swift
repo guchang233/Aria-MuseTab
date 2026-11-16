@@ -1099,10 +1099,10 @@ struct AndroidPageRect<Content: View>: View {
     @ViewBuilder let content: () -> Content
 
     var body: some View {
-        let width = max(pageSize.width * rect.width + padding * 2, 1)
-        let height = max(pageSize.height * rect.height + padding * 2, 1)
+        let width: CGFloat = max(pageSize.width * CGFloat(rect.width) + padding * 2, 1)
+        let height: CGFloat = max(pageSize.height * CGFloat(rect.height) + padding * 2, 1)
         content()
             .frame(width: width, height: height)
-            .offset(x: pageSize.width * rect.x - padding, y: pageSize.height * rect.y - padding)
+            .offset(x: pageSize.width * CGFloat(rect.x) - padding, y: pageSize.height * CGFloat(rect.y) - padding)
     }
 }

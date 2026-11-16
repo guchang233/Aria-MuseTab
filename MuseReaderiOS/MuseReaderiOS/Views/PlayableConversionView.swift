@@ -21,14 +21,18 @@ struct PlayableConversionView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section("源文件") {
+                Section {
                     if let source { Text(verbatim: source.lastPathComponent) }
                     Button("选择本地 PDF 或 MIDI") { picking = true }.disabled(running)
                     if source?.pathExtension.lowercased() == "pdf" {
                         Button("查看原始 PDF") { showsOriginal = true }
                         TextField("页码，如 1、1-3、1,3；全部填 all", text: $pageRange).disabled(running)
                     }
-                } footer: { Text("全部在设备内完成，无需上传。原始文件会保留；识别后请校对音高、节奏和声部。") }
+                } header: {
+                    Text("源文件")
+                } footer: {
+                    Text("全部在设备内完成，无需上传。原始文件会保留；识别后请校对音高、节奏和声部。")
+                }
                 Section {
                     if running {
                         ProgressView(value: progress)
